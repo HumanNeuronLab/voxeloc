@@ -1,6 +1,6 @@
-<h1 align="center">VOX·E·LOC (Voxel Electrode Locator)</h1>
+<h1 align="center">VOX·E·LOC</h1>
 
-<h3><a href="https://github.com/HumanNeuronLab/voxeloc/releases"><img src="https://github.com/jonathanmonney/misc_assets/blob/main/Voxeloc/Voxeloc_version.png" width="200" align="right"/></a><div align="left"><i>Electrode Reconstruction Widget for Neuroimaging</i></div></h3>
+<h3><a href="https://github.com/HumanNeuronLab/voxeloc/releases"><img src="https://github.com/jonathanmonney/misc_assets/blob/main/Voxeloc/Voxeloc_version.png" width="200" align="right"/></a><div align="left"><i>Voxel Electrode Locator</i></div></h3>
 
 
 ---
