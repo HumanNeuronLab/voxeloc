@@ -1,18 +1,18 @@
-<h1 align="center">ERWiN</h1>
+<h1 align="center">VOX·E·LOC (Voxel Electrode Locator)</h1>
 
-<h3><a href="https://github.com/HumanNeuronLab/ERWiN/releases"><img src="https://raw.githubusercontent.com/jonathanmonney/misc_assets/main/ERWiN/ERWiN_version.png" width="200" align="right"/></a><div align="left"><i>Electrode Reconstruction Widget for Neuroimaging</i></div></h3>
+<h3><a href="https://github.com/HumanNeuronLab/voxeloc/releases"><img src="https://github.com/jonathanmonney/misc_assets/blob/main/Voxeloc/Voxeloc_version.png" width="200" align="right"/></a><div align="left"><i>Electrode Reconstruction Widget for Neuroimaging</i></div></h3>
 
 
 ---
 
 This GUI widget was created to help locate intracranial-EEG contact locations.
-ERWiN is a semi-automated MATLAB widget that allows to rapidly and 
+Voxeloc is a semi-automated MATLAB widget that allows to rapidly and 
 efficiently locate iEEG contact coordinates using post-op & pre-op images.
 
-To start: open Matlab and run ERWiN in the command line 
-(ensure the folder containing the ERWiN.m file has been added to your 
+To start: open Matlab and run voxeloc in the command line 
+(ensure the folder containing the voxeloc.m file has been added to your 
 list of paths).
-The ERWiN function will open the GUI needed to run all electrode contact 
+The voxeloc function will open the GUI needed to run all electrode contact 
 location estimations.
 
 ---
@@ -27,7 +27,7 @@ Contacts, Distance Between Contacts (mm), Deepest Contact's
 Coordinates, Second Contact Coordinates.
 - New output format with time-stamped .mat file that cannot be 
 overwritten.
-- MGRID copy saved in '*/elec_recon/final_output', along with erwin
+- MGRID copy saved in '*/elec_recon/final_output', along with Voxeloc
 '.mat' file.
 - Log files and other text files automatically output from iELVis
 dykstraElecPjct.
@@ -53,7 +53,7 @@ depth electrodes may be created (no grids or strips).*
 
 #### Known bugs:
 - Autoupdate requires work to function on all host OS & archiving.
-- ! Must verify all requirements for MRIread are included in ERWiN!
+- ! Must verify all requirements for MRIread are included in Voxeloc!
 - Given new volume reading function, verify output coordinates are still 
 accurate (using .mgrid to cross-verify in BioImageSuite).
 
@@ -66,12 +66,12 @@ and down arrow buttons above tree panel.
 
 ---
 
-<p align="center"> <b><u>ERWiN</u></b> 2022 
+<p align="center"> <b><u>Voxeloc</u></b> 2023 
 | <a href="https://www.unige.ch/medecine/neucli/en/groupes-de-recherche/1034megevand/">Human Neuron Lab</a> - UNIGE 
 | <a href="mailto:jonathan.monney@unige.ch">jonathan.monney@unige.ch</a></p>
 <br>
 <div align="center"><a href="https://www.unige.ch/medecine/neucli/en/groupes-de-recherche/1034megevand/">
-  <img src="https://raw.githubusercontent.com/HumanNeuronLab/ERWiN/main/assets/UNIGE_logo.png" width="200"/>
+  <img src="https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/UNIGE_logo.png" width="200"/>
 </a></div>
 
 ---

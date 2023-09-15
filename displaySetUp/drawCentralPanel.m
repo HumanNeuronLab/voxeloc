@@ -129,7 +129,7 @@ widget.viewer.projectParams.lamp_forceSave = uilamp('Parent',widget.viewer.proje
 widget.viewer.projectParams.button_forceSave = uibutton('Parent',widget.viewer.projectParams.gridInner,'Text','Force Save','BackgroundColor',[0,0.65,1]);
 
 progPath = fileparts(which('voxeloc.m'));
-widget.viewer.projectParams.image_currentVersion = uiimage('Parent',widget.viewer.projectParams.gridInner,'ImageSource',[progPath filesep 'assets' filesep 'ERWiN_version.png'],'HorizontalAlignment','right');
+widget.viewer.projectParams.image_currentVersion = uiimage('Parent',widget.viewer.projectParams.gridInner,'ImageSource',[progPath filesep 'assets' filesep 'Voxeloc_version.png'],'HorizontalAlignment','right');
 widget.viewer.projectParams.image_currentVersion.Layout.Row = numel(widget.viewer.projectParams.gridInner.RowHeight);
 widget.viewer.projectParams.image_currentVersion.Layout.Column = numel(widget.viewer.projectParams.gridInner.ColumnWidth);
 
