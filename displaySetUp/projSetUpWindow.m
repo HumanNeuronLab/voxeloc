@@ -20,9 +20,9 @@ function projSetUpWindow(widget,varargin)
     B = fscanf(fid,'%s');
     fclose(fid);
     if isequal(A,B)
-        disp('yay');
+        paramsValues.label_newVersion.Text = 'Current version up-to-date ';
     else
-        disp('ew');
+        paramsValues.label_newVersion.Text = ['<a href="https://github.com/HumanNeuronLab/voxeloc">New version avaible (' A ')!</a>'];
     end
     function myCloseReq(src,~,widget,pV,d)
         validCheck = runcheck(pV,d);
@@ -119,10 +119,14 @@ function projSetUpWindow(widget,varargin)
                 pV.lamp_forceSave = uilamp('Parent',pV.gridInner,'Color',[0.94 0.94 0.94]);
                 pV.button_forceSave = uibutton('Parent',pV.gridInner,'Text','Force Save','BackgroundColor',[0,0.65,1]);
                 
+                pV.label_newVersion = uilabel('Parent',pV.gridInner,'Text','lll','HorizontalAlignment','right','VerticalAlignment','bottom','Interpreter','html','FontSize',10);
+                pV.label_newVersion.Layout.Row = numel(pV.gridInner.RowHeight)-1;
+                pV.label_newVersion.Layout.Column = [numel(pV.gridInner.ColumnWidth)-1 numel(pV.gridInner.ColumnWidth)];
+
                 progPath = fileparts(which('voxeloc.m'));
                 pV.image_currentVersion = uiimage('Parent',pV.gridInner,'ImageSource',[progPath filesep 'assets' filesep 'Voxeloc_version.png'],'HorizontalAlignment','right');
                 pV.image_currentVersion.Layout.Row = numel(pV.gridInner.RowHeight);
-                pV.image_currentVersion.Layout.Column = numel(pV.gridInner.ColumnWidth);
+                pV.image_currentVersion.Layout.Column = [numel(pV.gridInner.ColumnWidth)-1 numel(pV.gridInner.ColumnWidth)];
 
             case 'update'
 
