@@ -109,6 +109,8 @@ widget              = update_outputData(widget);
 widget.mV           = mV;
 drawnow
 
+projSetUpWindow(widget);
+
 [widget,wip]        = drawCentralPanel(widget);
 widget              = drawLeftPanel(widget,wip);
 widget              = drawRightPanel(widget,wip);
