@@ -11,8 +11,8 @@ function projSetUpWindow(widget,varargin)
     else
         widgetState = 'update';
     end
-
-    paramsValues = paramsBuilder(projectWindow,widgetState);
+    
+    paramsValues = paramsBuilder(projectWindow,widgetState,widget);
     projectWindow.CloseRequestFcn = {@myCloseReq,widget,paramsValues,d};
     %close(d);
     A = webread('https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/voxeloc_version.txt');
@@ -24,8 +24,9 @@ function projSetUpWindow(widget,varargin)
     else
         paramsValues.label_newVersion.Text = ['<a href="https://github.com/HumanNeuronLab/voxeloc">New version avaible (' A ')!</a>'];
     end
+
     function myCloseReq(src,~,widget,pV,d)
-        validCheck = runcheck(pV,d);
+        validCheck = runcheck([],[],pV,d,0);
         switch validCheck
             case 0
                 selection = uiconfirm(src,'Closing this window will close Voxeloc',...
@@ -37,9 +38,12 @@ function projSetUpWindow(widget,varargin)
                     case 'Cancel'
                         return 
                 end
+            case 1
+                delete(src);
+                uiresume(widget.fig);
         end
     end
-    function pV = paramsBuilder(pW,wS)
+    function pV = paramsBuilder(pW,wS,widget)
         switch wS
             case 'init'
                 pV.panel = uipanel('Parent',pW,'Position',[20 20 pW.Position(3)-40 pW.Position(4)-40]);
@@ -47,29 +51,37 @@ function projSetUpWindow(widget,varargin)
                     'ColumnWidth',{150,200,22,100,'1x'},'RowHeight',{100,22,22,22,22,22,22,22,22,22,22,'1x',35},...
                     'RowSpacing',15,'Padding',[20 20 20 20],'Scrollable','on');
                 drawCartouche(pV);
+
+                pV.label_userID = uilabel('Parent',pV.gridInner,'Text','User name:','FontWeight','bold');
+                pV.label_userID.Layout.Row = 2;pV.label_userID.Layout.Column = 1;
+                pV.field_userID = uieditfield('Parent',pV.gridInner,'Placeholder','[User name]','FontColor',[0.6 0.6 0.6]);
+                pV.lamp_userID = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
+                pV.check_matrix(5,1) = 0;
+
                 pV.label_patientDir = uilabel('Parent',pV.gridInner,'Text','Patient folder:','FontWeight','bold');
-                pV.lamp_patientDir = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
-                pV.lamp_patientDir.Layout.Row = 2; pV.lamp_patientDir.Layout.Column = 3;
-                pV.button_patientDir = uibutton('Parent',pV.gridInner,'Text','Select folder','BackgroundColor',[1,0.65,0],'Tag','DIR');
+                pV.label_patientDir.Layout.Row = 3; pV.label_patientDir.Layout.Column = 1;
                 pV.field_patientDir = uilabel('Parent',pV.gridInner,'Text','[Folder path]','FontColor',[0.6 0.6 0.6]);
+                pV.lamp_patientDir = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
+                pV.lamp_patientDir.Layout.Row = 3; pV.lamp_patientDir.Layout.Column = 3;
+                pV.button_patientDir = uibutton('Parent',pV.gridInner,'Text','Select folder','BackgroundColor',[1,0.65,0],'Tag','DIR');
                 pV.check_matrix(1,1) = 0;
+
+                pV.label_patientID = uilabel('Parent',pV.gridInner,'Text','Patient ID:','FontWeight','bold');
+                pV.label_patientID.Layout.Row = 4; pV.label_patientID.Layout.Column = 1;
+                pV.field_patientID = uieditfield('Parent',pV.gridInner,'Placeholder','[Patient_ID]','FontColor',[0.6 0.6 0.6]);
+                pV.lamp_patientID = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
+                pV.check_matrix(2,1) = 0;
                 
                 pV.label_autosaveFile = uilabel('Parent',pV.gridInner,'Text','Autosave file:','FontWeight','bold');
+                pV.label_autosaveFile.Layout.Row = 5; pV.label_autosaveFile.Layout.Column = 1;
                 pV.field_autosaveFile = uilabel('Parent',pV.gridInner,'Text','[No autosave file linked yet]','FontColor',[0.6 0.6 0.6]);
                 pV.lamp_autosaveFile = uilamp('Parent',pV.gridInner,'Color',[1 0.65 0]);
                 pV.field_autosavePath = uilabel('Parent',pV.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
                 pV.field_autosavePath.Layout.Column = 5;
-                pV.check_matrix(2,1) = 0;
-                
-                
-                
-                pV.label_patientID = uilabel('Parent',pV.gridInner,'Text','Patient ID:','FontWeight','bold');
-                pV.field_patientID = uieditfield('Parent',pV.gridInner,'Placeholder','[Patient_ID]','FontColor',[0.6 0.6 0.6]);
-                pV.lamp_patientID = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
                 pV.check_matrix(3,1) = 0;
                 
                 pV.label_ctFile = uilabel('Parent',pV.gridInner,'Text','CT file:','FontWeight','bold');
-                pV.label_ctFile.Layout.Row = 5;
+                pV.label_ctFile.Layout.Row = 6;
                 pV.label_ctFile.Layout.Column = 1;
                 pV.field_ctFile = uilabel('Parent',pV.gridInner,'Text','[No CT file loaded yet]','FontColor',[0.6 0.6 0.6]);
                 pV.lamp_ctFile = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
@@ -90,13 +102,13 @@ function projSetUpWindow(widget,varargin)
                 pV.field_parcPath = uilabel('Parent',pV.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
                 
                 pV.label_electrodes = uilabel('Parent',pV.gridInner,'Text','Number of electrodes:','FontWeight','bold');
-                pV.label_electrodes.Layout.Row = 8;
+                pV.label_electrodes.Layout.Row = 9;
                 pV.label_electrodes.Layout.Column = 1;
                 pV.field_electrodes = uilabel('Parent',pV.gridInner,'Text','Completed: 0 of 0','FontColor',[0.6 0.6 0.6]);
                 pV.lamp_electrodes = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
                 
                 pV.label_instLogo = uilabel('Parent',pV.gridInner,'Text','Institution Logo:','FontWeight','bold');
-                pV.label_instLogo.Layout.Row = 9;
+                pV.label_instLogo.Layout.Row = 10;
                 pV.label_instLogo.Layout.Column = 1;
                 pV.field_instLogo = uilabel('Parent',pV.gridInner,'Text','[No logo loaded yet]','FontColor',[0.6 0.6 0.6]);
                 pV.lamp_instLogo = uilamp('Parent',pV.gridInner,'Color',[0.94 0.94 0.94]);
@@ -104,13 +116,6 @@ function projSetUpWindow(widget,varargin)
                 pV.image_instLogo.Layout.Row = pV.label_instLogo.Layout.Row;
                 pV.image_instLogo.Layout.Column = 2;
                 pV.button_instLogo = uibutton('Parent',pV.gridInner,'Text','Load Image','BackgroundColor',[1,0.65,0]);
-                
-                pV.label_userID = uilabel('Parent',pV.gridInner,'Text','User name:','FontWeight','bold');
-                pV.label_userID.Layout.Row = 10;
-                pV.label_userID.Layout.Column = 1;
-                pV.field_userID = uieditfield('Parent',pV.gridInner,'Placeholder','[User name]','FontColor',[0.6 0.6 0.6]);
-                pV.lamp_userID = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
-                pV.check_matrix(5,1) = 0;
                 
                 pV.label_forceSave = uilabel('Parent',pV.gridInner,'Text','Last autosave:','FontWeight','bold');
                 pV.label_forceSave.Layout.Row = 11;
@@ -128,11 +133,47 @@ function projSetUpWindow(widget,varargin)
                 pV.image_currentVersion.Layout.Row = numel(pV.gridInner.RowHeight);
                 pV.image_currentVersion.Layout.Column = [numel(pV.gridInner.ColumnWidth)-1 numel(pV.gridInner.ColumnWidth)];
 
+                pV.field_userID.ValueChangingFcn = {@runcheck, pV,d,1};
+                pV.field_userID.ValueChangedFcn = {@runcheck, pV,d,1};
+
+                pV.field_patientID.ValueChangingFcn = {@runcheck, pV,d,2};
+                pV.field_patientID.ValueChangedFcn = {@runcheck, pV,d,2};
+                pV.button_patientDir.ButtonPushedFcn = {@runcheck, pV,d,2};
+
+                pV.button_ctFile.ButtonPushedFcn = {@selectFile, pV};
+                pV.button_t1File.ButtonPushedFcn = {@selectFile, pV};
+                pV.button_parcFile.ButtonPushedFcn = {@selectFile, pV};
+                
+                
+                
+                pV.button_instLogo.ButtonPushedFcn = {@instLogoLoad, pV};
+                pV.button_forceSave.ButtonPushedFcn = {@forceSave, pV};
             case 'update'
 
         end
     end
-    function validCheck = runcheck(pV,d)
+    function validCheck = runcheck(~,evt,pV,d,idVal)
+        switch idVal
+            case 1
+                userIDchange([],evt,pV);
+            case 2
+                patientIDchange([],evt,pV);
+        end
+        if ~isempty(pV.label_patientDir.UserData)
+            pV.check_matrix(1,1) = 1;
+        else
+            pV.check_matrix(1,1) = 0;
+        end
+        if ~isempty(pV.label_patientID.UserData)
+            pV.check_matrix(2,1) = 1;
+        else
+            pV.check_matrix(2,1) = 0;
+        end
+        if ~isempty(pV.label_userID.UserData)
+            pV.check_matrix(5,1) = 1;
+        else
+            pV.check_matrix(5,1) = 0;
+        end
         d.Value = sum(pV.check_matrix)/height(pV.check_matrix);
         if all(pV.check_matrix)
             validCheck = 1;

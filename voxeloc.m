@@ -110,6 +110,7 @@ widget.mV           = mV;
 drawnow
 
 projSetUpWindow(widget);
+uiwait(widget.fig);
 
 [widget,wip]        = drawCentralPanel(widget);
 widget              = drawLeftPanel(widget,wip);
