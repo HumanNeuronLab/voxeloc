@@ -15,7 +15,15 @@ function projSetUpWindow(widget,varargin)
     paramsValues = paramsBuilder(projectWindow,widgetState);
     projectWindow.CloseRequestFcn = {@myCloseReq,widget,paramsValues,d};
     %close(d);
-
+    A = webread('https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/voxeloc_version.txt');
+    fid = fopen(which('voxeloc_version.txt'));
+    B = fscanf(fid,'%s');
+    fclose(fid);
+    if isequal(A,B)
+        disp('yay');
+    else
+        disp('ew');
+    end
     function myCloseReq(src,~,widget,pV,d)
         validCheck = runcheck(pV,d);
         switch validCheck
@@ -134,7 +142,7 @@ function projSetUpWindow(widget,varargin)
         pV.panel_cartouche.Layout.Column = [1,numel(pV.gridInner.ColumnWidth)];
         pV.grid_cartouche = uigridlayout('Parent',pV.panel_cartouche,...
                     'ColumnWidth',{'3x','4x','3x'},'RowHeight',{'1x','1x','1x','1x'},...
-                    'RowSpacing',0,'Padding',[5 5 5 5],'Scrollable','off');
+                    'RowSpacing',0,'Padding',[5 5 5 5],'Scrollable','off','BackgroundColor',[1 1 1]);
         try
             if isfield(widget.glassbrain.UserData,'instLogoFile')
                 instLogo = imagesc('Parent',pV.header1,'CData',imread([widget.glassbrain.UserData.instLogoPath widget.glassbrain.UserData.instLogoFile]));
