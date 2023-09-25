@@ -2,7 +2,7 @@ function loadVoxelocFile(~,~,widget,autoload)
 try
     if autoload == 1
         load(widget.autosave.UserData.filePath);
-        widget.viewer.projectParams.field_autosaveFile.Text = 'autosave_vxlc.mat';
+        widget.viewer.projectParams.field_autosaveFile.Text = 'autosave_voxeloc.mat';
         widget.viewer.projectParams.field_autosaveFile.FontColor = [0 0 0];
         widget.viewer.projectParams.field_autosavePath.Text = fileparts(widget.autosave.UserData.filePath);
         widget.viewer.projectParams.field_autosavePath.FontColor = [0 0 0];
@@ -10,7 +10,7 @@ try
     else
         try
             widget.fig.Visible = 'off';
-            [file,path] = uigetfile({'*_vxlc.mat'},'Select Voxeloc autosave file',[fileparts(fileparts(widget.glassbrain.UserData.filePathCT)) filesep 'voxeloc' filesep]);
+            [file,path] = uigetfile({'*_voxeloc.mat'},'Select Voxeloc autosave file',[fileparts(fileparts(widget.glassbrain.UserData.filePathCT)) filesep 'voxeloc' filesep]);
             load([path file]);
             widget.fig.Visible = 'on';
         catch

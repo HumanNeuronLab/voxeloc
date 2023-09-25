@@ -16,7 +16,7 @@
     
     if isempty(widget.autosave.UserData.filePath)
         widget.autosave.UserData.filePath = ...
-                [widget.glassbrain.UserData.patientDir filesep 'voxeloc' filesep 'autosave_vxlc.mat'];
+                [widget.glassbrain.UserData.patientDir filesep 'voxeloc' filesep 'autosave_voxeloc.mat'];
         if isfile(widget.autosave.UserData.filePath)
             if isequal(widget.autosave.UserData.overwrite,'on')
                 % proceed to autosave
@@ -36,7 +36,7 @@
                         return
                     case 'Start New'
                         widget.autosave.UserData.overwrite = 'on';
-                        fileName = [widget.glassbrain.UserData.patientDir 'voxeloc' filesep 'archive_autosave_' datestr(now,'HHMM_ddmmmyy') '_vxlc.mat'];
+                        fileName = [widget.glassbrain.UserData.patientDir 'voxeloc' filesep 'archive_autosave_' datestr(now,'HHMM_ddmmmyy') '_voxeloc.mat'];
                         copyfile(widget.autosave.UserData.filePath,fileName);
                         % proceed to overwrite
                         fileSave(widget)
@@ -82,7 +82,7 @@
             autosave.glassbrain = widget.glassbrain.UserData;
         end
         save(widget.autosave.UserData.filePath,'autosave');
-        widget.viewer.projectParams.field_autosaveFile.Text = 'autosave_vxlc.mat';
+        widget.viewer.projectParams.field_autosaveFile.Text = 'autosave_voxeloc.mat';
         widget.viewer.projectParams.field_autosaveFile.FontColor = [0 0 0];
         widget.viewer.projectParams.field_autosavePath.Text = fileparts(widget.autosave.UserData.filePath);
         widget.viewer.projectParams.field_autosavePath.FontColor = [0 0 0];

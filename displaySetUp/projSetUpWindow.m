@@ -191,6 +191,8 @@ function projSetUpWindow(widget,widgetState)
                         pV.field_patientID.FontColor = [0 0 0];
                         pV.lamp_patientID.Color = [0 1 0];
                         pV.text2_cartouche.Text = pV.label_patientID.UserData.patientID;
+                        widget.glassbrain.UserData.patientDir = cDir;
+                        widget = widgetAutosave(widget);
                     end
                 end
             case 3
@@ -311,7 +313,7 @@ function projSetUpWindow(widget,widgetState)
             pV.logoI_cartouche.Layout.Column = 1;
         end
         pV.text1_cartouche = uilabel('Parent',pV.grid_cartouche,...
-            'Text','<u>sEEG SLICES</u>','HorizontalAlignment','center',...
+            'Text','<u>VOXELOC PROJECT PARAMETERS</u>','HorizontalAlignment','center',...
             'VerticalAlignment','center','FontSize',16,'Interpreter','html');
         pV.text1_cartouche.Layout.Row = [1,2]; pV.text1_cartouche.Layout.Column = 2;
         pV.text2_cartouche = uilabel('Parent',pV.grid_cartouche,...
