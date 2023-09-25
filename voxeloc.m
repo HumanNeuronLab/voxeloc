@@ -5,9 +5,9 @@ function voxeloc
 %   rapidly and efficiently locate iEEG contact coordinates using 
 %   post-op & pre-op images.
 %   
-%   Version:        0.9C
+%   Version:        0.9E
 %   Contact:        jonathan.monney@unige.ch
-%   Last Update:    18/09/2023
+%   Last Update:    25/09/2023
 %
 %   Current Version Updates:
 %       - New output format with time-stamped .mat file that cannot be 
@@ -107,10 +107,9 @@ end
 
 widget              = update_outputData(widget);
 widget.mV           = mV;
+widget.d            = uiprogressdlg(widget.fig,'Title',...
+                        'Waiting for Project Set-Up parameters...');
 drawnow
-
-projSetUpWindow(widget);
-uiwait(widget.fig);
 
 [widget,wip]        = drawCentralPanel(widget);
 widget              = drawLeftPanel(widget,wip);
@@ -126,6 +125,9 @@ drawnow;
 
 widget              = defineCallbacks(widget);
 widget.fig.Resize   = 'off';
+widget.transferSetupFcn = {@transferData,widget};
+
+projSetUpWindow(widget,'init');
 
 
 % ======================================================================= %

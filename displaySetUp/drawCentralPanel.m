@@ -30,7 +30,7 @@ widget.viewer.projectParams.tab = uitab('Parent',widget.viewer.panel_CentralTabs
 widget.glassbrain = uipanel('Parent',widget.fig,'Visible','off');
 widget = logoDisplay(widget,scriptPath);
 pause(2);
-widget.viewer.logo.panel.Visible = 'off';
+%widget.viewer.logo.panel.Visible = 'off';
 
 
 % ----------------------------- CT Tab Set-Up -----------------------------
