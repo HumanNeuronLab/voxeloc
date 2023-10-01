@@ -313,7 +313,7 @@ function projSetUpWindow(widget,widgetState)
             pV.logoI_cartouche.Layout.Column = 1;
         end
         pV.text1_cartouche = uilabel('Parent',pV.grid_cartouche,...
-            'Text','<u>VOXELOC PROJECT PARAMETERS</u>','HorizontalAlignment','center',...
+            'Text','<u>PROJECT PARAMETERS</u>','HorizontalAlignment','center',...
             'VerticalAlignment','center','FontSize',16,'Interpreter','html');
         pV.text1_cartouche.Layout.Row = [1,2]; pV.text1_cartouche.Layout.Column = 2;
         pV.text2_cartouche = uilabel('Parent',pV.grid_cartouche,...
@@ -329,7 +329,7 @@ function projSetUpWindow(widget,widgetState)
             'VerticalAlignment','bottom','FontSize',12);
         pV.text4_cartouche.Layout.Row = 2; pV.text4_cartouche.Layout.Column = 3;
         
-        pV.logoV_cartouche = uiimage('Parent',pV.grid_cartouche,'ImageSource',which('erwin_logo.png'));
+        pV.logoV_cartouche = uiimage('Parent',pV.grid_cartouche,'ImageSource',which('voxeloc_logo.png'));
         pV.logoV_cartouche.Layout.Row = [3,4];
         pV.logoV_cartouche.Layout.Column = 3;
 
