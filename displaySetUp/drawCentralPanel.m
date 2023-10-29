@@ -398,7 +398,7 @@ end
 
 function widget = logoDisplay(widget,scriptPath)
 
-    logopath1 = [scriptPath filesep 'assets' filesep 'erwin_logo.png'];
+    logopath1 = [scriptPath filesep 'assets' filesep 'voxeloc_logo_white.png'];
     widget.viewer.logo.panel = uipanel('Parent',widget.fig,...
         'Position',[0,0,1922,1082],...
         'BackgroundColor',[0.37 0.37 0.37]);
