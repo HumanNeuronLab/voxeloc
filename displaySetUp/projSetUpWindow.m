@@ -10,6 +10,7 @@ function projSetUpWindow(widget,widgetState)
     
     paramsValues = paramsBuilder(projectWindow,widgetState,widget);
     projectWindow.CloseRequestFcn = {@myCloseReq,widget,paramsValues};
+    paramsValues.button_Validate.ButtonPushedFcn = {@myCloseReq,widget,paramsValues};
     
     try
         A = webread('https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/voxeloc_version.txt');
@@ -27,6 +28,9 @@ function projSetUpWindow(widget,widgetState)
     end
 
     function myCloseReq(src,~,widget,pV)
+        if isequal(src.Type,'uibutton')
+            src = src.Parent.Parent.Parent;
+        end
         validCheck = runcheck([],[],pV,widget.d,0);
         switch validCheck
             case 0
