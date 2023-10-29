@@ -1,6 +1,6 @@
 function projSetUpWindow(widget,widgetState)
-
-    % widgetState ('init' or 'update')
+%projSetUpWindow(widget,widgetState)
+    % widgetState - 'init' or 'update'
 
     screenSize      = widget.root.monitorSize(3:4);
     projectWindow   = uifigure('Name','Project Set-Up',...
@@ -11,10 +11,15 @@ function projSetUpWindow(widget,widgetState)
     paramsValues = paramsBuilder(projectWindow,widgetState,widget);
     projectWindow.CloseRequestFcn = {@myCloseReq,widget,paramsValues};
     
-    A = webread('https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/voxeloc_version.txt');
-    fid = fopen(which('voxeloc_version.txt'));
-    B = fscanf(fid,'%s');
-    fclose(fid);
+    try
+        A = webread('https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/voxeloc_version.txt');
+        fid = fopen(which('voxeloc_version.txt'));
+        B = fscanf(fid,'%s');
+        fclose(fid);
+    catch
+        A = 0;
+        B = 0;
+    end
     if isequal(A,B)
         paramsValues.label_newVersion.Text = 'Current version up-to-date ';
     else
