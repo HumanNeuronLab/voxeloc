@@ -1,63 +1,75 @@
 function loadVoxelocFile(~,~,widget,autoload)
 try
-    if autoload == 1
+    if isnumeric(autoload) && autoload == 1
         load(widget.autosave.UserData.filePath);
-        widget.viewer.projectParams.field_autosaveFile.Text = 'autosave_voxeloc.mat';
-        widget.viewer.projectParams.field_autosaveFile.FontColor = [0 0 0];
-        widget.viewer.projectParams.field_autosavePath.Text = fileparts(widget.autosave.UserData.filePath);
-        widget.viewer.projectParams.field_autosavePath.FontColor = [0 0 0];
-        widget.viewer.projectParams.lamp_autosaveFile.Color = [0 1 0];
+%         widget.viewer.projectParams.field_autosaveFile.Text = 'autosave_voxeloc.mat';
+%         widget.viewer.projectParams.field_autosaveFile.FontColor = [0 0 0];
+%         widget.viewer.projectParams.field_autosavePath.Text = fileparts(widget.autosave.UserData.filePath);
+%         widget.viewer.projectParams.field_autosavePath.FontColor = [0 0 0];
+%         widget.viewer.projectParams.lamp_autosaveFile.Color = [0 1 0];
+    elseif isstruct(autoload)
+        try
+            autoload.panel.Parent.Visible = 'off';
+            [file,path] = uigetfile({'*_voxeloc.mat'},'Select Voxeloc file');
+            load([path file],'autosave');
+            autoload.panel.Parent.Visible = 'on';
+            widget.autosave.UserData.filePath = [path file];
+        catch
+            autoload.panel.Parent.Visible = 'on';
+            disp([newline 'No file selected...' newline]);
+            return
+        end
     else
         try
             widget.fig.Visible = 'off';
-            [file,path] = uigetfile({'*_voxeloc.mat'},'Select Voxeloc autosave file',[fileparts(fileparts(widget.glassbrain.UserData.filePathCT)) filesep 'voxeloc' filesep]);
-            load([path file]);
+            [file,path] = uigetfile({'*_voxeloc.mat'},'Select Voxeloc file',[fileparts(fileparts(widget.glassbrain.UserData.filePathCT)) filesep 'voxeloc' filesep]);
+            load([path file],'autosave');
             widget.fig.Visible = 'on';
         catch
             widget.fig.Visible = 'on';
-            disp([newline 'No autosave file selected...' newline]);
+            disp([newline 'No file selected...' newline]);
             return
         end
     end
     widget.viewer.logo.panel.Visible = 'on';
-    widget.fig.Pointer = 'watch';
-    if ~isequal(widget.glassbrain.UserData.patientID,autosave.glassbrain.patientID)
-        answer1 = uiconfirm(widget.fig,...
-                    ['The NIfTI and autosave files you have' ...
-                        ' selected do not have the same patient ID.' ...
-                        ' Please select the desired patient ID or cancel upload:'],...
-                        'Patient ID conflict',...
-                        'Options',{autosave.glassbrain.patientID,widget.glassbrain.UserData.patientID,'Cancel'},'DefaultOption',1,...
-                        'Icon','warning');
-        switch answer1
-            case 'Cancel'
-                disp([newline 'No autosave file selected...' newline]);
-                return
-            case autosave.glassbrain.patientID
-                widget.glassbrain.UserData.patientID = autosave.glassbrain.patientID;
-            case widget.glassbrains.Userdata.patientID
-                autosave.glassbrain.patientID = widget.glassbrain.UserData.patientID;
-        end
-        if isequal(widget.viewer.panel_CentralTabsMRI.SelectedTab.Tag,'CT')
-            widget.viewer.panel_CentralTabsMRI.SelectedTab.Title = ...
-                [widget.glassbrain.UserData.patientID ' | ' widget.glassbrain.UserData.fileNameCT];
-        else
-            widget.viewer.panel_CentralTabsMRI.SelectedTab.Title = ...
-                [widget.glassbrain.UserData.patientID ' | ' widget.glassbrain.UserData.fileNameT1];
-        end
-    else
-        % redundant...
-        widget.glassbrain.UserData.patientID = autosave.glassbrain.patientID;
-    end
+%     widget.fig.Pointer = 'watch';
+%     if ~isequal(widget.glassbrain.UserData.patientID,autosave.glassbrain.patientID)
+%         answer1 = uiconfirm(widget.fig,...
+%                     ['The NIfTI and autosave files you have' ...
+%                         ' selected do not have the same patient ID.' ...
+%                         ' Please select the desired patient ID or cancel upload:'],...
+%                         'Patient ID conflict',...
+%                         'Options',{autosave.glassbrain.patientID,widget.glassbrain.UserData.patientID,'Cancel'},'DefaultOption',1,...
+%                         'Icon','warning');
+%         switch answer1
+%             case 'Cancel'
+%                 disp([newline 'No autosave file selected...' newline]);
+%                 return
+%             case autosave.glassbrain.patientID
+%                 widget.glassbrain.UserData.patientID = autosave.glassbrain.patientID;
+%             case widget.glassbrains.Userdata.patientID
+%                 autosave.glassbrain.patientID = widget.glassbrain.UserData.patientID;
+%         end
+%         if isequal(widget.viewer.panel_CentralTabsMRI.SelectedTab.Tag,'CT')
+%             widget.viewer.panel_CentralTabsMRI.SelectedTab.Title = ...
+%                 [widget.glassbrain.UserData.patientID ' | ' widget.glassbrain.UserData.fileNameCT];
+%         else
+%             widget.viewer.panel_CentralTabsMRI.SelectedTab.Title = ...
+%                 [widget.glassbrain.UserData.patientID ' | ' widget.glassbrain.UserData.fileNameT1];
+%         end
+%     else
+%         % redundant...
+%         widget.glassbrain.UserData.patientID = autosave.glassbrain.patientID;
+%     end
     cF = dir(widget.autosave.UserData.filePath);
-    widget.viewer.projectParams.field_forceSave.Text = datestr(cF.date,'HH:MM dd/mmm/yyyy');
-    widget.viewer.projectParams.field_forceSave.FontColor = [0 0 0];
-    widget.viewer.projectParams.field_patientID.Value = widget.glassbrain.UserData.patientID;
-    widget.viewer.projectParams.field_patientID.FontColor = [0 0 0];
-    widget.viewer.projectParams.lamp_patientID.Color = [0 1 0];
+    autoload.field_forceSave.Text = datestr(cF.date,'HH:MM dd/mmm/yyyy');
+    autoload.field_forceSave.FontColor = [0.94 0.94 0.94];
     widget.tree_Summary.Children.delete
+
+    % DATA TRANSFER HAPPENS HERE
     widget.fig.UserData = autosave.fig;
     widget.glassbrain.UserData = autosave.glassbrain;
+
     for i = 1:numel(fieldnames(autosave.fig))
         field = ['Electrode' num2str(i)];
         widget = createTreeNode(widget,widget.tree_Summary,field);
@@ -85,16 +97,16 @@ try
         widget.viewer.panel_CentralTabsMRI.SelectedTab = widget.viewer.CT.tab;
         widget.glassbrain.UserData.reload = [];
         selectFile(widget.viewer.CT.button_selectNifti,[],widget);
-        widget.viewer.projectParams.field_ctFile.Text = widget.glassbrain.UserData.fileNameCT;
-        widget.viewer.projectParams.field_ctFile.FontColor = [0 0 0];
-        widget.viewer.projectParams.lamp_ctFile.Color = [0 1 0];
-        widget.viewer.projectParams.button_ctFile.BackgroundColor = [0.94 0.94 0.94];
+        autoload.field_ctPath.Text = widget.glassbrain.UserData.fileNameCT;
+        autoload.field_ctPath.FontColor = [0.94,0.94,0.94];
+        autoload.lamp_ctFile.Color = [0 1 0];
     end
     if isfield(widget.glassbrain.UserData,'filePathCT')
-        widget.viewer.projectParams.field_ctPath.Text = widget.glassbrain.UserData.filePathCT;
-        widget.viewer.projectParams.field_ctPath.FontColor = [0 0 0];
-        widget.viewer.projectParams.lamp_ctFile.Color = [0 1 0];
-        widget.viewer.projectParams.button_ctFile.BackgroundColor = [0.94 0.94 0.94];
+        [path1,~] = fileparts(widget.glassbrain.UserData.filePathCT);
+        [path2,path1] = fileparts(path1);
+        [~,path2] = fileparts(path2);
+        autoload.field_ctFile.Text = ['...' filesep path2 filesep path1];
+        autoload.field_ctFile.FontColor = [0.94,0.94,0.94];
     end
     if isfield(widget.glassbrain.UserData,'fileNameT1')
         widget.viewer.T1.label_selectNifti.Text = widget.glassbrain.UserData.fileNameT1;
@@ -105,53 +117,86 @@ try
         widget.viewer.oblique.button_niftiT1.BackgroundColor = [0.94,0.94,0.94];
         widget.viewer.panel_CentralTabsMRI.SelectedTab = widget.viewer.T1.tab;
         widget.glassbrain.UserData.reload = [];
-        selectFile(widget.viewer.CT.button_selectNifti,[],widget);
-        widget.viewer.projectParams.field_t1File.Text = widget.glassbrain.UserData.fileNameT1;
-        widget.viewer.projectParams.field_t1File.FontColor = [0 0 0];
-        widget.viewer.projectParams.lamp_t1File.Color = [0 1 0];
-        widget.viewer.projectParams.button_t1File.BackgroundColor = [0.94 0.94 0.94];
+        selectFile(widget.viewer.T1.button_selectNifti,[],widget);
+        autoload.field_t1Path.Text = widget.glassbrain.UserData.fileNameT1;
+        autoload.field_t1Path.FontColor = [0.94,0.94,0.94];
+        autoload.lamp_t1File.Color = [0 1 0];
     end
     if isfield(widget.glassbrain.UserData,'filePathT1')
-        widget.viewer.projectParams.field_t1Path.Text = widget.glassbrain.UserData.filePathT1;
-        widget.viewer.projectParams.field_t1Path.FontColor = [0 0 0];
-        widget.viewer.projectParams.lamp_t1File.Color = [0 1 0];
-        widget.viewer.projectParams.button_ctFile.BackgroundColor = [0.94 0.94 0.94];
+        [path1,~] = fileparts(widget.glassbrain.UserData.filePathT1);
+        [path2,path1] = fileparts(path1);
+        [~,path2] = fileparts(path2);
+        autoload.field_t1File.Text = ['...' filesep path2 filesep path1];
+        autoload.field_t1File.FontColor = [0.94,0.94,0.94];
     end
     if isfield(widget.glassbrain.UserData,'reload')
         widget.glassbrain.UserData = rmfield(widget.glassbrain.UserData,'reload');
+    end
+    if isfield(widget.glassbrain.UserData,'fileNamePARC')
+        autoload.field_parcPath.Text = widget.glassbrain.UserData.fileNamePARC;
+        autoload.field_parcPath.FontColor = [0.94,0.94,0.94];
+        autoload.lamp_parcFile.Color = [0 1 0];
     end
     if isfield(widget.glassbrain.UserData,'filePathPARC')
         widget.viewer.oblique.label_niftiParc.Text = [widget.glassbrain.UserData.filePathPARC widget.glassbrain.UserData.fileNamePARC];
         widget.viewer.oblique.label_niftiParc.FontColor = [0 0 0];
         widget.viewer.oblique.button_niftiParc.BackgroundColor = [0.94,0.94,0.94];
-        widget.viewer.projectParams.field_parcFile.Text = widget.glassbrain.UserData.fileNamePARC;
-        widget.viewer.projectParams.field_parcFile.FontColor = [0 0 0];
-        widget.viewer.projectParams.field_parcPath.Text = widget.glassbrain.UserData.filePathPARC;
-        widget.viewer.projectParams.field_parcPath.FontColor = [0 0 0];
-        widget.viewer.projectParams.lamp_parcFile.Color = [0 1 0];
-        widget.viewer.projectParams.button_parcFile.BackgroundColor = [0.94 0.94 0.94];
+        [path1,~] = fileparts(widget.glassbrain.UserData.filePathPARC);
+        [path2,path1] = fileparts(path1);
+        [~,path2] = fileparts(path2);
+        autoload.field_parcFile.Text = ['...' filesep path2 filesep path1];
+        autoload.field_parcFile.FontColor = [0.94,0.94,0.94];
     end
-
-    if isfield(widget.glassbrain.UserData,'userID')
-        widget.viewer.projectParams.field_userID.Value = widget.glassbrain.UserData.userID;
-        widget.viewer.projectParams.field_userID.FontColor = [0 0 0];
-        widget.viewer.projectParams.lamp_userID.Color = [0 1 0];
-    elseif ~isempty(widget.viewer.projectParams.field_userID.Value)
-        widget.glassbrain.UserData.userID = widget.viewer.projectParams.field_userID.Value;
+    widget.viewer.panel_CentralTabsMRI.SelectedTab = widget.viewer.CT.tab;
+    if isfield(widget.glassbrain.UserData,'userID') && ~isempty(widget.glassbrain.UserData.userID)
+        autoload.field_userID.Value = widget.glassbrain.UserData.userID;
+        autoload.field_userID.FontColor = [0 0 0];
+        autoload.lamp_userID.Color = [0 1 0];
+    else
+        widget.glassbrain.UserData.userID = [];
+    end
+    if isfield(widget.glassbrain.UserData,'patientID') && ~isempty(widget.glassbrain.UserData.patientID)
+        autoload.field_patientID.Value = widget.glassbrain.UserData.patientID;
+        autoload.field_patientID.FontColor = [0 0 0];
+        autoload.lamp_patientID.Color = [0 1 0];
+    else
+        widget.glassbrain.UserData.patientID = [];
+    end
+    if isfield(widget.glassbrain.UserData,'patientDir') && ~isempty(widget.glassbrain.UserData.patientDir)
+        [path2,path1] = fileparts(widget.glassbrain.UserData.patientDir);
+        [~,path2] = fileparts(path2);
+        autoload.field_patientDir.FontColor = [0.94,0.94,0.94];
+        autoload.lamp_patientDir.Color = [0 1 0];
+        autoload.field_patientDir.Text = ['...' filesep path2 filesep path1];
+    else
+        widget.glassbrain.UserData.patientDir = [];
+    end
+    if isfield(widget.autosave.UserData,'filePath')
+        [path1,file] = fileparts(widget.autosave.UserData.filePath);
+        [path2,path1] = fileparts(path1);
+        [~,path2] = fileparts(path2);
+        autoload.field_autosavePath.Text = [file '.mat'];
+        autoload.field_autosavePath.FontColor = [0.94,0.94,0.94];
+        autoload.lamp_autosaveFile.Color = [0 1 0];
+        autoload.field_autosaveFile.Text = ['...' filesep path2 filesep path1];
+        autoload.field_autosaveFile.FontColor = [0.94,0.94,0.94];
+        autoload.field_voxelocFolder.Text = ['...' filesep path2 filesep path1];
+        autoload.field_voxelocFolder.FontColor = [0.94,0.94,0.94];
+        autoload.lamp_voxelocFolder.Color = [0 1 0];
     end
 
     if isfield(widget.glassbrain.UserData,'instLogoPath')
-        widget.viewer.projectParams.field_instLogo.Visible = 'off';
-        widget.viewer.projectParams.image_instLogo.Visible = 'on';
-        widget.viewer.projectParams.image_instLogo.ImageSource = [widget.glassbrain.UserData.instLogoPath widget.glassbrain.UserData.instLogoFile];
-        widget.viewer.projectParams.image_instLogo.Layout.Row = widget.viewer.projectParams.label_instLogo.Layout.Row;
-        widget.viewer.projectParams.image_instLogo.Layout.Column = 2;
-        widget.viewer.projectParams.button_instLogo.BackgroundColor = [0.94 0.94 0.94];
-        widget.viewer.projectParams.lamp_instLogo.Color = [0 1 0];
-    elseif isequal(widget.viewer.projectParams.image_instLogo.Visible,'on')
-        cInstFile = dir(widget.viewer.projectParams.image_instLogo.ImageSource);
-        widget.glassbrain.UserData.instLogoFile = cInstFile.name;
-        widget.glassbrain.UserData.instLogoPath = [cInstFile.folder filesep];
+%         widget.viewer.projectParams.field_instLogo.Visible = 'off';
+%         widget.viewer.projectParams.image_instLogo.Visible = 'on';
+%         widget.viewer.projectParams.image_instLogo.ImageSource = [widget.glassbrain.UserData.instLogoPath widget.glassbrain.UserData.instLogoFile];
+%         widget.viewer.projectParams.image_instLogo.Layout.Row = widget.viewer.projectParams.label_instLogo.Layout.Row;
+%         widget.viewer.projectParams.image_instLogo.Layout.Column = 2;
+%         widget.viewer.projectParams.button_instLogo.BackgroundColor = [0.94 0.94 0.94];
+%         widget.viewer.projectParams.lamp_instLogo.Color = [0 1 0];
+%     elseif isequal(widget.viewer.projectParams.image_instLogo.Visible,'on')
+%         cInstFile = dir(widget.viewer.projectParams.image_instLogo.ImageSource);
+%         widget.glassbrain.UserData.instLogoFile = cInstFile.name;
+%         widget.glassbrain.UserData.instLogoPath = [cInstFile.folder filesep];
     end
 
 
@@ -177,13 +222,7 @@ try
         catch
         end
     end
-    widget.viewer.projectParams.field_electrodes.Text = ['Completed: ' num2str(numSuccess) ' of ' num2str(allElec)];
-    widget.viewer.projectParams.field_electrodes.FontColor = [0 0 0];
-    if numSuccess == allElec
-        widget.viewer.projectParams.lamp_electrodes.Color = [0 1 0];
-    else
-        widget.viewer.projectParams.lamp_electrodes.Color = [1 0 0];
-    end
+
     try
         widget.viewer.oblique.slider_opacity.Value = max(max(widget.fig.UserData.(cElec).oblique.image.sliceSEG_VertT1.AlphaData))*100;
         widget.viewer.oblique.label_opacity.Text = ['Parcellation opacity: ' num2str(widget.viewer.oblique.slider_opacity.Value) '%'];

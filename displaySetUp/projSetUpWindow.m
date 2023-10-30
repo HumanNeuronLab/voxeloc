@@ -23,8 +23,10 @@ function projSetUpWindow(widget,widgetState)
     end
     if isequal(A,B)
         paramsValues.label_newVersion.Text = 'Current version up-to-date ';
+        paramsValues.label_newVersionTop.Text = 'Current version up-to-date ';
     else
         paramsValues.label_newVersion.Text = ['<a href="https://github.com/HumanNeuronLab/voxeloc">New version avaible (' A ')!</a>'];
+        paramsValues.label_newVersionTop.Text = ['<a href="https://github.com/HumanNeuronLab/voxeloc">New version avaible (' A ')!</a>'];
     end
 
     function myCloseReq(src,~,widget,pV)
@@ -56,9 +58,36 @@ function projSetUpWindow(widget,widgetState)
         switch wS
             case 'init'
                 pV.panel = uipanel('Parent',pW,'Position',[20 20 pW.Position(3)-40 pW.Position(4)-40]);
+                
+                pV.gridInit = uigridlayout('Parent',pV.panel,...
+                    'ColumnWidth',{'1x',200,200,'1x'},'RowHeight',{100,'1x',50,'1x',35},...
+                    'RowSpacing',15,'Padding',[20 20 20 20],'Scrollable','on','BackgroundColor',[0.24 0.24 0.24]);
+                
+                pV.logo_voxeloc = uiimage('Parent',pV.gridInit,'ImageSource',which('voxeloc_logo_white.png'));
+                pV.logo_voxeloc.Layout.Column = [1,numel(pV.gridInit.ColumnWidth)];
+                pV.logo_voxeloc.Layout.Row = 1;
+                pV.label_choice = uilabel('Parent',pV.gridInit,'Text','Start new projet or load existing file?','FontWeight','bold','FontColor',[1 1 1]);
+                pV.label_choice.Layout.Column = [1,numel(pV.gridInit.ColumnWidth)];
+                pV.label_choice.Layout.Row = 2;
+                pV.label_choice.HorizontalAlignment = 'center';
+                pV.label_choice.VerticalAlignment = 'center';
+                pV.button_startNew = uibutton('Parent',pV.gridInit,'Text','New Project','BackgroundColor',[1,0.65,0],'Tag','NEW');
+                pV.button_startNew.Layout.Column = 2;
+                pV.button_startNew.Layout.Row = 3;
+                pV.button_loadFile = uibutton('Parent',pV.gridInit,'Text','Load','BackgroundColor',[0.94 0.94 0.94],'Tag','LOAD');
+                pV.button_loadFile.Layout.Column = 3;
+                pV.button_loadFile.Layout.Row = 3;
+                pV.label_newVersionTop = uilabel('Parent',pV.gridInit,'Text','lll','HorizontalAlignment','right','VerticalAlignment','bottom','Interpreter','html','FontSize',10,'FontColor',[1 1 1]);
+                pV.label_newVersionTop.Layout.Row = numel(pV.gridInit.RowHeight)-1;
+                pV.label_newVersionTop.Layout.Column = [numel(pV.gridInit.ColumnWidth)-1 numel(pV.gridInit.ColumnWidth)];
+                progPath = fileparts(which('voxeloc.m'));
+                pV.image_currentVersionTop = uiimage('Parent',pV.gridInit,'ImageSource',[progPath filesep 'assets' filesep 'Voxeloc_version.png'],'HorizontalAlignment','right');
+                pV.image_currentVersionTop.Layout.Row = numel(pV.gridInit.RowHeight);
+                pV.image_currentVersionTop.Layout.Column = [numel(pV.gridInit.ColumnWidth)-1 numel(pV.gridInit.ColumnWidth)];
+
                 pV.gridInner = uigridlayout('Parent',pV.panel,...
                     'ColumnWidth',{150,200,22,100,'1x'},'RowHeight',{100,22,22,22,22,22,22,22,22,22,22,'1x',35},...
-                    'RowSpacing',15,'Padding',[20 20 20 20],'Scrollable','on','BackgroundColor',[0.24 0.24 0.24]);
+                    'RowSpacing',15,'Padding',[20 20 20 20],'Scrollable','on','BackgroundColor',[0.24 0.24 0.24],'Visible','off');
                 pV = drawCartouche(pV);
 
                 pV.label_userID = uilabel('Parent',pV.gridInner,'Text','User name:','FontWeight','bold','FontColor',[1 1 1]);
@@ -152,6 +181,9 @@ function projSetUpWindow(widget,widgetState)
                 pV.image_currentVersion.Layout.Row = numel(pV.gridInner.RowHeight);
                 pV.image_currentVersion.Layout.Column = [numel(pV.gridInner.ColumnWidth)-1 numel(pV.gridInner.ColumnWidth)];
 
+                pV.button_startNew.ButtonPushedFcn = {@fileStartVoxeloc,pV,widget};
+                pV.button_loadFile.ButtonPushedFcn = {@fileStartVoxeloc,pV,widget};
+
                 pV.field_userID.ValueChangingFcn = {@runcheck, pV,widget.d,1};
                 pV.field_userID.ValueChangedFcn = {@runcheck, pV,widget.d,1};
 
@@ -170,7 +202,22 @@ function projSetUpWindow(widget,widgetState)
 
         end
     end
-    
+
+    function fileStartVoxeloc (src,evt,pV,widget)
+        switch src.Tag
+            case 'NEW'
+                pV.gridInit.Visible = 'off';
+                pV.gridInner.Visible = 'on';
+                return
+            case 'LOAD'
+                %loadfile
+                loadVoxelocFile([],[],widget,pV)
+                pV.gridInit.Visible = 'off';
+                pV.gridInner.Visible = 'on';
+                return
+        end
+    end
+
     function validCheck = runcheck(src,evt,pV,d,idVal)
         switch idVal
             case 1
@@ -380,7 +427,7 @@ function projSetUpWindow(widget,widgetState)
         pV.panel_cartouche.Layout.Column = [1,numel(pV.gridInner.ColumnWidth)];
         pV.grid_cartouche = uigridlayout('Parent',pV.panel_cartouche,...
                     'ColumnWidth',{'3x','4x','3x'},'RowHeight',{'1x','1x','1x','1x'},...
-                    'RowSpacing',0,'Padding',[5 5 5 5],'Scrollable','off','BackgroundColor',[0.8 0.8 0.8 ]);
+                    'RowSpacing',0,'Padding',[5 5 5 5],'Scrollable','off','BackgroundColor',[0.9 0.9 0.9 ]);
         if isequal(widgetState,'update')
             if isfield(widget.glassbrain.UserData,'instLogoFile')
                 instLogo = imagesc('Parent',pV.header1,'CData',imread([widget.glassbrain.UserData.instLogoPath widget.glassbrain.UserData.instLogoFile]));

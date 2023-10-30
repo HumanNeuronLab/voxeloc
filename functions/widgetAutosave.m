@@ -7,6 +7,7 @@ if nargin == 2
 else
     cDisplay = widget.fig;
     varargin{2} = [];
+    pV = 1;
 end
 
 % CALLED FROM checkStatus, checkOblique, reorderElectrodes @keyDown & @buttonUp
@@ -31,7 +32,7 @@ end
                 switch overwriteOpt
                     case 'Load'
                         % Load // load widget.autosave.UserData.filePath
-                        loadVoxelocFile([],[],widget,1);
+                        loadVoxelocFile([],[],widget,pV);
                         widget.autosave.UserData.overwrite = 'on';
                         return
                     case 'Start New'
