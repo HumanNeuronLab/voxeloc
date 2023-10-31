@@ -283,10 +283,15 @@ function projSetUpWindow(widget,widgetState)
                 pV.gridInner.Visible = 'on';
                 return
             case 'LOAD'
-                %loadfile
-                loadVoxelocFile([],[],widget,pV)
+                pV.panel.Parent.Visible = 'off';
+                nSrc.mssg = [];
+                loadVoxelocFile(nSrc,[],widget,pV);
+                widget.autosave.UserData.overwrite = 'on';
+                pV.panel.Parent.Visible = 'on';
+                figure(pV.panel.Parent);
                 pV.gridInit.Visible = 'off';
                 pV.gridInner.Visible = 'on';
+                validCheck = runcheck([],[],pV,widget.d,0);
                 return
         end
     end

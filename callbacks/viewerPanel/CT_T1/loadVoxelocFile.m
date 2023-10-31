@@ -1,13 +1,8 @@
-function loadVoxelocFile(~,~,widget,autoload)
+function loadVoxelocFile(src,~,widget,autoload)
 try
-    if isnumeric(autoload) && autoload == 1
+    if isequal(src.mssg,'load')
         load(widget.autosave.UserData.filePath);
-%         widget.viewer.projectParams.field_autosaveFile.Text = 'autosave_voxeloc.mat';
-%         widget.viewer.projectParams.field_autosaveFile.FontColor = [0 0 0];
-%         widget.viewer.projectParams.field_autosavePath.Text = fileparts(widget.autosave.UserData.filePath);
-%         widget.viewer.projectParams.field_autosavePath.FontColor = [0 0 0];
-%         widget.viewer.projectParams.lamp_autosaveFile.Color = [0 1 0];
-    elseif isstruct(autoload)
+    else
         try
             autoload.panel.Parent.Visible = 'off';
             [file,path] = uigetfile({'*_voxeloc.mat'},'Select Voxeloc file');
@@ -16,17 +11,6 @@ try
             widget.autosave.UserData.filePath = [path file];
         catch
             autoload.panel.Parent.Visible = 'on';
-            disp([newline 'No file selected...' newline]);
-            return
-        end
-    else
-        try
-            widget.fig.Visible = 'off';
-            [file,path] = uigetfile({'*_voxeloc.mat'},'Select Voxeloc file',[fileparts(fileparts(widget.glassbrain.UserData.filePathCT)) filesep 'voxeloc' filesep]);
-            load([path file],'autosave');
-            widget.fig.Visible = 'on';
-        catch
-            widget.fig.Visible = 'on';
             disp([newline 'No file selected...' newline]);
             return
         end
@@ -152,6 +136,7 @@ try
         autoload.field_userID.Value = widget.glassbrain.UserData.userID;
         autoload.field_userID.FontColor = [0 0 0];
         autoload.lamp_userID.Color = [0 1 0];
+        autoload.label_userID.UserData.userID = autoload.field_userID.Value;
     else
         widget.glassbrain.UserData.userID = [];
     end
@@ -159,6 +144,7 @@ try
         autoload.field_patientID.Value = widget.glassbrain.UserData.patientID;
         autoload.field_patientID.FontColor = [0 0 0];
         autoload.lamp_patientID.Color = [0 1 0];
+        autoload.label_patientID.UserData.patientID = autoload.field_patientID.Value;
     else
         widget.glassbrain.UserData.patientID = [];
     end
@@ -168,6 +154,7 @@ try
         autoload.field_patientDir.FontColor = [0.94,0.94,0.94];
         autoload.lamp_patientDir.Color = [0 1 0];
         autoload.field_patientDir.Text = ['...' filesep path2 filesep path1];
+        autoload.label_patientDir.UserData.patientDir = autoload.field_patientDir.Text;
     else
         widget.glassbrain.UserData.patientDir = [];
     end
@@ -183,20 +170,23 @@ try
         autoload.field_voxelocFolder.Text = ['...' filesep path2 filesep path1];
         autoload.field_voxelocFolder.FontColor = [0.94,0.94,0.94];
         autoload.lamp_voxelocFolder.Color = [0 1 0];
+
+        autoload.label_voxelocFolder.UserData.voxDir = autoload.field_voxelocFolder.Text;
+        autoload.label_autosaveFile.UserData.autosavePath = widget.autosave.UserData.filePath;
+
     end
 
     if isfield(widget.glassbrain.UserData,'instLogoPath')
-%         widget.viewer.projectParams.field_instLogo.Visible = 'off';
-%         widget.viewer.projectParams.image_instLogo.Visible = 'on';
-%         widget.viewer.projectParams.image_instLogo.ImageSource = [widget.glassbrain.UserData.instLogoPath widget.glassbrain.UserData.instLogoFile];
-%         widget.viewer.projectParams.image_instLogo.Layout.Row = widget.viewer.projectParams.label_instLogo.Layout.Row;
-%         widget.viewer.projectParams.image_instLogo.Layout.Column = 2;
-%         widget.viewer.projectParams.button_instLogo.BackgroundColor = [0.94 0.94 0.94];
-%         widget.viewer.projectParams.lamp_instLogo.Color = [0 1 0];
-%     elseif isequal(widget.viewer.projectParams.image_instLogo.Visible,'on')
-%         cInstFile = dir(widget.viewer.projectParams.image_instLogo.ImageSource);
-%         widget.glassbrain.UserData.instLogoFile = cInstFile.name;
-%         widget.glassbrain.UserData.instLogoPath = [cInstFile.folder filesep];
+        autoload.image_instLogo.ImageSource = widget.glassbrain.UserData.instLogoPath;
+        [autoload.label_instLogo.UserData.instLogoPath,autoload.label_instLogo.UserData.instLogoFile,fileExt] = ...
+            fileparts(widget.glassbrain.UserData.instLogoPath);
+        autoload.label_instLogo.UserData.instLogoFile = [autoload.label_instLogo.UserData.instLogoFile fileExt];
+        autoload.label_instLogo.UserData.instLogoPath = [autoload.label_instLogo.UserData.instLogoPath filesep];
+        autoload.image_instLogo.Visible = 'on';
+        autoload.field_instLogo.Visible = 'off';
+        autoload.logoI_cartouche.ImageSource = widget.glassbrain.UserData.instLogoPath;
+        autoload.lamp_instLogo.Color = [0 1 0];
+        widget.viewer.projectParams.tab.UserData.instLogoPath = widget.glassbrain.UserData.instLogoPath;
     end
 
 

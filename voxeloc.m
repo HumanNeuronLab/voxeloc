@@ -5,33 +5,13 @@ function voxeloc
 %   rapidly and efficiently locate iEEG contact coordinates using 
 %   post-op & pre-op images.
 %   
-%   Version:        v0.9H
+%   Version:        v0.9L
 %   Contact:        jonathan.monney@unige.ch
-%   Last Update:    29/10/2023
+%   Last Update:    31/10/2023
 %
 %   Current Version Updates:
-%       - New output format with time-stamped .mat file that cannot be 
-%         overwritten.
-%       - MGRID copy saved in '*/elec_recon/final_output', along with
-%       voxeloc.
-%         '.mat' file.
-%       - Log files and other text files automatically output from iELVis
-%          dykstraElecPjct
-%       - Output to BIDS format now implemented!
-%       - New tab created to allow reordering of electrodes.
-%       - New tab created for parcellation viewer (oblique slice) [work in
-%       progress...]
-%       - widget object restructured for cohesiveness.
-%       - Loading of files from oblique tab.
-%       - All volumes now loaded using MRIread ('YDir' reversed on axes for
-%       proper display of imagesc), independantly of file format (.nii,
-%       .mgh, .mgz).
-%       - Added features to oblique slice tab: overlay parcellation on
-%       either slice, adjust opacity level for overlay, apply opacity saves
-%       the parameter and applies it to all slices.
-%       - Possibility to export a PDF file of all oblique slices.
-%       - Creation of new project parameters tab.
-%       - Update of CT & T1 tabs layout and performance on PDF exporting.
+%       - Finalising beta runs to make sure all mains functions are
+%       operational.
 %          
 %       Note: electrode parameters may only be modified or updated in the
 %       CT tab. After updating any electrode parameters, estimation must be
@@ -39,11 +19,8 @@ function voxeloc
 %       depth electrodes may be created (no grids or strips).
 % 
 %   Future Version Updates:
-%       - Removal of "Reorder electrodes" tab and replace feature with up
-%       and down arrow buttons above tree panel.
-%       - Addition of an electrode color changing button above tree panel.
-%       - Add option to create "grid" electrodes.
-%       - Add option to create "strip" electrodes.
+%       - Add option to create "grid" & "strip" electrodes.
+%       - Enhance compatibility and visualization methods.
 %
 %   Created by J.P.Monney - Human Neuron Lab (Université de Genève)
 

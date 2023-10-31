@@ -250,7 +250,7 @@ function selectFile(data, ~, widget)
         drawnow
         widget.fig.Pointer = 'arrow';
         widget.viewer.CT.button_resetView.Enable = 'on';
-        widget.viewer.CT.button_load.Enable = 'on';
+%         widget.viewer.CT.button_load.Enable = 'on';
         widget = contactDotDisplay(widget);
         
         addlistener(widget.viewer.(tab_Viewer.Tag).coronal_crosshair,'MovingROI',@(src,data)crossDrag...

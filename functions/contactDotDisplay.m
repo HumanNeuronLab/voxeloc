@@ -9,6 +9,9 @@ function widget = contactDotDisplay(widget)
         case 'T1'
             volName = 'T1vol';
     end
+    if ~isfield(widget.glassbrain.UserData,volName)
+        return
+    end
     for i = 1:length(widget.viewer.(currTab).ax_sliceView1.Children)
         if isequal(widget.viewer.(currTab).ax_sliceView1.Children(i).Tag,'dot')
             idDelete1(j1) = i;

@@ -18,33 +18,7 @@ location estimations.
 ---
 
 #### Current Version Updates:
-
-- GUI created that allows i-EEG electrode location estimation based 
-on the deepest contact's position and a second contact position
-placed on the electrode's shaft.
-Required parameters for each electrode are Name, Number of
-Contacts, Distance Between Contacts (mm), Deepest Contact's
-Coordinates, Second Contact Coordinates.
-- New output format with time-stamped .mat file that cannot be 
-overwritten.
-- MGRID copy saved in '*/elec_recon/final_output', along with Voxeloc
-'.mat' file.
-- Log files and other text files automatically output from iELVis
-dykstraElecPjct.
-- Output to BIDS format now implemented!
-- New tab created to allow reordering of electrodes.
-- New tab created for parcellation viewer (oblique slice) [work in 
-progress...].
-- widget object restructured for cohesiveness.
-- Loading of files from oblique tab.
-- All volumes now loaded using MRIread ('YDir' reversed on axes for proper 
-display of imagesc), independantly of file format (.nii, .mgh, .mgz).
-- Added features to oblique slice tab: overlay parcellation on
-either slice, adjust opacity level for overlay, apply opacity saves
-the parameter and applies it to all slices.
-- Possibility to export a PDF file of all oblique slices.
-- Creation of new project parameters tab.
-- Update of CT & T1 tabs layout and performance on PDF exporting.
+- Finalising beta runs to make sure all mains functions are operational.
 
 *Note: electrode parameters may only be modified or updated in the
 CT tab. After updating any electrode parameters, estimation must be
@@ -52,17 +26,13 @@ re-run in order to update contact locations. At this point, only
 depth electrodes may be created (no grids or strips).*
 
 #### Known bugs:
-- Autoupdate requires work to function on all host OS & archiving.
-- ! Must verify all requirements for MRIread are included in Voxeloc!
-- Given new volume reading function, verify output coordinates are still 
-accurate (using .mgrid to cross-verify in BioImageSuite).
+- Oblique slicing may generate errors in contact placement on map, but all 
+parcellation locations per contact are grounded in absolute voxel-specific 
+values (ie: true area).
 
 #### Future Version Updates:
-- Removal of "Reorder electrodes" tab and replace feature with up
-and down arrow buttons above tree panel.
-- Addition of an electrode color changing button above tree panel.
-- Add option to create "grid" electrodes.
-- Add option to create "strip" electrodes.
+- Add option to create "grid" & "strip" electrodes.
+- Enhance compatibility and visualization methods.
 
 ---
 

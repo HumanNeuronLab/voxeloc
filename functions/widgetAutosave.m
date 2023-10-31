@@ -32,8 +32,10 @@ end
                 switch overwriteOpt
                     case 'Load'
                         % Load // load widget.autosave.UserData.filePath
-                        loadVoxelocFile([],[],widget,pV);
+                        nSrc.mssg = 'load';
+                        loadVoxelocFile(nSrc,[],widget,pV);
                         widget.autosave.UserData.overwrite = 'on';
+                        figure(pV.panel.Parent);
                         return
                     case 'Start New'
                         widget.autosave.UserData.overwrite = 'on';
