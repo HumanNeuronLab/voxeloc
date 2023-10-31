@@ -3,6 +3,14 @@ function viewerChanged(~,evt,widget)
     currTab = evt.NewValue.Tag;
     prevTab = evt.OldValue.Tag;
 
+    if isequal(currTab,'project')
+        widget.viewer.panel_CentralTabsMRI.SelectedTab = widget.viewer.CT.tab;
+        widget.params.panel_ElectrodeParams.Enable = 'on';
+        widget.d            = uiprogressdlg(widget.fig,'Title',...
+                        'Waiting for Project Set-Up parameters...');
+        projSetUpWindow(widget,'update');
+        return
+    end
     if isequal(currTab,'CT') && ...
             isfield(widget.glassbrain.UserData,'filePathCT')
         widget.params.panel_ElectrodeParams.Enable = 'on';

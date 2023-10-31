@@ -57,81 +57,81 @@ widget.glassbrain.UserData.ColorList = [[1 0 0];[1 135/255 0];[1 211/255 0];...
 
 % ----------------------- Project Prameters Set-Up ------------------------
 
-widget.viewer.projectParams.gridInner = uigridlayout('Parent',widget.viewer.projectParams.tab,...
-    'ColumnWidth',{150,200,22,100,'1x'},'RowHeight',{22,22,22,22,22,22,22,22,22,22,'1x',35},...
-    'RowSpacing',15,'Padding',[20 20 20 50],'Scrollable','on');
-
-widget.viewer.projectParams.label_patientDir = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','Patient folder:','FontWeight','bold');
-widget.viewer.projectParams.lamp_patientDir = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[1 0 0]);
-widget.viewer.projectParams.lamp_patientDir.Layout.Row = 1; widget.viewer.projectParams.lamp_patientDir.Layout.Column = 3;
-widget.viewer.projectParams.button_patientDir = uibutton('Parent',widget.viewer.projectParams.gridInner,'Text','Select folder','BackgroundColor',[1,0.65,0],'Tag','DIR');
-widget.viewer.projectParams.field_patientDir = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[Folder path]','FontColor',[0.6 0.6 0.6]);
-
-widget.viewer.projectParams.label_autosaveFile = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','Autosave file:','FontWeight','bold');
-widget.viewer.projectParams.field_autosaveFile = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[No autosave file linked yet]','FontColor',[0.6 0.6 0.6]);
-widget.viewer.projectParams.lamp_autosaveFile = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[1 0.65 0]);
-widget.viewer.projectParams.field_autosavePath = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
-widget.viewer.projectParams.field_autosavePath.Layout.Column = 5;
-
-
-
-widget.viewer.projectParams.label_patientID = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','Patient ID:','FontWeight','bold');
-widget.viewer.projectParams.field_patientID = uieditfield('Parent',widget.viewer.projectParams.gridInner,'Placeholder','[Patient_ID]','FontColor',[0.6 0.6 0.6]);
-widget.viewer.projectParams.lamp_patientID = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[1 0 0]);
-
-widget.viewer.projectParams.label_ctFile = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','CT file:','FontWeight','bold');
-widget.viewer.projectParams.label_ctFile.Layout.Row = 4;
-widget.viewer.projectParams.label_ctFile.Layout.Column = 1;
-widget.viewer.projectParams.field_ctFile = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[No CT file loaded yet]','FontColor',[0.6 0.6 0.6]);
-widget.viewer.projectParams.lamp_ctFile = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[1 0 0]);
-widget.viewer.projectParams.button_ctFile = uibutton('Parent',widget.viewer.projectParams.gridInner,'Text','Load .nii','BackgroundColor',[1,0.65,0],'Tag','CT');
-widget.viewer.projectParams.field_ctPath = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
-
-widget.viewer.projectParams.label_t1File = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','T1 file:','FontWeight','bold');
-widget.viewer.projectParams.field_t1File = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[No T1 file loaded yet]','FontColor',[0.6 0.6 0.6]);
-widget.viewer.projectParams.lamp_t1File = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[0.94 0.94 0.94]);
-widget.viewer.projectParams.button_t1File = uibutton('Parent',widget.viewer.projectParams.gridInner,'Text','Load .nii','BackgroundColor',[1,0.65,0],'Tag','T1');
-widget.viewer.projectParams.field_t1Path = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
-
-widget.viewer.projectParams.label_parcFile = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','Parcellation file:','FontWeight','bold');
-widget.viewer.projectParams.field_parcFile = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[No parcellation file loaded yet]','FontColor',[0.6 0.6 0.6]);
-widget.viewer.projectParams.lamp_parcFile = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[0.94 0.94 0.94]);
-widget.viewer.projectParams.button_parcFile = uibutton('Parent',widget.viewer.projectParams.gridInner,'Text','Load .nii','BackgroundColor',[1,0.65,0],'Tag','PARC');
-widget.viewer.projectParams.field_parcPath = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
-
-widget.viewer.projectParams.label_electrodes = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','Number of electrodes:','FontWeight','bold');
-widget.viewer.projectParams.label_electrodes.Layout.Row = 7;
-widget.viewer.projectParams.label_electrodes.Layout.Column = 1;
-widget.viewer.projectParams.field_electrodes = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','Completed: 0 of 0','FontColor',[0.6 0.6 0.6]);
-widget.viewer.projectParams.lamp_electrodes = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[1 0 0]);
-
-widget.viewer.projectParams.label_instLogo = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','Institution Logo:','FontWeight','bold');
-widget.viewer.projectParams.label_instLogo.Layout.Row = 8;
-widget.viewer.projectParams.label_instLogo.Layout.Column = 1;
-widget.viewer.projectParams.field_instLogo = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[No logo loaded yet]','FontColor',[0.6 0.6 0.6]);
-widget.viewer.projectParams.lamp_instLogo = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[0.94 0.94 0.94]);
-widget.viewer.projectParams.image_instLogo = uiimage('Parent',widget.viewer.projectParams.gridInner,'ImageSource','erwin_logo.png','HorizontalAlignment','left','Visible','off');
-widget.viewer.projectParams.image_instLogo.Layout.Row = widget.viewer.projectParams.label_instLogo.Layout.Row;
-widget.viewer.projectParams.image_instLogo.Layout.Column = 2;
-widget.viewer.projectParams.button_instLogo = uibutton('Parent',widget.viewer.projectParams.gridInner,'Text','Load Image','BackgroundColor',[1,0.65,0]);
-
-widget.viewer.projectParams.label_userID = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','User name:','FontWeight','bold');
-widget.viewer.projectParams.label_userID.Layout.Row = 9;
-widget.viewer.projectParams.label_userID.Layout.Column = 1;
-widget.viewer.projectParams.field_userID = uieditfield('Parent',widget.viewer.projectParams.gridInner,'Placeholder','[User name]','FontColor',[0.6 0.6 0.6]);
-widget.viewer.projectParams.lamp_userID = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[1 0 0]);
-
-widget.viewer.projectParams.label_forceSave = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','Last autosave:','FontWeight','bold');
-widget.viewer.projectParams.label_forceSave.Layout.Row = 10;
-widget.viewer.projectParams.label_forceSave.Layout.Column = 1;
-widget.viewer.projectParams.field_forceSave = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[No autosave yet]','FontColor',[0.6 0.6 0.6]); % datestr(A.date,'HH:MM dd/mmm/yyyy')
-widget.viewer.projectParams.lamp_forceSave = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[0.94 0.94 0.94]);
-widget.viewer.projectParams.button_forceSave = uibutton('Parent',widget.viewer.projectParams.gridInner,'Text','Force Save','BackgroundColor',[0,0.65,1]);
-
-progPath = fileparts(which('voxeloc.m'));
-widget.viewer.projectParams.image_currentVersion = uiimage('Parent',widget.viewer.projectParams.gridInner,'ImageSource',[progPath filesep 'assets' filesep 'Voxeloc_version.png'],'HorizontalAlignment','right');
-widget.viewer.projectParams.image_currentVersion.Layout.Row = numel(widget.viewer.projectParams.gridInner.RowHeight);
-widget.viewer.projectParams.image_currentVersion.Layout.Column = numel(widget.viewer.projectParams.gridInner.ColumnWidth);
+% widget.viewer.projectParams.gridInner = uigridlayout('Parent',widget.viewer.projectParams.tab,...
+%     'ColumnWidth',{150,200,22,100,'1x'},'RowHeight',{22,22,22,22,22,22,22,22,22,22,'1x',35},...
+%     'RowSpacing',15,'Padding',[20 20 20 50],'Scrollable','on');
+% 
+% widget.viewer.projectParams.label_patientDir = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','Patient folder:','FontWeight','bold');
+% widget.viewer.projectParams.lamp_patientDir = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[1 0 0]);
+% widget.viewer.projectParams.lamp_patientDir.Layout.Row = 1; widget.viewer.projectParams.lamp_patientDir.Layout.Column = 3;
+% widget.viewer.projectParams.button_patientDir = uibutton('Parent',widget.viewer.projectParams.gridInner,'Text','Select folder','BackgroundColor',[1,0.65,0],'Tag','DIR');
+% widget.viewer.projectParams.field_patientDir = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[Folder path]','FontColor',[0.6 0.6 0.6]);
+% 
+% widget.viewer.projectParams.label_autosaveFile = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','Autosave file:','FontWeight','bold');
+% widget.viewer.projectParams.field_autosaveFile = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[No autosave file linked yet]','FontColor',[0.6 0.6 0.6]);
+% widget.viewer.projectParams.lamp_autosaveFile = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[1 0.65 0]);
+% widget.viewer.projectParams.field_autosavePath = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
+% widget.viewer.projectParams.field_autosavePath.Layout.Column = 5;
+% 
+% 
+% 
+% widget.viewer.projectParams.label_patientID = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','Patient ID:','FontWeight','bold');
+% widget.viewer.projectParams.field_patientID = uieditfield('Parent',widget.viewer.projectParams.gridInner,'Placeholder','[Patient_ID]','FontColor',[0.6 0.6 0.6]);
+% widget.viewer.projectParams.lamp_patientID = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[1 0 0]);
+% 
+% widget.viewer.projectParams.label_ctFile = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','CT file:','FontWeight','bold');
+% widget.viewer.projectParams.label_ctFile.Layout.Row = 4;
+% widget.viewer.projectParams.label_ctFile.Layout.Column = 1;
+% widget.viewer.projectParams.field_ctFile = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[No CT file loaded yet]','FontColor',[0.6 0.6 0.6]);
+% widget.viewer.projectParams.lamp_ctFile = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[1 0 0]);
+% widget.viewer.projectParams.button_ctFile = uibutton('Parent',widget.viewer.projectParams.gridInner,'Text','Load .nii','BackgroundColor',[1,0.65,0],'Tag','CT');
+% widget.viewer.projectParams.field_ctPath = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
+% 
+% widget.viewer.projectParams.label_t1File = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','T1 file:','FontWeight','bold');
+% widget.viewer.projectParams.field_t1File = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[No T1 file loaded yet]','FontColor',[0.6 0.6 0.6]);
+% widget.viewer.projectParams.lamp_t1File = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[0.94 0.94 0.94]);
+% widget.viewer.projectParams.button_t1File = uibutton('Parent',widget.viewer.projectParams.gridInner,'Text','Load .nii','BackgroundColor',[1,0.65,0],'Tag','T1');
+% widget.viewer.projectParams.field_t1Path = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
+% 
+% widget.viewer.projectParams.label_parcFile = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','Parcellation file:','FontWeight','bold');
+% widget.viewer.projectParams.field_parcFile = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[No parcellation file loaded yet]','FontColor',[0.6 0.6 0.6]);
+% widget.viewer.projectParams.lamp_parcFile = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[0.94 0.94 0.94]);
+% widget.viewer.projectParams.button_parcFile = uibutton('Parent',widget.viewer.projectParams.gridInner,'Text','Load .nii','BackgroundColor',[1,0.65,0],'Tag','PARC');
+% widget.viewer.projectParams.field_parcPath = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
+% 
+% widget.viewer.projectParams.label_electrodes = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','Number of electrodes:','FontWeight','bold');
+% widget.viewer.projectParams.label_electrodes.Layout.Row = 7;
+% widget.viewer.projectParams.label_electrodes.Layout.Column = 1;
+% widget.viewer.projectParams.field_electrodes = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','Completed: 0 of 0','FontColor',[0.6 0.6 0.6]);
+% widget.viewer.projectParams.lamp_electrodes = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[1 0 0]);
+% 
+% widget.viewer.projectParams.label_instLogo = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','Institution Logo:','FontWeight','bold');
+% widget.viewer.projectParams.label_instLogo.Layout.Row = 8;
+% widget.viewer.projectParams.label_instLogo.Layout.Column = 1;
+% widget.viewer.projectParams.field_instLogo = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[No logo loaded yet]','FontColor',[0.6 0.6 0.6]);
+% widget.viewer.projectParams.lamp_instLogo = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[0.94 0.94 0.94]);
+% widget.viewer.projectParams.image_instLogo = uiimage('Parent',widget.viewer.projectParams.gridInner,'ImageSource','erwin_logo.png','HorizontalAlignment','left','Visible','off');
+% widget.viewer.projectParams.image_instLogo.Layout.Row = widget.viewer.projectParams.label_instLogo.Layout.Row;
+% widget.viewer.projectParams.image_instLogo.Layout.Column = 2;
+% widget.viewer.projectParams.button_instLogo = uibutton('Parent',widget.viewer.projectParams.gridInner,'Text','Load Image','BackgroundColor',[1,0.65,0]);
+% 
+% widget.viewer.projectParams.label_userID = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','User name:','FontWeight','bold');
+% widget.viewer.projectParams.label_userID.Layout.Row = 9;
+% widget.viewer.projectParams.label_userID.Layout.Column = 1;
+% widget.viewer.projectParams.field_userID = uieditfield('Parent',widget.viewer.projectParams.gridInner,'Placeholder','[User name]','FontColor',[0.6 0.6 0.6]);
+% widget.viewer.projectParams.lamp_userID = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[1 0 0]);
+% 
+% widget.viewer.projectParams.label_forceSave = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','Last autosave:','FontWeight','bold');
+% widget.viewer.projectParams.label_forceSave.Layout.Row = 10;
+% widget.viewer.projectParams.label_forceSave.Layout.Column = 1;
+% widget.viewer.projectParams.field_forceSave = uilabel('Parent',widget.viewer.projectParams.gridInner,'Text','[No autosave yet]','FontColor',[0.6 0.6 0.6]); % datestr(A.date,'HH:MM dd/mmm/yyyy')
+% widget.viewer.projectParams.lamp_forceSave = uilamp('Parent',widget.viewer.projectParams.gridInner,'Color',[0.94 0.94 0.94]);
+% widget.viewer.projectParams.button_forceSave = uibutton('Parent',widget.viewer.projectParams.gridInner,'Text','Force Save','BackgroundColor',[0,0.65,1]);
+% 
+% progPath = fileparts(which('voxeloc.m'));
+% widget.viewer.projectParams.image_currentVersion = uiimage('Parent',widget.viewer.projectParams.gridInner,'ImageSource',[progPath filesep 'assets' filesep 'Voxeloc_version.png'],'HorizontalAlignment','right');
+% widget.viewer.projectParams.image_currentVersion.Layout.Row = numel(widget.viewer.projectParams.gridInner.RowHeight);
+% widget.viewer.projectParams.image_currentVersion.Layout.Column = numel(widget.viewer.projectParams.gridInner.ColumnWidth);
 
 
 % ------------------------- Oblique Slice Set-Up --------------------------

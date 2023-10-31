@@ -91,15 +91,16 @@ end
             [~,path1] = fileparts(path1);
             pV.field_autosaveFile.Text = ['...' filesep path1 filesep path0];
             pV.field_autosavePath.FontColor = [0.94 0.94 0.94];
+            pV.label_autosaveFile.UserData.autosavePath = [widget.glassbrain.UserData.voxelocDir filesep pV.field_autosavePath.Text];
         end
-        widget.viewer.projectParams.field_autosaveFile.Text = 'autosave_voxeloc.mat';
-        widget.viewer.projectParams.field_autosaveFile.FontColor = [0 0 0];
-        widget.viewer.projectParams.field_autosavePath.Text = fileparts(widget.autosave.UserData.filePath);
-        widget.viewer.projectParams.field_autosavePath.FontColor = [0 0 0];
-        widget.viewer.projectParams.lamp_autosaveFile.Color = [0 1 0];
-        cF = dir(widget.autosave.UserData.filePath);
-        widget.viewer.projectParams.field_forceSave.Text = datestr(cF.date,'HH:MM dd/mmm/yyyy');
-        widget.viewer.projectParams.field_forceSave.FontColor = [0 0 0];
+%         widget.viewer.projectParams.field_autosaveFile.Text = 'autosave_voxeloc.mat';
+%         widget.viewer.projectParams.field_autosaveFile.FontColor = [0 0 0];
+%         widget.viewer.projectParams.field_autosavePath.Text = fileparts(widget.autosave.UserData.filePath);
+%         widget.viewer.projectParams.field_autosavePath.FontColor = [0 0 0];
+%         widget.viewer.projectParams.lamp_autosaveFile.Color = [0 1 0];
+%         cF = dir(widget.autosave.UserData.filePath);
+%         widget.viewer.projectParams.field_forceSave.Text = datestr(cF.date,'HH:MM dd/mmm/yyyy');
+%         widget.viewer.projectParams.field_forceSave.FontColor = [0 0 0];
     end
 
 

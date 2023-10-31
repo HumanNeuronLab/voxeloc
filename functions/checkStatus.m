@@ -95,23 +95,23 @@ function widget = checkStatus(field,widget,~)
             ready_check(i) = 0;
         end
     end
-    widget.viewer.projectParams.field_electrodes.Text = ['Completed: ' num2str(sum(ready_check)) ' of ' num2str(numElectrodes)];
-    ready_check = sum(ready_check)/numElectrodes;
-    if ready_check == 1
-        widget.params.button_done.Enable = 'on';
-        widget.params.button_done.BackgroundColor = [1,0.65,0];
-        widget.viewer.projectParams.lamp_electrodes.Color = [0 1 0];
-    else
-        widget.params.button_done.Enable = 'off';
-        widget.params.button_done.BackgroundColor = [0.95,0.95,0.95];
-        widget.viewer.projectParams.lamp_electrodes.Color = [1 0 0];
-    end
-    try
-        cF = dir(widget.autosave.UserData.filePath);
-        widget.viewer.projectParams.field_forceSave.Text = datestr(cF.date,'HH:MM dd/mmm/yyyy');
-        widget.viewer.projectParams.field_forceSave.FontColor = [0 0 0];
-    catch
-    end
+%     widget.viewer.projectParams.field_electrodes.Text = ['Completed: ' num2str(sum(ready_check)) ' of ' num2str(numElectrodes)];
+%     ready_check = sum(ready_check)/numElectrodes;
+%     if ready_check == 1
+%         widget.params.button_done.Enable = 'on';
+%         widget.params.button_done.BackgroundColor = [1,0.65,0];
+%         widget.viewer.projectParams.lamp_electrodes.Color = [0 1 0];
+%     else
+%         widget.params.button_done.Enable = 'off';
+%         widget.params.button_done.BackgroundColor = [0.95,0.95,0.95];
+%         widget.viewer.projectParams.lamp_electrodes.Color = [1 0 0];
+%     end
+%     try
+%         cF = dir(widget.autosave.UserData.filePath);
+%         widget.viewer.projectParams.field_forceSave.Text = datestr(cF.date,'HH:MM dd/mmm/yyyy');
+%         widget.viewer.projectParams.field_forceSave.FontColor = [0 0 0];
+%     catch
+%     end
 
     if nargin == 2
 %         for i = 1:length(fieldnames(widget.fig.UserData))

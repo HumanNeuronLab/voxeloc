@@ -47,18 +47,18 @@ function selectFile(data, ~, widget)
             if isequal(currTab,'CT')
                 obliqueButton = widget.viewer.oblique.button_niftiCT;
                 obliqueLabel = widget.viewer.oblique.label_niftiCT;
-                projectButton = widget.viewer.projectParams.button_ctFile;
-                projectFile = widget.viewer.projectParams.field_ctFile;
-                projectPath = widget.viewer.projectParams.field_ctPath;
-                projectLamp = widget.viewer.projectParams.lamp_ctFile;
+%                 projectButton = widget.viewer.projectParams.button_ctFile;
+%                 projectFile = widget.viewer.projectParams.field_ctFile;
+%                 projectPath = widget.viewer.projectParams.field_ctPath;
+%                 projectLamp = widget.viewer.projectParams.lamp_ctFile;
                 
             elseif isequal(currTab,'T1')
                 obliqueButton = widget.viewer.oblique.button_niftiT1;
                 obliqueLabel = widget.viewer.oblique.label_niftiT1;
-                projectButton = widget.viewer.projectParams.button_ctFile;
-                projectFile = widget.viewer.projectParams.field_t1File;
-                projectPath = widget.viewer.projectParams.field_t1Path;
-                projectLamp = widget.viewer.projectParams.lamp_ctFile;
+%                 projectButton = widget.viewer.projectParams.button_ctFile;
+%                 projectFile = widget.viewer.projectParams.field_t1File;
+%                 projectPath = widget.viewer.projectParams.field_t1Path;
+%                 projectLamp = widget.viewer.projectParams.lamp_ctFile;
             end
     
         cMap = 'bone';
@@ -85,7 +85,7 @@ function selectFile(data, ~, widget)
                     widget.fig.Visible = 'on';
                     selectButton.BackgroundColor = [0.94,0.94,0.94];
                     obliqueButton.BackgroundColor = selectButton.BackgroundColor;
-                    projectButton.BackgroundColor = selectButton.BackgroundColor;
+%                     projectButton.BackgroundColor = selectButton.BackgroundColor;
                     tmp_vol = MRIread([path file]);
                     widget.glassbrain.UserData.(volName) = [];
                     widget.glassbrain.UserData = rmfield(widget.glassbrain.UserData,volName);
@@ -103,11 +103,11 @@ function selectFile(data, ~, widget)
                     labelButton.Text = file;
                     obliqueLabel.Text = [path file];
                     obliqueLabel.FontColor = [0 0 0];
-                    projectFile.Text = file;
-                    projectFile.FontColor = [0 0 0];
-                    projectPath.Text = path;
-                    projectPath.FontColor = [0 0 0];
-                    projectLamp.Color = [0 1 0];
+%                     projectFile.Text = file;
+%                     projectFile.FontColor = [0 0 0];
+%                     projectPath.Text = path;
+%                     projectPath.FontColor = [0 0 0];
+%                     projectLamp.Color = [0 1 0];
                     if isequal(tab_Viewer.Tag,'CT')
                         widget.autosave.UserData.filePath = [];
                     end
@@ -282,8 +282,8 @@ function selectFile(data, ~, widget)
                 end
                 widget.fig.Visible = 'on';
                 obliqueButton.BackgroundColor = [0.94,0.94,0.94];
-                widget.viewer.projectParams.button_parcFile.BackgroundColor = [0.94,0.94,0.94];
-                widget.viewer.projectParams.lamp_parcFile.Color = [0 1 0];
+%                 widget.viewer.projectParams.button_parcFile.BackgroundColor = [0.94,0.94,0.94];
+%                 widget.viewer.projectParams.lamp_parcFile.Color = [0 1 0];
                 tmp_vol = MRIread([path file]);
                 widget.glassbrain.UserData.PARCvol = tmp_vol.vol;
                 figure(widget.fig);
@@ -294,11 +294,14 @@ function selectFile(data, ~, widget)
                 [~,widget.glassbrain.UserData.patientID] = fileparts(fileparts(fileparts(path)));
                 obliqueLabel.Text = [path file];
                 obliqueLabel.FontColor = [0 0 0];
-                widget.viewer.projectParams.field_parcFile.Text = file;
-                widget.viewer.projectParams.field_parcFile.FontColor = [0 0 0];
-                widget.viewer.projectParams.field_parcPath.Text = path;
-                widget.viewer.projectParams.field_parcPath.FontColor = [0 0 0];
-                checkOblique(widget,'reslice');
+%                 widget.viewer.projectParams.field_parcFile.Text = file;
+%                 widget.viewer.projectParams.field_parcFile.FontColor = [0 0 0];
+%                 widget.viewer.projectParams.field_parcPath.Text = path;
+%                 widget.viewer.projectParams.field_parcPath.FontColor = [0 0 0];
+                try
+                    checkOblique(widget,'reslice');
+                catch
+                end
             catch
                 widget.fig.Visible = 'on';
                 disp([newline 'No NIfTI file selected...' newline]);
