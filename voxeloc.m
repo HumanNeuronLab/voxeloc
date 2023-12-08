@@ -176,8 +176,8 @@ end
 function mV = versionCheck
     matlabVersion = version('-release');
     matlabVersion = str2double(matlabVersion(1:4));
-    if matlabVersion < 2022
-        fprintf('\n<strong>Use Matlab version R2022a (or more recent) \nfor full functionality of Voxeloc.</strong>\n\n');
+    if matlabVersion < 2023
+        fprintf('\n<strong>Use Matlab version R2023a (or more recent) \nfor full functionality of Voxeloc.</strong>\n\n');
         mV = 0;
     else
         mV = 1;
