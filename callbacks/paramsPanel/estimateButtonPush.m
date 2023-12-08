@@ -111,6 +111,6 @@ function estimateButtonPush (~, ~, widget)
         warning('Contact coordinates estimation failed - Please try updating coordinates');
     end
     widget = checkStatus(field,widget);
-    checkOblique(widget,'estimate');
+    %checkOblique(widget,'estimate');
     widget = widgetAutosave(widget);
 end

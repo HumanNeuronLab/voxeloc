@@ -40,7 +40,7 @@ function transferData(~,~,widget,pV,directionTransfer)
                     widget.glassbrain.UserData.voxelocDir = pV.label_voxelocFolder.UserData.voxDir;
                 end
                 if ~isempty(pV.label_voxelocFolder.UserData.voxDir)
-                    widget.viewer.projectParams.tab.UserData.voxelocDir = pV.field_voxelocFolder.Text;
+                    widget.viewer.projectParams.tab.UserData.voxelocDir = pV.label_voxelocFolder.UserData.voxDir;
                 else
                     widget.viewer.projectParams.tab.UserData.voxelocDir = [];
                 end
@@ -82,19 +82,21 @@ function transferData(~,~,widget,pV,directionTransfer)
                 end
 
                 % LOGO INFO
-                if (~isempty(pV.label_instLogo.UserData.instLogoFile) && ~isfield(widget.glassbrain.UserData,'instLogoPath')) ||...
-                    ~isequal([pV.label_instLogo.UserData.instLogoPath pV.label_instLogo.UserData.instLogoFile],widget.glassbrain.UserData.instLogoPath)
-                    widget.glassbrain.UserData.instLogoPath = pV.label_instLogo.UserData.instLogoPath;
-                end
-                if ~isempty(pV.label_instLogo.UserData.instLogoFile)
+                if ~isempty(pV.label_instLogo.UserData)
+                    if (~isempty(pV.label_instLogo.UserData.instLogoFile) && ~isfield(widget.glassbrain.UserData,'instLogoPath')) ||...
+                        ~isequal([pV.label_instLogo.UserData.instLogoPath pV.label_instLogo.UserData.instLogoFile],widget.glassbrain.UserData.instLogoPath)
+                        widget.glassbrain.UserData.instLogoPath = pV.label_instLogo.UserData.instLogoPath;
+                    end
                     widget.viewer.projectParams.tab.UserData.instLogoPath = [pV.label_instLogo.UserData.instLogoPath pV.label_instLogo.UserData.instLogoFile];
                 else
                     widget.viewer.projectParams.tab.UserData.instLogoPath = [];
+                    widget.viewer.projectParams.tab.UserData.instLogoFile = [];
                 end
                 forceSave([],[],widget,pV)
                 drawnow();
             catch
                 disp('No data transfer');
+                widget.fig.Pointer = 'arrow';
             end
         case 'IN'
     end
