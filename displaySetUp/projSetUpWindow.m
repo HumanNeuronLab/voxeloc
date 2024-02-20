@@ -51,6 +51,7 @@ function projSetUpWindow(widget,widgetState)
                 widget.viewer.logo.panel.Visible = 'off';
                 delete(src);
                 close(widget.d);
+                widget.fig.Pointer = 'arrow';
         end
     end
 

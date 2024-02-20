@@ -1,7 +1,7 @@
 function pickButtonPush(data,~,widget)
 
     vol = widget.glassbrain.UserData.CTvol;
-    idx = find(contains(widget.params.dropdown_ElectrodeSelector.Items,widget.params.dropdown_ElectrodeSelector.Value));
+    idx = find(strcmp(widget.params.dropdown_ElectrodeSelector.Items,widget.params.dropdown_ElectrodeSelector.Value));
     field = ['Electrode' num2str(idx)];
     if isequal(widget.fig.UserData.(field).Estimation, 'SUCCESS')
         widget.fig.UserData.(field).Estimation = 'RE-ESTIMATE';

@@ -294,6 +294,7 @@ function selectFile(data, ~, widget)
                 [~,widget.glassbrain.UserData.patientID] = fileparts(fileparts(fileparts(path)));
                 obliqueLabel.Text = [path file];
                 obliqueLabel.FontColor = [0 0 0];
+                widget.fig.Pointer = 'arrow';
 %                 widget.viewer.projectParams.field_parcFile.Text = file;
 %                 widget.viewer.projectParams.field_parcFile.FontColor = [0 0 0];
 %                 widget.viewer.projectParams.field_parcPath.Text = path;

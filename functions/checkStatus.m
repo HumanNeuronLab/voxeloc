@@ -95,6 +95,13 @@ function widget = checkStatus(field,widget,~)
             ready_check(i) = 0;
         end
     end
+    if all(ready_check)
+        widget.params.button_done.Enable = 'on';
+        widget.params.button_done.BackgroundColor = [1,0.65,0];
+    else
+        widget.params.button_done.Enable = 'off';
+        widget.params.button_done.BackgroundColor = [0.95,0.95,0.95];
+    end
 %     widget.viewer.projectParams.field_electrodes.Text = ['Completed: ' num2str(sum(ready_check)) ' of ' num2str(numElectrodes)];
 %     ready_check = sum(ready_check)/numElectrodes;
 %     if ready_check == 1

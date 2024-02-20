@@ -1,6 +1,6 @@
 function electrodeNameChanged(~,evt,widget)
 
-    idx = find(contains(widget.params.dropdown_ElectrodeSelector.Items,widget.params.dropdown_ElectrodeSelector.Value));
+    idx = find(strcmp(widget.params.dropdown_ElectrodeSelector.Items,widget.params.dropdown_ElectrodeSelector.Value));
     errorVal = 0;
     for i = 1:numel(widget.params.dropdown_ElectrodeSelector.Items)
         if isequal(widget.params.dropdown_ElectrodeSelector.Items{i},...
