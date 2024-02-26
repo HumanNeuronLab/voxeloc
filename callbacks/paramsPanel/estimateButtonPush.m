@@ -68,9 +68,35 @@ function estimateButtonPush (~, ~, widget)
                     round(X-kernel(2)):round(X+kernel(2)),round(Z-kernel(3)):round(Z+kernel(3)));
                 val = max(max(max(kernel_vol)));
                 [x,y,z] = ind2sub(size(kernel_vol),find(kernel_vol == val));
-                X_out = round(X + (y(1) - (1+kernel(1))));
-                Y_out = round(Y + (x(1) - (1+kernel(2))));
-                Z_out = round(Z + (z(1) - (1+kernel(3))));
+                X_prev = widget.fig.UserData.(field).contact(i-1,1);
+                Y_prev = widget.fig.UserData.(field).contact(i-1,2);
+                Z_prev = widget.fig.UserData.(field).contact(i-1,3);
+                X_new = (X + (y(1) - (1+kernel(1))));
+                Y_new = (Y + (x(1) - (1+kernel(2))));
+                Z_new = (Z + (z(1) - (1+kernel(3))));
+                delta_total  = pdist2([X_new Y_new Z_new], [X_prev Y_prev Z_prev]);
+                delta_totalSquared = delta_total^2;
+                delta_x         = (X_new-X_prev)^2 / delta_totalSquared;
+                delta_y         = (Y_new-Y_prev)^2 / delta_totalSquared;
+                delta_z         = (Z_new-Z_prev)^2 / delta_totalSquared;
+                var_x           = X_new-X_prev;
+                var_y           = Y_new-Y_prev;
+                var_z           = Z_new-Z_prev;
+                if var_x >= 0
+                    X_out = widget.fig.UserData.(field).contact(i-1,1) + sqrt(delta_x * contact_dist^2);
+                else
+                    X_out = widget.fig.UserData.(field).contact(i-1,1) - sqrt(delta_x * contact_dist^2);
+                end
+                if var_y >= 0
+                    Y_out = widget.fig.UserData.(field).contact(i-1,2) + sqrt(delta_y * contact_dist^2);
+                else
+                    Y_out = widget.fig.UserData.(field).contact(i-1,2) - sqrt(delta_y * contact_dist^2);
+                end
+                if var_z >= 0
+                    Z_out = widget.fig.UserData.(field).contact(i-1,3) + sqrt(delta_z * contact_dist^2);
+                else
+                    Z_out = widget.fig.UserData.(field).contact(i-1,3) - sqrt(delta_z * contact_dist^2);
+                end
             else
                 X_out = X;
                 Y_out = Y;
@@ -82,7 +108,9 @@ function estimateButtonPush (~, ~, widget)
             
             uitreenode('Parent',widget.tree.UserData.(field).contacts,'Text',['Contact ' num2str(i) ': ' mat2str(round(widget.fig.UserData.(field).contact(i,:)))],'Tag',field);
             if widget.params.checkbox_LocalMax.Value == 1
-                disp(['Contact ' num2str(i) ': ' mat2str(round(widget.fig.UserData.(field).contact(i,:),3)) newline 'Adjusted: [' num2str(y(1) - (1+kernel(1))) num2str(x(1) - (1+kernel(2))) num2str(z(1) - (1+kernel(3))) ']']);
+                disp(['Contact ' num2str(i) ': ' mat2str(round(widget.fig.UserData.(field).contact(i,:),3)) ...
+                    newline 'Adjusted: [' num2str(y(1) - (1+kernel(1))) num2str(x(1) - (1+kernel(2))) num2str(z(1) - (1+kernel(3))) ']' ...
+                    newline 'Distance: ' num2str(pdist2([X_out Y_out Z_out], [X_prev Y_prev Z_prev]))]);
             else
                 disp(['Contact ' num2str(i) ': ' mat2str(round(widget.fig.UserData.(field).contact(i,:),3))]);
             end

@@ -2,10 +2,10 @@ function contactCorrect(~,~,widget)
     
     idx = find(contains(widget.params.dropdown_ElectrodeSelector.Items,widget.params.dropdown_ElectrodeSelector.Value));
     field = ['Electrode' num2str(idx)];
-    currContact = sliderContacts.Value;
-    X = widget.viewer.CT.field_Xvalue;
-    Y = widget.viewer.CT.field_Xvalue;
-    Z = widget.viewer.CT.field_Xvalue;
+    currContact = widget.viewer.CT.slider_contacts.Value;
+    X = widget.viewer.CT.field_Xvalue.Value;
+    Y = widget.viewer.CT.field_Yvalue.Value;
+    Z = widget.viewer.CT.field_Zvalue.Value;
     widget.fig.UserData.(field).contact(currContact,1) = X;
     widget.fig.UserData.(field).contact(currContact,2) = Y;
     widget.fig.UserData.(field).contact(currContact,3) = Z;

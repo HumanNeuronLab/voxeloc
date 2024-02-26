@@ -16,7 +16,7 @@ function donePushed(~,~,widget,fig,pos)
     end
     autosave.filePath = [path filesep];
     autosave.patientID = widget.glassbrain.UserData.patientID;
-    filenameMAT = [autosave.filePath autosave.patientID '_' datestr(now,'HHMM_ddmmmyy') '_vxlc.mat'];
+    filenameMAT = [autosave.filePath autosave.patientID '_' datestr(now,'HHMM_ddmmmyy') '_voxeloc.mat'];
     save(filenameMAT,'autosave');
 
     for z = 1:widget.params.spinner_NumElectrodes.Value

@@ -145,7 +145,7 @@ function convertToBids(numElecs,widget)
     buttonPrev.ButtonPushedFcn = {@changeElec,labelStrElecs,buttonPrev,buttonNext,labelElecName,fieldElecSurface,fieldElecMaterial,fieldElecManufacturer,fieldElecImpedance,numElecs,listElecs};
     buttonNext.ButtonPushedFcn = {@changeElec,labelStrElecs,buttonPrev,buttonNext,labelElecName,fieldElecSurface,fieldElecMaterial,fieldElecManufacturer,fieldElecImpedance,numElecs,listElecs};
 
-    buttonEXPORT.ButtonPushedFcn = {@exportBIDS,labelStrElecs,checkAllElec,labelPath,labelBIDSfolder,fig,fieldSubjectID,fieldSession,numElecs,listElecs};
+    buttonEXPORT.ButtonPushedFcn = {@exportBIDS,labelStrElecs,checkAllElec,labelPath,labelBIDSfolder,fig,fieldSubjectID,fieldSession,numElecs,listElecs,fieldCoordSystem};
     
     % Callback functions
     function toggleChange(~,evt,labelC,labelS,ProjName,SubjID,Session,Path,BIDSfolder,labelStrElecs,checkAllElec,labelElecName,numElecs,buttonEXPORT)
@@ -412,7 +412,7 @@ function convertToBids(numElecs,widget)
         fieldElecImpedance.Value = labelStrElecs.UserData.individualValue{currElec,4};
     end
 
-    function exportBIDS(~,~,labelStrElecs,checkAllElec,labelPath,labelBIDSfolder,fig,fieldSubjectID,fieldSession,numElecs,listElecs)
+    function exportBIDS(~,~,labelStrElecs,checkAllElec,labelPath,labelBIDSfolder,fig,fieldSubjectID,fieldSession,numElecs,listElecs,fieldCoordSystem)
         projDir = labelPath.Text;%extractHTMLText(labelPath.Text);
 %         subjDir = extractHTMLText(labelBIDSfolder.Text);
 %         tmpIdx = strfind(subjDir,'sub-');
@@ -426,20 +426,24 @@ function convertToBids(numElecs,widget)
         end
         if isequal(fieldSession.Value,'')
             fid = fopen([outDir filesep 'sub-' fieldSubjectID.Value...
-                '_coordinates.json'],'w');
+                '_coordsystem.json'],'w');
             outTSV.file = [outDir filesep 'sub-' fieldSubjectID.Value...
                 '_electrodes.tsv'];
         else
             fid = fopen([outDir filesep 'sub-' fieldSubjectID.Value '_'...
-                'ses-' fieldSession.Value '_coordinates.json'],'w');
+                'ses-' fieldSession.Value '_coordsystem.json'],'w');
             outTSV.file = [outDir filesep 'sub-' fieldSubjectID.Value '_'...
                 'ses-' fieldSession.Value '_electrodes.tsv'];
         end
 
         % JSON FILE EXPORT
-        outJSON.iEEGCoordinateSystem = 'fsaverage';
+        outJSON.iEEGCoordinateSystem = fieldCoordSystem.Value;
         outJSON.iEEGCoordinateUnits = 'mm';
-        outJSON.iEEGCoordinateSystemDescription = 'N/A';
+        if isequal(fieldCoordSystem.Value,'fsaverage')
+            outJSON.iEEGCoordinateSystemDescription = 'https://surfer.nmr.mgh.harvard.edu/';
+        else
+            outJSON.iEEGCoordinateSystemDescription = 'N/A';
+        end
         outJSON.iEEGCoordinateProcessingDescription = 'none';
         outJSON.iEEGCoordinateProcessingReference = 'https://github.com/HumanNeuronLab/voxeloc';
         w = 1;
@@ -485,13 +489,14 @@ function convertToBids(numElecs,widget)
         for l = 1:numElecs
             nContact = height(listElecs{l,2});
             for k = 1:nContact
-                if k == 1
-                    name = {[num2str(k) ' (deep)']};
-                elseif k == nContact
-                    name = {[num2str(k) ' (superficial)']};
-                else
-                    name = {num2str(k)};
-                end
+                % if k == 1
+                %     name = {[num2str(k) ' (deep)']};
+                % elseif k == nContact
+                %     name = {[num2str(k) ' (superficial)']};
+                % else
+                %     name = {num2str(k)};
+                % end
+                name = {[listElecs{l,1}(4:end) num2str(k)]};
                 x = listElecs{l,2}(k,1);
                 y = listElecs{l,2}(k,2);
                 z = listElecs{l,2}(k,3);
@@ -499,7 +504,9 @@ function convertToBids(numElecs,widget)
                     size = labelStrElecs.UserData.allValue{1,1};
                     material = labelStrElecs.UserData.allValue(1,2);
                     manufacturer = labelStrElecs.UserData.allValue(1,3);
-                    impendance = labelStrElecs.UserData.allValue{1,4};
+                    if ~isequal(labelStrElecs.UserData.allValue{1,4},0)
+                        impendance = labelStrElecs.UserData.allValue{1,4};
+                    end
                 else
                     size = labelStrElecs.UserData.individualValue{l,1};
                     material = labelStrElecs.UserData.individualValue(l,2);
@@ -514,9 +521,15 @@ function convertToBids(numElecs,widget)
                     type = {'n/a'};
                 end
                 dimension = {['[1x' num2str(nContact) ']']};
-                outTSV.table(counter,:) = table(name,x,y,z,size,...
-                    material,manufacturer,group,...
-                    hemisphere,type,impendance,dimension);
+                try
+                    outTSV.table(counter,:) = table(name,x,y,z,size,...
+                        material,manufacturer,group,...
+                        hemisphere,type,impendance,dimension);
+                catch
+                    outTSV.table(counter,:) = table(name,x,y,z,size,...
+                        material,manufacturer,group,...
+                        hemisphere,type,dimension);
+                end
                 counter = counter+1;
             end
         end
