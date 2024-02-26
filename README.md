@@ -1,7 +1,7 @@
 <h1 align="center">VOX·E·LOC</h1>
 
 <h3><a href="https://github.com/HumanNeuronLab/voxeloc/releases"><img src="https://github.com/jonathanmonney/misc_assets/blob/main/voxeloc/voxeloc_version.png" width="200" align="right"/></a><div align="left"><i>Voxel Electrode Locator</i></div></h3>
-
+<div src="https://raw.githubusercontent.com/jonathanmonney/misc_assets/main/voxeloc/testimg.html"></div>
 
 ---
 
