@@ -5,10 +5,7 @@
 | hey | ![Static Badge](https://img.shields.io/badge/v0.9P-20%C2%B7Feb%C2%B72024-blue?logo=github&link=https%3A%2F%2Fgithub.com%2FHumanNeuronLab%2Fvoxeloc%2Freleases) |
 |-|-|
 
-<div style="float:left;margin:0 10px 10px 0" markdown="1">
-    ![Static Badge](https://img.shields.io/badge/v0.9P-20%C2%B7Feb%C2%B72024-blue?logo=github&link=https%3A%2F%2Fgithub.com%2FHumanNeuronLab%2Fvoxeloc%2Freleases)
-</div>
-
+<img align="right" src="https://img.shields.io/badge/v0.9P-20%C2%B7Feb%C2%B72024-blue?logo=github&link=https%3A%2F%2Fgithub.com%2FHumanNeuronLab%2Fvoxeloc%2Freleases">
 
 ---
 
