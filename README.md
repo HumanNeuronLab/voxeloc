@@ -1,19 +1,19 @@
 
 <img src="https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/voxeloc_logoBG.png"/>
 
-<h3><a href="https://github.com/HumanNeuronLab/voxeloc/releases"><img src="https://img.shields.io/badge/v0.9R7-27%C2%B7Feb%C2%B72024-blue?logo=github" width="200" align="right"/></a><div align="left"><i>Voxel Electrode Locator</i></div></h3>
-
----
+<h2><a href="https://github.com/HumanNeuronLab/voxeloc/releases"><img src="https://img.shields.io/badge/v0.9R7-27%C2%B7Feb%C2%B72024-blue?logo=github" width="200" align="right"/></a><div align="left">Voxel Electrode Locator</div></h2>
+<br />
 
 This GUI widget was created to help locate intracranial-EEG contact locations.
 Voxeloc is a semi-automated MATLAB widget that allows to rapidly and 
 efficiently locate iEEG contact coordinates using post-op & pre-op images.
+<br />
 
-To start: open Matlab and run voxeloc in the command line 
-(ensure the folder containing the voxeloc.m file has been added to your 
-list of paths).
-The voxeloc function will open the GUI needed to run all electrode contact 
-location estimations.
+**To get started, click on the button below to find our tutorials on our wiki page:**
+<br />
+
+<div align="center"><a href="https://github.com/HumanNeuronLab/voxeloc/releases"><img alt="Go to Wiki" src="https://img.shields.io/badge/Go%20to%20Wiki-blue?style=for-the-badge" width="150"></a></div>
+
 
 ---
 
