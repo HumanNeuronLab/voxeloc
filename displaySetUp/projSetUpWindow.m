@@ -150,7 +150,7 @@ function projSetUpWindow(widget,widgetState)
         pV.button_Validate.Layout.Column = 1;
 
         progPath = fileparts(which('voxeloc.m'));
-        pV.image_currentVersion = uiimage('Parent',pV.gridInner,'ImageSource',[progPath filesep 'assets' filesep 'Voxeloc_version.png'],'HorizontalAlignment','right');
+        pV.image_currentVersion = uiimage('Parent',pV.gridInner,'ImageSource',[progPath filesep 'assets' filesep 'voxeloc_version.svg'],'HorizontalAlignment','right','ScaleMethod','scaledown');
         pV.image_currentVersion.Layout.Row = numel(pV.gridInner.RowHeight);
         pV.image_currentVersion.Layout.Column = [numel(pV.gridInner.ColumnWidth)-1 numel(pV.gridInner.ColumnWidth)];
         
@@ -178,7 +178,7 @@ function projSetUpWindow(widget,widgetState)
                 pV.label_newVersionTop.Layout.Row = numel(pV.gridInit.RowHeight)-1;
                 pV.label_newVersionTop.Layout.Column = [numel(pV.gridInit.ColumnWidth)-1 numel(pV.gridInit.ColumnWidth)];
                 progPath = fileparts(which('voxeloc.m'));
-                pV.image_currentVersionTop = uiimage('Parent',pV.gridInit,'ImageSource',[progPath filesep 'assets' filesep 'Voxeloc_version.png'],'HorizontalAlignment','right');
+                pV.image_currentVersionTop = uiimage('Parent',pV.gridInit,'ImageSource',[progPath filesep 'assets' filesep 'voxeloc_version.svg'],'HorizontalAlignment','right','ScaleMethod','scaledown');
                 pV.image_currentVersionTop.Layout.Row = numel(pV.gridInit.RowHeight);
                 pV.image_currentVersionTop.Layout.Column = [numel(pV.gridInit.ColumnWidth)-1 numel(pV.gridInit.ColumnWidth)];
                 
