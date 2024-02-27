@@ -39,7 +39,11 @@ values (ie: true area).
 | <a href="https://www.unige.ch/medecine/neucli/en/groupes-de-recherche/1034megevand/">Human Neuron Lab</a> - UNIGE 
 | <a href="mailto:jonathan.monney@unige.ch">jonathan.monney@unige.ch</a></p>
 <br>
-<div align="center"><a href="https://www.unige.ch/medecine/neucli/en/groupes-de-recherche/1034megevand/">
+<div align="center">
+  <a href="https://www.unige.ch/medecine/neucli/en/groupes-de-recherche/1034megevand/">
+  <img src="https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/HNL_logo.png" width="100"/></a>
+  &emsp;&emsp;&emsp;
+  <a href="https://www.unige.ch/medecine/neucli/en/groupes-de-recherche/1034megevand/">
   <img src="https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/UNIGE_logo.png" width="200"/>
 </a></div>
 
