@@ -41,10 +41,10 @@ values (ie: true area).
 <br>
 <div align="center">
   <a href="https://www.unige.ch/medecine/neucli/en/groupes-de-recherche/1034megevand/">
-  <img src="https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/HNL_logo.png" width="100"/></a>
+  <img src="https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/HNL_logo.png" width="80"/></a>
   &emsp;&emsp;&emsp;
   <a href="https://www.unige.ch/medecine/neucli/en/groupes-de-recherche/1034megevand/">
-  <img src="https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/UNIGE_logo.png" width="200"/>
+  <img src="https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/UNIGE_logo.png" width="320"/>
 </a></div>
 
 
