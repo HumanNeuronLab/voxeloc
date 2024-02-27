@@ -28,6 +28,7 @@ depth electrodes may be created (no grids or strips).*
 - Oblique slicing may generate errors in contact placement on map, but all 
 parcellation locations per contact are grounded in absolute voxel-specific 
 values (ie: true area).
+<div style="color:red;">If you encounter any bugs or issues, please <a href="https://github.com/HumanNeuronLab/voxeloc/issues/new">click here</a> to let us know so we can fix it!</div>
 
 #### Future Version Updates:
 - Add option to create "grid" & "strip" electrodes.
