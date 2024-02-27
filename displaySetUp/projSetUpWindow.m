@@ -22,8 +22,8 @@ function projSetUpWindow(widget,widgetState)
         B = 0;
     end
     if isequal(A,B)
-        paramsValues.label_newVersion.Text = 'Current version up-to-date ';
-        paramsValues.label_newVersionTop.Text = 'Current version up-to-date ';
+        paramsValues.label_newVersion.Text = 'Latest version installed ';
+        paramsValues.label_newVersionTop.Text = 'Latest version installed ';
     else
         paramsValues.label_newVersion.Text = ['<a href="https://github.com/HumanNeuronLab/voxeloc">New version avaible (' A ')!</a>'];
         paramsValues.label_newVersionTop.Text = ['<a href="https://github.com/HumanNeuronLab/voxeloc">New version avaible (' A ')!</a>'];
