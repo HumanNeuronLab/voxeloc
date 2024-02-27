@@ -3,6 +3,8 @@
 <h3><a href="https://github.com/HumanNeuronLab/voxeloc/releases"><img src="https://github.com/jonathanmonney/misc_assets/blob/main/voxeloc/voxeloc_version.png" width="200" align="right"/></a><div align="left"><i>Voxel Electrode Locator</i></div></h3>
 <source src="https://raw.githubusercontent.com/jonathanmonney/misc_assets/main/voxeloc/testimg.html">
 <embed type="text/html" src="https://raw.githubusercontent.com/jonathanmonney/misc_assets/main/voxeloc/testimg.html" width="500" height="200">
+![Static Badge](https://img.shields.io/badge/v0.9P-20%C2%B7Feb%C2%B72024-blue?logo=github&link=https%3A%2F%2Fgithub.com%2FHumanNeuronLab%2Fvoxeloc%2Freleases)
+
 
 ---
 
