@@ -12,7 +12,7 @@ efficiently locate iEEG contact coordinates using post-op & pre-op images.
 **To get started, click on the button below to find our tutorials on our wiki page:**
 <br />
 
-<div align="center"><a href="https://github.com/HumanNeuronLab/voxeloc/releases"><img alt="Go to Wiki" src="https://img.shields.io/badge/Go%20to%20Wiki-blue?style=for-the-badge" width="150"></a></div>
+<div align="center"><a href="https://github.com/HumanNeuronLab/voxeloc/wiki"><img alt="Go to Wiki" src="https://img.shields.io/badge/Go%20to%20Wiki-blue?style=for-the-badge" width="150"></a></div>
 
 
 ---
