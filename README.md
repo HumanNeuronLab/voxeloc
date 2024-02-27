@@ -1,4 +1,5 @@
-<h1 align="center">VOX·E·LOC</h1>
+
+<img src="https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/voxeloc_logoBG.png"/>
 
 <h3><a href="https://github.com/HumanNeuronLab/voxeloc/releases"><img src="https://img.shields.io/badge/v0.9R7-27%C2%B7Feb%C2%B72024-blue?logo=github" width="200" align="right"/></a><div align="left"><i>Voxel Electrode Locator</i></div></h3>
 
