@@ -9,7 +9,7 @@ Voxeloc is a semi-automated MATLAB widget that allows to rapidly and
 efficiently locate iEEG contact coordinates using post-op & pre-op images.
 <br />
 
-**To get started, click on the button below to find our tutorials on our wiki page:**
+**To get started, click on the button below to find all tutorials on the wiki page:**
 <br />
 
 <div align="center"><a href="https://github.com/HumanNeuronLab/voxeloc/wiki"><img alt="Go to Wiki" src="https://img.shields.io/badge/Go%20to%20Wiki-blue?style=for-the-badge" width="150"></a></div>
@@ -44,7 +44,6 @@ values (ie: true area).
   <img src="https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/UNIGE_logo.png" width="200"/>
 </a></div>
 
----
 
 
 
