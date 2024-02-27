@@ -35,7 +35,7 @@ values (ie: true area).
 
 ---
 
-<p align="center"> <b><u>Voxeloc</u></b> 2023 
+<p align="center"> <b><u>Voxeloc</u></b> 2024 
 | <a href="https://www.unige.ch/medecine/neucli/en/groupes-de-recherche/1034megevand/">Human Neuron Lab</a> - UNIGE 
 | <a href="mailto:jonathan.monney@unige.ch">jonathan.monney@unige.ch</a></p>
 <br>
