@@ -5,7 +5,7 @@ function voxeloc
 %   rapidly and efficiently locate iEEG contact coordinates using 
 %   post-op & pre-op images.
 %   
-%   Version:        v0.9U
+%   Version:        v0.9V
 %   Contact:        jonathan.monney@unige.ch
 %   Last Update:    28/02/2024
 %
