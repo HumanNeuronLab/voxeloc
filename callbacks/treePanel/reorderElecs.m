@@ -2,6 +2,7 @@ function reorderElecs(src,~,widget)
     
     widget.fig.Pointer = 'watch';
     drawnow();
+    tic;
     elecName = widget.tree_Summary.SelectedNodes.Tag;
     currElec = str2double(elecName(10:end));
     permutor = linspace(1,numel(fieldnames(widget.fig.UserData)),numel(fieldnames(widget.fig.UserData)));
@@ -31,5 +32,6 @@ function reorderElecs(src,~,widget)
     electrodeSelectionChanged(widget.params.dropdown_ElectrodeSelector,artEvt,widget);
     widget.tree_Summary.SelectedNodes = findobj(widget.tree_Summary.Children,'Text',elecName);
     treeSelectionChange([],widget.tree_Summary,widget);
+    drawnow();
     widget.fig.Pointer = 'arrow';
 end
