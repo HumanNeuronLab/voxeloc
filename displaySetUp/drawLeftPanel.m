@@ -92,7 +92,7 @@ widget.params.field_ZSecond = uieditfield(widget.params.grid,'numeric','Limits',
 widget.params.field_ZSecond.Layout.Row = 16; widget.params.field_ZSecond.Layout.Column = 5;
 widget.params.checkbox_Snapping = uicheckbox('Parent',widget.params.grid,'Value',true,'Text','Enable snapping');
 widget.params.checkbox_Snapping.Layout.Row = 17; widget.params.checkbox_Snapping.Layout.Column = [2 5];
-widget.params.checkbox_LocalMax = uicheckbox('Parent',widget.params.grid,'Value',true,'Text','Find local maximum');
+widget.params.checkbox_LocalMax = uicheckbox('Parent',widget.params.grid,'Value',false,'Text','Find local maximum');
 widget.params.checkbox_LocalMax.Layout.Row = 18; widget.params.checkbox_LocalMax.Layout.Column = [2 5];
 
 widget.params.divider3 = uilabel('Parent',widget.params.grid,'HorizontalAlignment','center','Text','______________________________','FontColor',[0.8 0.8 0.8]);

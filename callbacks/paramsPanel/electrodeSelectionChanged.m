@@ -19,7 +19,7 @@ function electrodeSelectionChanged(data,evt,widget)
             slider_Y = widget.viewer.CT.slider_Y;
             slider_Z = widget.viewer.CT.slider_Z;
         case 'T1'
-            label_contact = widget.viewer.T1.label_contacts;
+            label_contact = widget.viewer.CT.label_contacts;
             slider_contact = widget.viewer.T1.slider_contacts;
             slider_X = widget.viewer.T1.slider_X;
             slider_Y = widget.viewer.T1.slider_Y;

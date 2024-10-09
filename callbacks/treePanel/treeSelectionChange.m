@@ -23,7 +23,7 @@ function treeSelectionChange(~,evt,widget)
         case 'T1'
             if ~(isequal(widget.viewer.panel_CentralTabsMRI.SelectedTab.Title,'[select Anatomical NIfTI file (optional)]'))
                 slider_contacts = widget.viewer.T1.slider_contacts;
-                label_contacts = widget.viewer.T1.label_contacts;
+                label_contacts = widget.viewer.CT.label_contacts;
                 field_Xvalue1 = widget.viewer.T1.field_Xvalue;
                 field_Yvalue1 = widget.viewer.T1.field_Yvalue;
                 field_Zvalue1 = widget.viewer.T1.field_Zvalue;

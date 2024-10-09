@@ -18,7 +18,11 @@ efficiently locate iEEG contact coordinates using post-op & pre-op images.
 
 #### Current Version Updates:
 - Bug fixes, including "isunix" to replace typo "islinux" (many thanks to <a href="https://github.com/TimnaKleinman">Timna Kleinman</a> for spotting this).
-- Reordering electrode mousing pointer render improved
+- Reordering electrode mousing pointer render improved.
+- Reordering electrode mousing pointer render improved.
+- Bugs from autosave path fixed.
+- Changed color is kept after re-estimating.
+- Navigating contacts in tree on T1 fixed.
 
 *Note: electrode parameters may only be modified or updated in the
 CT tab. After updating any electrode parameters, estimation must be
@@ -29,7 +33,6 @@ depth electrodes may be created (no grids or strips).*
 - Oblique slicing may generate errors in contact placement on map, but all 
 parcellation locations per contact are grounded in absolute voxel-specific 
 values (ie: true area).
-- Some PCs rewrite the output saving path causing an error and updates to not be saved. A big fix will be released shortly.
 <div style="color:red;">If you encounter any bugs or issues, please <a href="https://github.com/HumanNeuronLab/voxeloc/issues/new">click here</a> to let us know so we can fix it!</div>
 
 #### Future Version Updates:

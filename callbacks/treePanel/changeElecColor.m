@@ -6,5 +6,6 @@ function changeElecColor(~,~,widget)
     widget.glassbrain.UserData.electrodes.(currElec).Color = nC;
     widget = checkStatus(currElec,widget,[]);
     checkOblique(widget,'estimate');
+    widget = contactDotDisplay(widget);
     widget = widgetAutosave(widget);
 end

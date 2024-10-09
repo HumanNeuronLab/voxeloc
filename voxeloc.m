@@ -5,14 +5,17 @@ function voxeloc
 %   rapidly and efficiently locate iEEG contact coordinates using 
 %   post-op & pre-op images.
 %   
-%   Version:        v0.9X
+%   Version:        v0.9Y
 %   Contact:        jonathan.monney@unige.ch
-%   Last Update:    02/10/2024
+%   Last Update:    09/10/2024
 %
 %   Current Version Updates:
 %       - Bug fixes, including "isunix" to replace typo "islinux" (many
 %       thanks to Timna Kleinman for spotting this).
-%       - Reordering electrode mousing pointer render improved
+%       - Reordering electrode mousing pointer render improved.
+%       - Bugs from autosave path fixed.
+%       - Changed color is kept after re-estimating.
+%       - Navigating contacts in tree on T1 fixed.
 %          
 %       Note: electrode parameters may only be modified or updated in the
 %       CT tab. After updating any electrode parameters, estimation must be
@@ -20,8 +23,7 @@ function voxeloc
 %       depth electrodes may be created (no grids or strips).
 %
 %   Known bugs:
-%       - Some PCs rewrite the output saving path causing an error and
-%       updates to not be saved. A big fix will be released shortly.
+%       - 
 % 
 %   Future Version Updates:
 %       - Add option to create "grid" & "strip" electrodes.

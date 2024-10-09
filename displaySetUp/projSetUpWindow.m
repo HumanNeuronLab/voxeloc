@@ -52,6 +52,7 @@ function projSetUpWindow(widget,widgetState)
                 delete(src);
                 close(widget.d);
                 widget.fig.Pointer = 'arrow';
+                widget.params.panel_ElectrodeParams.Enable = 'on';
         end
     end
 

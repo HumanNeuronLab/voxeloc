@@ -154,7 +154,7 @@ try
         autoload.field_patientDir.FontColor = [0.94,0.94,0.94];
         autoload.lamp_patientDir.Color = [0 1 0];
         autoload.field_patientDir.Text = ['...' filesep path2 filesep path1];
-        autoload.label_patientDir.UserData.patientDir = autoload.field_patientDir.Text;
+        autoload.label_patientDir.UserData.patientDir = widget.glassbrain.UserData.patientDir;
     else
         widget.glassbrain.UserData.patientDir = [];
     end
@@ -171,7 +171,7 @@ try
         autoload.field_voxelocFolder.FontColor = [0.94,0.94,0.94];
         autoload.lamp_voxelocFolder.Color = [0 1 0];
 
-        autoload.label_voxelocFolder.UserData.voxDir = autoload.field_voxelocFolder.Text;
+        autoload.label_voxelocFolder.UserData.voxDir = widget.glassbrain.UserData.voxelocDir;
         autoload.label_autosaveFile.UserData.autosavePath = widget.autosave.UserData.filePath;
 
     end
