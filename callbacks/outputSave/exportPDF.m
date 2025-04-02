@@ -98,7 +98,7 @@ function exportPDF(~,~,widget)
                 fig1.Position(3)*headerRatios(3)-0.1 ...
                 header3.Position(4)*0.4],'YDir','reverse',...
                 'Visible','off','Clipping','on');
-            voxelocLogo = imagesc('Parent',header4,'CData',imread('erwin_logo.png'));
+            voxelocLogo = imagesc('Parent',header4,'CData',imread('voxeloc_logo.png'));
             header4.XLim = ([voxelocLogo.XData(1)-voxelocLogo.XData(2)*0.05 voxelocLogo.XData(2)+voxelocLogo.XData(2)*0.05]); % adds 10% padding
             header4.YLim = ([voxelocLogo.YData(1)-voxelocLogo.YData(2)*0.05 voxelocLogo.YData(2)+voxelocLogo.YData(2)*0.05]); % adds 10% padding
             axis(header4,'equal');
