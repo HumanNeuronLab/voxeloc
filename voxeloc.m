@@ -5,17 +5,14 @@ function voxeloc
 %   rapidly and efficiently locate iEEG contact coordinates using 
 %   post-op & pre-op images.
 %   
-%   Version:        v0.9Y
+%   Version:        v0.9.3
 %   Contact:        jonathan.monney@unige.ch
-%   Last Update:    09/10/2024
+%   Last Update:    28/08/2025
 %
 %   Current Version Updates:
-%       - Bug fixes, including "isunix" to replace typo "islinux" (many
-%       thanks to Timna Kleinman for spotting this).
-%       - Reordering electrode mousing pointer render improved.
-%       - Bugs from autosave path fixed.
-%       - Changed color is kept after re-estimating.
-%       - Navigating contacts in tree on T1 fixed.
+%       - Updated output file variable name ("voxelocOutput")
+%       - Output file now contains probabilistic tissues labels and weights
+%       based on the SEEG2parc function from Prof. Pierre Mégevand.
 %          
 %       Note: electrode parameters may only be modified or updated in the
 %       CT tab. After updating any electrode parameters, estimation must be
@@ -23,9 +20,14 @@ function voxeloc
 %       depth electrodes may be created (no grids or strips).
 %
 %   Known bugs:
-%       - 
+%       - Oblique slices still doesn't render accurately
 % 
 %   Future Version Updates:
+%       - For v1.0:
+%           BIDS output must contain tissue labels and weights in the .tsv.
+%           Create a redirection fodler in the voxeloc folder to the BIDS
+%           directory.
+%           Fix the oblique slices to work.
 %       - Add option to create "grid" & "strip" electrodes.
 %       - Enhance compatibility and visualization methods.
 %
