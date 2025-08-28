@@ -5,10 +5,6 @@ nElectrodes.Depth = length(fieldnames(outputData));
 nElectrodes.Strips = 0;
 nElectrodes.Grids = 0;
 
-if exist(fName,'file')
-    delete(fName);
-end
-
 fid = fopen(fName,'w');
 fprintf(fid, '#vtkpxElectrodeMultiGridSource File\n');
 fprintf(fid, ['#Description\n' patientID '\n']);
@@ -58,12 +54,6 @@ if nElectrodes.Depth
     end
 end
 
-cpFile = [fileparts(fileparts(fName)) filesep patientID '.mgrid'];
-copyfile(fName,cpFile);
-
-
 fclose(fid);
-
-
 
 end

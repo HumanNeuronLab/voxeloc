@@ -1,23 +1,32 @@
 function donePushed(~,~,widget,fig,pos)
     
+    d = uiprogressdlg(fig,'Title','Exporting your data...',...
+        'Indeterminate','on');
+    drawnow;
+    
     path = fileparts(widget.autosave.UserData.filePath);
     if ~isfolder(path)
         mkdir(path);
     end
     cd(path);
     filenameMGRID = [widget.glassbrain.UserData.patientID '.mgrid'];
+    cfg.elecCoord = [];
+    counter = 1;
         
     for i = 1:widget.params.spinner_NumElectrodes.Value
         field = ['Electrode' num2str(i)];
-        autosave.electrode.(field) = widget.fig.UserData.(field);
+        voxelocOutput.electrodes.(field) = widget.fig.UserData.(field);
         if isfield(widget.glassbrain.UserData,'electrodes') && isfield(widget.glassbrain.UserData.electrodes,field)
-            autosave.glassbrain.(field) = widget.glassbrain.UserData.electrodes.(field);
+            voxelocOutput.electrodes.(field).Color = widget.glassbrain.UserData.electrodes.(field).Color;
+        end
+        cfg.elecCoord = [cfg.elecCoord;widget.fig.UserData.(field).contact];
+        for j = 1:height(widget.fig.UserData.(field).contact)
+            cfg.elecNames{counter,1} = [widget.fig.UserData.(field).Name(4:end) num2str(j)];
+            cfg.elecType{counter,1} = widget.fig.UserData.(field).Name(2);
+            cfg.elecHem{counter,1} = widget.fig.UserData.(field).Name(1);
+            counter = counter +1;
         end
     end
-    autosave.filePath = [path filesep];
-    autosave.patientID = widget.glassbrain.UserData.patientID;
-    filenameMAT = [autosave.filePath autosave.patientID '_' datestr(now,'HHMM_ddmmmyy') '_voxeloc.mat'];
-    save(filenameMAT,'autosave');
 
     for z = 1:widget.params.spinner_NumElectrodes.Value
         field = ['Electrode' num2str(z)];
@@ -28,6 +37,32 @@ function donePushed(~,~,widget,fig,pos)
 
     saveMGRID(final_outputData,[path filesep filenameMGRID],widget.glassbrain.UserData.patientID);
 
+    if isfield(widget.glassbrain.UserData,'PARCvol') && isfield(widget.glassbrain.UserData.electrodes,'Electrode1')
+        cfg.parcVol = widget.glassbrain.UserData.PARCvol;
+        cfg.parcPath = widget.glassbrain.UserData.filePathPARC;
+        cfg.filePath = path;
+        cfg.dataType = 'Voxeloc';
+        cfg.parcType = 'DK';
+        [elecTable,tissueLabels,tissueWeights] = SEEG2parc(cfg);
+    end
+    counter = 1;
+    for i = 1:widget.params.spinner_NumElectrodes.Value
+        field = ['Electrode' num2str(i)];
+        for j = 1:height(widget.fig.UserData.(field).contact)
+            voxelocOutput.electrodes.(field).tissueLabels{j,:} = string(tissueLabels{counter,:});
+            voxelocOutput.electrodes.(field).tissueWeights{j,:} = tissueWeights{counter,:};
+            counter = counter +1;
+        end
+    end
+
+    voxelocOutput.filePath = [path filesep];
+    voxelocOutput.patientID = widget.glassbrain.UserData.patientID;
+    filenameMAT = [voxelocOutput.filePath voxelocOutput.patientID '_' datestr(now,'HHMM_ddmmmyy') '_voxeloc.mat'];
+    save(filenameMAT,'voxelocOutput');
+
+
+    % close the dialog box
+    close(d)
     outputBIDS = uiconfirm(widget.fig,...
                     'Would you like to output to BIDS format?',...
                         'BIDS output',...
@@ -38,12 +73,15 @@ function donePushed(~,~,widget,fig,pos)
     end
 
     w = 1;
+    if endsWith(widget.glassbrain.UserData.filePathCT,filesep)
+        widget.glassbrain.UserData.filePathCT = fileparts(widget.glassbrain.UserData.filePathCT);
+    end
     if isfile([fileparts(fileparts(widget.glassbrain.UserData.filePathCT))...
             filesep 'surf' filesep 'rh.pial-outer-smoothed'])
         prjctCheck(1) = 1;
     else
         prjctCheck(1) = 0;
-        mssg(w) = {['   surf' filesep 'rh.pial-outer-smoothed\n']};
+        mssg(w) = {['   surf' filesep 'rh.pial-outer-smoothed' newline]};
         w = w+1;
     end
     if isfile([fileparts(fileparts(widget.glassbrain.UserData.filePathCT))...
@@ -51,7 +89,7 @@ function donePushed(~,~,widget,fig,pos)
         prjctCheck(2) = 1;
     else
         prjctCheck(2) = 0;
-        mssg(w) = {['   surf' filesep 'lh.pial-outer-smoothed\n']};
+        mssg(w) = {['   surf' filesep 'lh.pial-outer-smoothed' newline]};
         w = w+1;
     end
     if isfile([fileparts(fileparts(widget.glassbrain.UserData.filePathCT))...
@@ -59,7 +97,7 @@ function donePushed(~,~,widget,fig,pos)
         prjctCheck(3) = 1;
     else
         prjctCheck(3) = 0;
-        mssg(w) = {['   surf' filesep 'rh.pial\n']};
+        mssg(w) = {['   surf' filesep 'rh.pial' newline]};
         w = w+1;
     end
     if isfile([fileparts(fileparts(widget.glassbrain.UserData.filePathCT))...
@@ -67,7 +105,7 @@ function donePushed(~,~,widget,fig,pos)
         prjctCheck(4) = 1;
     else
         prjctCheck(4) = 0;
-        mssg(w) = {['   surf' filesep 'lh.pial\n']};
+        mssg(w) = {['   surf' filesep 'lh.pial' newline]};
         w = w+1;
     end
     if isfile([fileparts(fileparts(widget.glassbrain.UserData.filePathCT))...
@@ -75,7 +113,7 @@ function donePushed(~,~,widget,fig,pos)
         prjctCheck(5) = 1;
     else
         prjctCheck(5) = 0;
-        mssg(w) = {['   surf' filesep 'rh.inflated\n']};
+        mssg(w) = {['   surf' filesep 'rh.inflated' newline]};
         w = w+1;
     end
     if isfile([fileparts(fileparts(widget.glassbrain.UserData.filePathCT))...
@@ -83,7 +121,7 @@ function donePushed(~,~,widget,fig,pos)
         prjctCheck(6) = 1;
     else
         prjctCheck(6) = 0;
-        mssg(w) = {['   surf' filesep 'lh.inflated\n']};
+        mssg(w) = {['   surf' filesep 'lh.inflated' newline]};
     end
 
     if all(prjctCheck)
@@ -101,7 +139,7 @@ function donePushed(~,~,widget,fig,pos)
     else
         fprintf(1,['\n\n<strong>iELVis surface projection and visual outputs using ' ...
             'Dykstra Projection method impossible.</strong>\n\n']);
-        fprintf(['Missing files from:<strong>' fileparts(fileparts(widget.glassbrain.UserData.filePathCT)) '</strong>\n\n' mssg{:} ' \n\n\n']);
+        fprintf(['Missing files from <strong>%s </strong>\n\n%s \n\n\n'],fileparts(fileparts(widget.glassbrain.UserData.filePathCT)),[mssg{:}]);
     end
 
     
@@ -110,8 +148,14 @@ function donePushed(~,~,widget,fig,pos)
             [path filesep 'localization_process_' datestr(now,'yyyy-mm-dd') '.log']);
     end
 
-    fprintf(2,'\n\nElectrode localization successful for:\n\n');
+    fprintf(1,'<strong>Electrode localization successful for:</strong>\n\n');
     fprintf(['<strong>' name_list{:} '</strong> \n\n\n']);
+
+    [~,oName,oExt] = fileparts(filenameMAT);
+    linkText = ['Your data has been exported to:' newline newline oName oExt];
+    
+    uialert(widget.fig,linkText,'Success!','Icon','success');
+    
     
 %         close(fig);
 
