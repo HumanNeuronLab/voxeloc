@@ -5,7 +5,7 @@ function projSetUpWindow(widget,widgetState)
     screenSize      = widget.root.monitorSize(3:4);
     projectWindow   = uifigure('Name','Project Set-Up',...
                         'Color',[0.22 0.22 0.22],...
-                        'Position',[(screenSize(1)-3*(round(screenSize(1)/2)/2)) ((screenSize(2)-round(screenSize(2)*0.75))/2) round(screenSize(1)/2) round(screenSize(2)*0.75)],...
+                        'Position',[round(screenSize(1)/2-480) round(screenSize(2)/2-360) 960 760],...
                         'Pointer','arrow');
     
     paramsValues = paramsBuilder(projectWindow,widgetState,widget);
@@ -47,7 +47,11 @@ function projSetUpWindow(widget,widgetState)
                         return 
                 end
             case 1
+                d = uiprogressdlg(src,'Title','Updating autosave file',...
+                    'Indeterminate','on');
+                drawnow;
                 transferData(pV,[],widget,pV,'OUT');
+                close (d);
                 widget.viewer.logo.panel.Visible = 'off';
                 delete(src);
                 close(widget.d);
@@ -60,63 +64,70 @@ function projSetUpWindow(widget,widgetState)
         pV.panel = uipanel('Parent',pW,'Position',[20 20 pW.Position(3)-40 pW.Position(4)-40]);
         
         pV.gridInner = uigridlayout('Parent',pV.panel,...
-            'ColumnWidth',{150,200,22,100,'1x'},'RowHeight',{100,22,22,22,22,22,22,22,22,22,22,'1x',35},...
+            'ColumnWidth',{22,120,100,160,'1x'},'RowHeight',{100,22,22,22,22,22,22,22,22,22,22,'1x',35},...
             'RowSpacing',15,'Padding',[20 20 20 20],'Scrollable','on','BackgroundColor',[0.24 0.24 0.24],'Visible','off');
         pV = drawCartouche(pV);
 
-        pV.label_userID = uilabel('Parent',pV.gridInner,'Text','User name:','FontWeight','bold','FontColor',[1 1 1]);
-        pV.label_userID.Layout.Row = 2;pV.label_userID.Layout.Column = 1;
-        pV.field_userID = uieditfield('Parent',pV.gridInner,'Placeholder','[User name]','FontColor',[0.6 0.6 0.6],'BackgroundColor',[0.85 0.85 0.85]);
         pV.lamp_userID = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
+        pV.lamp_userID.Layout.Row = 2; pV.lamp_userID.Layout.Column = 1;
+        pV.label_userID = uilabel('Parent',pV.gridInner,'Text','User name:','FontWeight','bold','FontColor',[1 1 1]);
+        % pV.label_userID.Layout.Row = 2;pV.label_userID.Layout.Column = 1;
+        pV.field_userID = uieditfield('Parent',pV.gridInner,'Placeholder','[User name]','FontColor',[0.6 0.6 0.6],'BackgroundColor',[1 1 1]);
         pV.check_matrix(4,1) = 0;
 
-        pV.label_patientDir = uilabel('Parent',pV.gridInner,'Text','Patient folder:','FontWeight','bold','FontColor',[1 1 1]);
-        pV.label_patientDir.Layout.Row = 3; pV.label_patientDir.Layout.Column = 1;
-        pV.field_patientDir = uilabel('Parent',pV.gridInner,'Text','[Folder path]','FontColor',[0.6 0.6 0.6]);
-        pV.lamp_patientDir = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
-        pV.lamp_patientDir.Layout.Row = 3; pV.lamp_patientDir.Layout.Column = 3;
-        pV.button_patientDir = uibutton('Parent',pV.gridInner,'Text','Select folder','BackgroundColor',[1,0.65,0],'Tag','DIR');
-        pV.check_matrix(1,1) = 0;
-
-        pV.label_patientID = uilabel('Parent',pV.gridInner,'Text','Patient ID:','FontWeight','bold','FontColor',[1 1 1]);
-        pV.label_patientID.Layout.Row = 4; pV.label_patientID.Layout.Column = 1;
-        pV.field_patientID = uieditfield('Parent',pV.gridInner,'Placeholder','[Patient_ID]','FontColor',[0.6 0.6 0.6],'BackgroundColor',[0.85 0.85 0.85]);
         pV.lamp_patientID = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
+        pV.lamp_patientID.Layout.Row = 3; pV.lamp_patientID.Layout.Column = 1;
+        pV.label_patientID = uilabel('Parent',pV.gridInner,'Text','Patient ID:','FontWeight','bold','FontColor',[1 1 1]);
+        % pV.label_patientID.Layout.Row = 4; pV.label_patientID.Layout.Column = 1;
+        pV.field_patientID = uieditfield('Parent',pV.gridInner,'Placeholder','[Patient_ID]','FontColor',[0.6 0.6 0.6],'BackgroundColor',[1 1 1]);
         pV.check_matrix(2,1) = 0;
+
+        pV.lamp_patientDir = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
+        pV.lamp_patientDir.Layout.Row = 4; pV.lamp_patientDir.Layout.Column = 1;
+        pV.label_patientDir = uilabel('Parent',pV.gridInner,'Text','Patient folder:','FontWeight','bold','FontColor',[1 1 1]);
+        % pV.label_patientDir.Layout.Row = 3; pV.label_patientDir.Layout.Column = 1;
+        pV.button_patientDir = uibutton('Parent',pV.gridInner,'Text','Select folder','BackgroundColor',[1,0.65,0],'Tag','DIR');
+        pV.field_patientDir = uilabel('Parent',pV.gridInner,'Text','[Folder path]','FontColor',[0.6 0.6 0.6]);
+        pV.check_matrix(1,1) = 0;
         
-        pV.label_voxelocFolder = uilabel('Parent',pV.gridInner,'Text','Voxeloc Folder:','FontWeight','bold','FontColor',[1 1 1]);
-        pV.label_voxelocFolder.Layout.Row = 5; pV.label_voxelocFolder.Layout.Column = 1;
-        pV.field_voxelocFolder = uilabel('Parent',pV.gridInner,'Text','[Folder path]','FontColor',[0.6 0.6 0.6]);
         pV.lamp_voxelocFolder = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
+        pV.lamp_voxelocFolder.Layout.Row = 5; pV.lamp_voxelocFolder.Layout.Column = 1;
+        pV.label_voxelocFolder = uilabel('Parent',pV.gridInner,'Text','Voxeloc Folder:','FontWeight','bold','FontColor',[1 1 1]);
+        % pV.label_voxelocFolder.Layout.Row = 5; pV.label_voxelocFolder.Layout.Column = 1;
         pV.button_voxelocFolder = uibutton('Parent',pV.gridInner,'Text','Select folder','BackgroundColor',[1,0.65,0],'Tag','DIR_VOX');
+        pV.field_voxelocFolder = uilabel('Parent',pV.gridInner,'Text','[Folder path]','FontColor',[0.6 0.6 0.6]);
         pV.check_matrix(6,1) = 0;
 
-        pV.label_autosaveFile = uilabel('Parent',pV.gridInner,'Text','Autosave file:','FontWeight','bold','FontColor',[1 1 1]);
-        pV.label_autosaveFile.Layout.Row = 6; pV.label_autosaveFile.Layout.Column = 1;
-        pV.field_autosaveFile = uilabel('Parent',pV.gridInner,'Text','[No autosave file linked yet]','FontColor',[0.6 0.6 0.6]);
         pV.lamp_autosaveFile = uilamp('Parent',pV.gridInner,'Color',[0.94 0.94 0.94]);
+        pV.lamp_autosaveFile.Layout.Row = 6; pV.lamp_autosaveFile.Layout.Column = 1;
+        pV.label_autosaveFile = uilabel('Parent',pV.gridInner,'Text','Autosave file:','FontWeight','bold','FontColor',[1 1 1]);
+        % pV.label_autosaveFile.Layout.Row = 6; pV.label_autosaveFile.Layout.Column = 1;
+        pV.field_autosaveFile = uilabel('Parent',pV.gridInner,'Text','[No autosave file linked yet]','FontColor',[0.6 0.6 0.6]);
+        pV.field_autosaveFile.Layout.Column = 4;
         pV.field_autosavePath = uilabel('Parent',pV.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
-        pV.field_autosavePath.Layout.Column = 5;
         
-        pV.label_ctFile = uilabel('Parent',pV.gridInner,'Text','CT file:','FontWeight','bold','FontColor',[1 1 1]);
-        pV.label_ctFile.Layout.Row = 7;
-        pV.label_ctFile.Layout.Column = 1;
-        pV.field_ctFile = uilabel('Parent',pV.gridInner,'Text','[No CT file loaded yet]','FontColor',[0.6 0.6 0.6]);
         pV.lamp_ctFile = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
-        pV.button_ctFile = uibutton('Parent',pV.gridInner,'Text','Load .nii','BackgroundColor',[1,0.65,0],'Tag','CT');
+        pV.lamp_ctFile.Layout.Row = 7; pV.lamp_ctFile.Layout.Column = 1;
+        pV.label_ctFile = uilabel('Parent',pV.gridInner,'Text','CT file:','FontWeight','bold','FontColor',[1 1 1]);
+        % pV.label_ctFile.Layout.Row = 7;
+        % pV.label_ctFile.Layout.Column = 1;
+        pV.button_ctFile = uibutton('Parent',pV.gridInner,'Text','Load','BackgroundColor',[1,0.65,0],'Tag','CT');
+        pV.field_ctFile = uilabel('Parent',pV.gridInner,'Text','[No CT file loaded yet]','FontColor',[0.6 0.6 0.6]);
         pV.field_ctPath = uilabel('Parent',pV.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
         pV.check_matrix(3,1) = 0;
         
-        pV.label_t1File = uilabel('Parent',pV.gridInner,'Text','T1 file:','FontWeight','bold','FontColor',[1 1 1]);
-        pV.field_t1File = uilabel('Parent',pV.gridInner,'Text','[No T1 file loaded yet]','FontColor',[0.6 0.6 0.6]);
         pV.lamp_t1File = uilamp('Parent',pV.gridInner,'Color',[0.94 0.94 0.94]);
-        pV.button_t1File = uibutton('Parent',pV.gridInner,'Text','Load .nii','BackgroundColor',[1,0.65,0],'Tag','T1');
+        pV.lamp_t1File.Layout.Row = 8; pV.lamp_t1File.Layout.Column = 1;
+        pV.label_t1File = uilabel('Parent',pV.gridInner,'Text','T1 file:','FontWeight','bold','FontColor',[1 1 1]);
+        pV.button_t1File = uibutton('Parent',pV.gridInner,'Text','Load','BackgroundColor',[1,0.65,0],'Tag','T1');
+        pV.field_t1File = uilabel('Parent',pV.gridInner,'Text','[No T1 file loaded yet]','FontColor',[0.6 0.6 0.6]);
         pV.field_t1Path = uilabel('Parent',pV.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
         
-        pV.label_parcFile = uilabel('Parent',pV.gridInner,'Text','Parcellation file:','FontWeight','bold','FontColor',[1 1 1]);
-        pV.field_parcFile = uilabel('Parent',pV.gridInner,'Text','[No parcellation file loaded yet]','FontColor',[0.6 0.6 0.6]);
         pV.lamp_parcFile = uilamp('Parent',pV.gridInner,'Color',[0.94 0.94 0.94]);
-        pV.button_parcFile = uibutton('Parent',pV.gridInner,'Text','Load .nii','BackgroundColor',[1,0.65,0],'Tag','PARC');
+        pV.lamp_parcFile.Layout.Row = 9; pV.lamp_parcFile.Layout.Column = 1;
+        pV.label_parcFile = uilabel('Parent',pV.gridInner,'Text','Parcellation file:','FontWeight','bold','FontColor',[1 1 1]);
+        pV.button_parcFile = uibutton('Parent',pV.gridInner,'Text','Load','BackgroundColor',[1,0.65,0],'Tag','PARC');
+        pV.field_parcFile = uilabel('Parent',pV.gridInner,'Text','[No parcellation file loaded yet]','FontColor',[0.6 0.6 0.6]);
         pV.field_parcPath = uilabel('Parent',pV.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
         
 %                 pV.label_electrodes = uilabel('Parent',pV.gridInner,'Text','Number of electrodes:','FontWeight','bold');
@@ -125,22 +136,24 @@ function projSetUpWindow(widget,widgetState)
 %                 pV.field_electrodes = uilabel('Parent',pV.gridInner,'Text','Completed: 0 of 0','FontColor',[0.6 0.6 0.6]);
 %                 pV.lamp_electrodes = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
         
-        pV.label_instLogo = uilabel('Parent',pV.gridInner,'Text','Institution Logo:','FontWeight','bold','FontColor',[1 1 1]);
-        pV.label_instLogo.Layout.Row = 10;
-        pV.label_instLogo.Layout.Column = 1;
-        pV.field_instLogo = uilabel('Parent',pV.gridInner,'Text','[No logo loaded yet]','FontColor',[0.6 0.6 0.6]);
         pV.lamp_instLogo = uilamp('Parent',pV.gridInner,'Color',[0.94 0.94 0.94]);
-        pV.image_instLogo = uiimage('Parent',pV.gridInner,'ImageSource',which('UNIGE_logo.png'),'HorizontalAlignment','left','Visible','off');
-        pV.image_instLogo.Layout.Row = pV.label_instLogo.Layout.Row;
-        pV.image_instLogo.Layout.Column = 2;
+        pV.lamp_instLogo.Layout.Row = 10; pV.lamp_instLogo.Layout.Column = 1;
+        pV.label_instLogo = uilabel('Parent',pV.gridInner,'Text','Institution Logo:','FontWeight','bold','FontColor',[1 1 1]);
+        % pV.label_instLogo.Layout.Row = 10;
+        % pV.label_instLogo.Layout.Column = 1;
         pV.button_instLogo = uibutton('Parent',pV.gridInner,'Text','Load Image','BackgroundColor',[1,0.65,0]);
+        pV.field_instLogo = uilabel('Parent',pV.gridInner,'Text','[No logo loaded yet]','FontColor',[0.6 0.6 0.6]);
+        pV.image_instLogo = uiimage('Parent',pV.gridInner,'ImageSource',which('UNIGE_logo.png'),'HorizontalAlignment','left','Visible','off');
+        pV.image_instLogo.Layout.Row = pV.lamp_instLogo.Layout.Row;
+        pV.image_instLogo.Layout.Column = 3;
         
-        pV.label_forceSave = uilabel('Parent',pV.gridInner,'Text','Last autosave:','FontWeight','bold','FontColor',[1 1 1]);
-        pV.label_forceSave.Layout.Row = 11;
-        pV.label_forceSave.Layout.Column = 1;
-        pV.field_forceSave = uilabel('Parent',pV.gridInner,'Text','[No autosave yet]','FontColor',[0.6 0.6 0.6]); % datestr(A.date,'HH:MM dd/mmm/yyyy')
         pV.lamp_forceSave = uilamp('Parent',pV.gridInner,'Color',[0.94 0.94 0.94]);
+        pV.lamp_forceSave.Layout.Row = 11; pV.lamp_forceSave.Layout.Column = 1;
+        pV.label_forceSave = uilabel('Parent',pV.gridInner,'Text','Last autosave:','FontWeight','bold','FontColor',[1 1 1]);
+        % pV.label_forceSave.Layout.Row = 11;
+        % pV.label_forceSave.Layout.Column = 1;
         pV.button_forceSave = uibutton('Parent',pV.gridInner,'Text','Force Save','BackgroundColor',[0,0.65,1]);
+        pV.field_forceSave = uilabel('Parent',pV.gridInner,'Text','[No autosave yet]','FontColor',[0.6 0.6 0.6]); % datestr(A.date,'HH:MM dd/mmm/yyyy')
         
         pV.label_newVersion = uilabel('Parent',pV.gridInner,'Text','lll','HorizontalAlignment','right','VerticalAlignment','bottom','Interpreter','html','FontSize',10,'FontColor',[1 1 1]);
         pV.label_newVersion.Layout.Row = numel(pV.gridInner.RowHeight)-1;
@@ -148,7 +161,7 @@ function projSetUpWindow(widget,widgetState)
 
         pV.button_Validate = uibutton('Parent',pV.gridInner,'Text','Next','BackgroundColor',[1,0.65,0],'Tag','DONE','Enable','off');
         pV.button_Validate.Layout.Row = numel(pV.gridInner.RowHeight);
-        pV.button_Validate.Layout.Column = 1;
+        pV.button_Validate.Layout.Column = 2;
 
         progPath = fileparts(which('voxeloc.m'));
         pV.image_currentVersion = uiimage('Parent',pV.gridInner,'ImageSource',[progPath filesep 'assets' filesep 'voxeloc_version.svg'],'HorizontalAlignment','right','ScaleMethod','scaledown');
@@ -293,6 +306,8 @@ function projSetUpWindow(widget,widgetState)
                 figure(pV.panel.Parent);
                 pV.gridInit.Visible = 'off';
                 pV.gridInner.Visible = 'on';
+                pV.text2_cartouche.Text = pV.field_patientID.Value;
+                pV.text4_cartouche.Text = ['Produced by: ' pV.field_userID.Value];
                 validCheck = runcheck([],[],pV,widget.d,0);
                 return
         end
@@ -344,6 +359,7 @@ function projSetUpWindow(widget,widgetState)
                         pV.text2_cartouche.Text = pV.label_patientID.UserData.patientID;
                         widget.glassbrain.UserData.patientID = pV.field_patientID.Value;
                         widget.glassbrain.UserData.patientDir = cDir;
+                        transferData(pV,[],widget,pV,'OUT');
                     end
                 end
             case 3
@@ -478,7 +494,7 @@ function projSetUpWindow(widget,widgetState)
                     pV.lamp_voxelocFolder.Color = [0 1 0];
                     widget.glassbrain.UserData.voxelocDir = [cDir filesep 'voxeloc'];
                     pV.label_voxelocFolder.UserData.voxDir = [cDir filesep 'voxeloc'];
-                    widget = widgetAutosave(widget,pV);
+                    transferData(pV,[],widget,pV,'OUT');
                     pV.check_matrix(6,1) = 1;
                 end
         end
@@ -528,7 +544,7 @@ function projSetUpWindow(widget,widgetState)
         pV.panel_cartouche.Layout.Column = [1,numel(pV.gridInner.ColumnWidth)];
         pV.grid_cartouche = uigridlayout('Parent',pV.panel_cartouche,...
                     'ColumnWidth',{'3x','4x','3x'},'RowHeight',{'1x','1x','1x','1x'},...
-                    'RowSpacing',0,'Padding',[5 5 5 5],'Scrollable','off','BackgroundColor',[0.9 0.9 0.9 ]);
+                    'RowSpacing',0,'Padding',[5 5 5 5],'Scrollable','off','BackgroundColor',[1 1 1]);
         pV.logoI_cartouche = uiimage('Parent',pV.grid_cartouche,'ImageSource',which('UNIGE_logo.png'));
         pV.logoI_cartouche.Layout.Row = [1,4];
         pV.logoI_cartouche.Layout.Column = 1;

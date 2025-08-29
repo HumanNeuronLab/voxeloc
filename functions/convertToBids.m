@@ -1,4 +1,4 @@
-function convertToBids(numElecs,widget)
+function convertToBids(numElecs,widget,voxelocOutput)
     if nargin == 0
         numElecs = randi(15);
         for j = 1:numElecs
@@ -448,7 +448,13 @@ function convertToBids(numElecs,widget)
         outJSON.iEEGCoordinateProcessingReference = 'https://github.com/HumanNeuronLab/voxeloc';
         w = 1;
         if isfield(widget.glassbrain.UserData,'filePathCT')
-            sourceCT = [widget.glassbrain.UserData.filePathCT widget.glassbrain.UserData.fileNameCT];
+            if endsWith(widget.glassbrain.UserData.filePathCT, '.nii') || ...
+                    endsWith(widget.glassbrain.UserData.filePathCT, '.mgh') || ...
+                    endsWith(widget.glassbrain.UserData.filePathCT, '.mgz')
+                sourceCT = [widget.glassbrain.UserData.filePathCT];
+            else
+                sourceCT = [widget.glassbrain.UserData.filePathCT widget.glassbrain.UserData.fileNameCT];
+            end
             if isequal(fieldSession.Value,'')
                 fileCT = ['sub-' fieldSubjectID.Value...
                     '_' widget.glassbrain.UserData.fileNameCT];
@@ -465,7 +471,13 @@ function convertToBids(numElecs,widget)
             w = w+1;
         end
         if isfield(widget.glassbrain.UserData,'filePathT1')
-            sourceT1 = [widget.glassbrain.UserData.filePathT1 widget.glassbrain.UserData.fileNameT1];
+            if endsWith(widget.glassbrain.UserData.filePathT1, '.nii') || ...
+                    endsWith(widget.glassbrain.UserData.filePathT1, '.mgh') || ...
+                    endsWith(widget.glassbrain.UserData.filePathT1, '.mgz')
+                sourceCT = [widget.glassbrain.UserData.filePathT1];
+            else
+                sourceCT = [widget.glassbrain.UserData.filePathT1 widget.glassbrain.UserData.filePathT1];
+            end
             if isequal(fieldSession.Value,'')
                 fileT1 = ['sub-' fieldSubjectID.Value...
                     '_' widget.glassbrain.UserData.fileNameT1];

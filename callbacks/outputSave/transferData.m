@@ -26,7 +26,7 @@ function transferData(~,~,widget,pV,directionTransfer)
 
                 if (~isempty(pV.label_patientID.UserData.patientID) && ~isfield(widget.glassbrain.UserData,'patientID')) ||...
                     ~isequal(pV.label_patientID.UserData.patientID,widget.glassbrain.UserData.patientID)
-                    widget.glassbrain.UserData.patientDir = pV.label_patientID.UserData.patientID;
+                    widget.glassbrain.UserData.patientID = pV.label_patientID.UserData.patientID;
                 end
                 if ~isempty(pV.label_patientID.UserData.patientID)
                     widget.viewer.projectParams.tab.UserData.patientID = pV.field_patientID.Value;

@@ -69,7 +69,11 @@ function donePushed(~,~,widget,fig,pos)
                         'Options',{'Yes','No'},'DefaultOption',1,...
                         'Icon','question');
     if isequal(outputBIDS,'Yes')
-        convertToBids(widget.params.spinner_NumElectrodes.Value,widget);
+        if exist('tissueWeights')
+            convertToBids(widget.params.spinner_NumElectrodes.Value,widget, voxelocOutput);
+        else
+            convertToBids(widget.params.spinner_NumElectrodes.Value,widget);
+        end
     end
 
     w = 1;
