@@ -43,8 +43,10 @@ function donePushed(~,~,widget,fig,pos)
         cfg.filePath = path;
         cfg.dataType = 'Voxeloc';
         cfg.parcType = 'DK';
-        [elecTable,tissueLabels,tissueWeights] = SEEG2parc(cfg);
+        [~,tissueLabels,tissueWeights] = SEEG2parc(cfg);
     end
+    bidsTissueData.labels = tissueLabels;
+    bidsTissueData.weights = tissueWeights;
     counter = 1;
     for i = 1:widget.params.spinner_NumElectrodes.Value
         field = ['Electrode' num2str(i)];
@@ -70,7 +72,7 @@ function donePushed(~,~,widget,fig,pos)
                         'Icon','question');
     if isequal(outputBIDS,'Yes')
         if exist('tissueWeights')
-            convertToBids(widget.params.spinner_NumElectrodes.Value,widget, voxelocOutput);
+            convertToBids(widget.params.spinner_NumElectrodes.Value,widget,bidsTissueData);
         else
             convertToBids(widget.params.spinner_NumElectrodes.Value,widget);
         end

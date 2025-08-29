@@ -17,12 +17,11 @@ efficiently locate iEEG contact coordinates using post-op & pre-op images.
 ---
 
 #### Current Version Updates:
-- Bug fixes, including "isunix" to replace typo "islinux" (many thanks to <a href="https://github.com/TimnaKleinman">Timna Kleinman</a> for spotting this).
-- Reordering electrode mousing pointer render improved.
-- Reordering electrode mousing pointer render improved.
-- Bugs from autosave path fixed.
-- Changed color is kept after re-estimating.
-- Navigating contacts in tree on T1 fixed.
+- Updated output file variable name ("voxelocOutput")
+- Output file now contains probabilistic tissues labels and weights based on the SEEG2parc function from Prof. Pierre Mégevand.
+- Bug fixes and display update on project parameters window.
+- BIDS .tsv now contains Tissue labels and weights if a parcellation file has been provided to Voxeloc (eg. wmparc.nii).
+- Upon exporting to BIDS, a shortcut link is created in the subject's voxeloc folder (along with the autosave and export .mat files).
 
 *Note: electrode parameters may only be modified or updated in the
 CT tab. After updating any electrode parameters, estimation must be
@@ -30,12 +29,12 @@ re-run in order to update contact locations. At this point, only
 depth electrodes may be created (no grids or strips).*
 
 #### Known bugs:
-- Oblique slicing may generate errors in contact placement on map, but all 
-parcellation locations per contact are grounded in absolute voxel-specific 
-values (ie: true area).
+- Oblique slices still doesn't render accurately.
 <div style="color:red;">If you encounter any bugs or issues, please <a href="https://github.com/HumanNeuronLab/voxeloc/issues/new">click here</a> to let us know so we can fix it!</div>
 
 #### Future Version Updates:
+- For v1.0:
+    Fix the oblique slices to work.
 - Add option to create "grid" & "strip" electrodes.
 - Enhance compatibility and visualization methods.
 

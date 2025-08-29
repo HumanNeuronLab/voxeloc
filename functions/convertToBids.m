@@ -1,4 +1,4 @@
-function convertToBids(numElecs,widget,voxelocOutput)
+function convertToBids(numElecs,widget,bidsTissueData)
     if nargin == 0
         numElecs = randi(15);
         for j = 1:numElecs
@@ -10,6 +10,9 @@ function convertToBids(numElecs,widget,voxelocOutput)
             listElecs{m,1} = widget.fig.UserData.(cElec).Name;
             listElecs{m,2} = widget.fig.UserData.(cElec).contact;
         end
+    end
+    if nargin ==2
+        bidsTissueData = [];
     end
 
     %%% MAKE TSV AND JSON FILES ACTUALLY MEAN SOMETHING
@@ -145,7 +148,7 @@ function convertToBids(numElecs,widget,voxelocOutput)
     buttonPrev.ButtonPushedFcn = {@changeElec,labelStrElecs,buttonPrev,buttonNext,labelElecName,fieldElecSurface,fieldElecMaterial,fieldElecManufacturer,fieldElecImpedance,numElecs,listElecs};
     buttonNext.ButtonPushedFcn = {@changeElec,labelStrElecs,buttonPrev,buttonNext,labelElecName,fieldElecSurface,fieldElecMaterial,fieldElecManufacturer,fieldElecImpedance,numElecs,listElecs};
 
-    buttonEXPORT.ButtonPushedFcn = {@exportBIDS,labelStrElecs,checkAllElec,labelPath,labelBIDSfolder,fig,fieldSubjectID,fieldSession,numElecs,listElecs,fieldCoordSystem};
+    buttonEXPORT.ButtonPushedFcn = {@exportBIDS,labelStrElecs,checkAllElec,labelPath,labelBIDSfolder,fig,fieldSubjectID,fieldSession,numElecs,listElecs,fieldCoordSystem,bidsTissueData};
     
     % Callback functions
     function toggleChange(~,evt,labelC,labelS,ProjName,SubjID,Session,Path,BIDSfolder,labelStrElecs,checkAllElec,labelElecName,numElecs,buttonEXPORT)
@@ -224,7 +227,11 @@ function convertToBids(numElecs,widget,voxelocOutput)
                 src.Parent.Visible = 'off';
                 A = uigetdir;
                 src.Parent.Visible = 'on';
-                [~,b] = fileparts(A);
+                try
+                    [~,b] = fileparts(A);
+                catch
+                    return
+                end
                 %Path.Interpreter = 'html';
                 Path.Text = A;%sprintf("<font style='color:dimgray;'>%s/</font><font style='color:forestgreen;'>%s</font>",a,b);
                 ProjName.Value = b;
@@ -412,7 +419,10 @@ function convertToBids(numElecs,widget,voxelocOutput)
         fieldElecImpedance.Value = labelStrElecs.UserData.individualValue{currElec,4};
     end
 
-    function exportBIDS(~,~,labelStrElecs,checkAllElec,labelPath,labelBIDSfolder,fig,fieldSubjectID,fieldSession,numElecs,listElecs,fieldCoordSystem)
+    function exportBIDS(~,~,labelStrElecs,checkAllElec,labelPath,labelBIDSfolder,fig,fieldSubjectID,fieldSession,numElecs,listElecs,fieldCoordSystem,bidsTissueData)
+        d = uiprogressdlg(fig,'Title','Exporting to your BIDS folder...',...
+            'Indeterminate','on');
+        drawnow;
         projDir = labelPath.Text;%extractHTMLText(labelPath.Text);
 %         subjDir = extractHTMLText(labelBIDSfolder.Text);
 %         tmpIdx = strfind(subjDir,'sub-');
@@ -448,13 +458,11 @@ function convertToBids(numElecs,widget,voxelocOutput)
         outJSON.iEEGCoordinateProcessingReference = 'https://github.com/HumanNeuronLab/voxeloc';
         w = 1;
         if isfield(widget.glassbrain.UserData,'filePathCT')
-            if endsWith(widget.glassbrain.UserData.filePathCT, '.nii') || ...
-                    endsWith(widget.glassbrain.UserData.filePathCT, '.mgh') || ...
-                    endsWith(widget.glassbrain.UserData.filePathCT, '.mgz')
-                sourceCT = [widget.glassbrain.UserData.filePathCT];
-            else
-                sourceCT = [widget.glassbrain.UserData.filePathCT widget.glassbrain.UserData.fileNameCT];
+            if ~endsWith(widget.glassbrain.UserData.filePathCT, filesep)
+                widget.glassbrain.UserData.filePathCT = [widget.glassbrain.UserData.filePathCT filesep];
+                % widget = widgetAutosave(widget);
             end
+            sourceCT = [widget.glassbrain.UserData.filePathCT widget.glassbrain.UserData.fileNameCT];
             if isequal(fieldSession.Value,'')
                 fileCT = ['sub-' fieldSubjectID.Value...
                     '_' widget.glassbrain.UserData.fileNameCT];
@@ -471,13 +479,11 @@ function convertToBids(numElecs,widget,voxelocOutput)
             w = w+1;
         end
         if isfield(widget.glassbrain.UserData,'filePathT1')
-            if endsWith(widget.glassbrain.UserData.filePathT1, '.nii') || ...
-                    endsWith(widget.glassbrain.UserData.filePathT1, '.mgh') || ...
-                    endsWith(widget.glassbrain.UserData.filePathT1, '.mgz')
-                sourceCT = [widget.glassbrain.UserData.filePathT1];
-            else
-                sourceCT = [widget.glassbrain.UserData.filePathT1 widget.glassbrain.UserData.filePathT1];
+            if ~endsWith(widget.glassbrain.UserData.filePathT1, filesep)
+                widget.glassbrain.UserData.filePathT1 = [widget.glassbrain.UserData.filePathT1 filesep];
+                % widget = widgetAutosave(widget);
             end
+            sourceT1 = [widget.glassbrain.UserData.filePathT1 widget.glassbrain.UserData.fileNameT1];
             if isequal(fieldSession.Value,'')
                 fileT1 = ['sub-' fieldSubjectID.Value...
                     '_' widget.glassbrain.UserData.fileNameT1];
@@ -533,14 +539,28 @@ function convertToBids(numElecs,widget,voxelocOutput)
                     type = {'n/a'};
                 end
                 dimension = {['[1x' num2str(nContact) ']']};
-                try
-                    outTSV.table(counter,:) = table(name,x,y,z,size,...
-                        material,manufacturer,group,...
-                        hemisphere,type,impendance,dimension);
-                catch
-                    outTSV.table(counter,:) = table(name,x,y,z,size,...
-                        material,manufacturer,group,...
-                        hemisphere,type,dimension);
+                if ~isempty(bidsTissueData)
+                    tissueLabel = {strjoin(bidsTissueData.labels{counter})};
+                    tissueWeights = {bidsTissueData.weights{counter}};
+                    try
+                        outTSV.table(counter,:) = table(name,x,y,z,size,...
+                            material,manufacturer,group,...
+                            hemisphere,type,impendance,dimension,tissueLabel,tissueWeights);
+                    catch
+                        outTSV.table(counter,:) = table(name,x,y,z,size,...
+                            material,manufacturer,group,...
+                            hemisphere,type,dimension,tissueLabel,tissueWeights);
+                    end
+                else
+                    try
+                        outTSV.table(counter,:) = table(name,x,y,z,size,...
+                            material,manufacturer,group,...
+                            hemisphere,type,impendance,dimension);
+                    catch
+                        outTSV.table(counter,:) = table(name,x,y,z,size,...
+                            material,manufacturer,group,...
+                            hemisphere,type,dimension);
+                    end
                 end
                 counter = counter+1;
             end
@@ -548,6 +568,24 @@ function convertToBids(numElecs,widget,voxelocOutput)
         
         
         writetable(outTSV.table,outTSV.file,'FileType','text','Delimiter','\t');
+        targetFolder = [fileparts(outDir)];   % The folder you want to link to
+        shortcutPath = [widget.glassbrain.UserData.voxelocDir filesep 'BIDS.lnk']; % Where the shortcut should be created
+        
+        if ispc
+            % On Windows: use mklink /D (needs admin if outside user space)
+            shell = actxserver('WScript.Shell');
+            shortcut = shell.CreateShortcut(shortcutPath);
+            
+            % Set shortcut properties
+            shortcut.TargetPath = targetFolder;
+            shortcut.WorkingDirectory = targetFolder;
+            shortcut.Save();
+        elseif isunix || ismac
+            % On Linux/macOS: use ln -s
+            cmd = sprintf('ln -s "%s" "%s"', targetFolder, shortcutPath);
+            [status, msg] = system(cmd);
+        end
+        close(d);
         close(fig);
     end
 

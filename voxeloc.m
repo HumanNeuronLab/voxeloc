@@ -5,7 +5,7 @@ function voxeloc
 %   rapidly and efficiently locate iEEG contact coordinates using 
 %   post-op & pre-op images.
 %   
-%   Version:        v0.9.4
+%   Version:        v0.9.6
 %   Contact:        jonathan.monney@unige.ch
 %   Last Update:    29/08/2025
 %
@@ -14,6 +14,11 @@ function voxeloc
 %       - Output file now contains probabilistic tissues labels and weights
 %       based on the SEEG2parc function from Prof. Pierre Mégevand.
 %       - Bug fixes and display update on project parameters window.
+%       - BIDS .tsv now contains Tissue labels and weights if a
+%       parcellation file has been provided to Voxeloc (eg. wmparc.nii).
+%       - Upon exporting to BIDS, a shortcut link is created in the
+%       subject's voxeloc folder (along with the autosave and export .mat
+%       files).
 %          
 %       Note: electrode parameters may only be modified or updated in the
 %       CT tab. After updating any electrode parameters, estimation must be
@@ -25,10 +30,7 @@ function voxeloc
 % 
 %   Future Version Updates:
 %       - For v1.0:
-%           BIDS output must contain tissue labels and weights in the .tsv.
-%           (Create a redirection fodler in the voxeloc folder to the BIDS
-%           directory.)
-%           Fix the oblique slices to work.
+%          Fix the oblique slices to work.
 %       - Add option to create "grid" & "strip" electrodes.
 %       - Enhance compatibility and visualization methods.
 %
