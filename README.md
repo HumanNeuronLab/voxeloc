@@ -1,6 +1,6 @@
 <a href="https://github.com/HumanNeuronLab/voxeloc"><img src="https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/voxeloc_logoBG.png"/></a>
 
-<h3><a href="https://github.com/HumanNeuronLab/voxeloc/releases"><img src="https://img.shields.io/badge/v0.9.4-29%C2%B7Aug%C2%B72025-blue?logo=github" width="150" align="right"/></a><div align="left"><i>Voxel Electrode Locator</i></div></h3>
+<h3><a href="https://github.com/HumanNeuronLab/voxeloc/releases"><img src="https://img.shields.io/badge/v0.9.6-29%C2%B7Aug%C2%B72025-blue?logo=github" width="150" align="right"/></a><div align="left"><i>Voxel Electrode Locator</i></div></h3>
 <br />
 
 This GUI widget was created to help locate intracranial-EEG contact locations.
@@ -51,6 +51,7 @@ depth electrodes may be created (no grids or strips).*
   <a href="https://www.unige.ch/medecine/neucli/en/groupes-de-recherche/1034megevand/">
   <img src="https://raw.githubusercontent.com/HumanNeuronLab/voxeloc/main/assets/UNIGE_logo.png" width="320"/>
 </a></div>
+
 
 
 
