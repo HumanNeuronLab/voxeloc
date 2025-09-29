@@ -353,7 +353,7 @@ function checkOblique(widget,modus)
         % uniquely retrieved after rotation
         for a = 1:height(contact)
             realVal(a,:) = ct(round(contact(a,2)),round(contact(a,1)),round(contact(a,3)));
-            ct(round(contact(a,2)),round(contact(a,1)),round(contact(a,3))) = a+maxVal;
+            ct(round(contact(a,2)),round(contact(a,1)),round(contact(a,3))) = ceil(a+maxVal);
         end
     end
     
@@ -409,7 +409,7 @@ function checkOblique(widget,modus)
         for i = 1:height(contact)
             %----------------- Vertical Height determination ------------------
             % Find the index of the contact in the rotated volume
-            idxVert = find(rotVolumes.ct_Vert(:,:,:) == i+maxVal);
+            idxVert = find(rotVolumes.ct_Vert(:,:,:) == ceil(i+maxVal));
             % Due to rotation, some contacts may be cropped. For this reason,
             % we give empty values to the vectors before retrieving their mode
             % value.
@@ -425,7 +425,7 @@ function checkOblique(widget,modus)
     
             %----------------- Horizontal Height determination ----------------
             % Find the index of the contact in the rotated volume
-            idxHor = find(rotVolumes.ct_Hor(:,:,:) == i+maxVal);
+            idxHor = find(rotVolumes.ct_Hor(:,:,:) == ceil(i+maxVal));
             % Due to rotation, some contacts may be cropped. For this reason,
             % we give empty values to the vectors before retrieving their mode
             % value.

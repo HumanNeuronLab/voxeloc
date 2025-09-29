@@ -144,8 +144,8 @@ function projSetUpWindow(widget,widgetState)
         pV.button_instLogo = uibutton('Parent',pV.gridInner,'Text','Load Image','BackgroundColor',[1,0.65,0]);
         pV.field_instLogo = uilabel('Parent',pV.gridInner,'Text','[No logo loaded yet]','FontColor',[0.6 0.6 0.6]);
         pV.image_instLogo = uiimage('Parent',pV.gridInner,'ImageSource',which('UNIGE_logo.png'),'HorizontalAlignment','left','Visible','off');
-        pV.image_instLogo.Layout.Row = pV.lamp_instLogo.Layout.Row;
-        pV.image_instLogo.Layout.Column = 3;
+        % pV.image_instLogo.Layout.Row = pV.lamp_instLogo.Layout.Row;
+        % pV.image_instLogo.Layout.Column = 3;
         
         pV.lamp_forceSave = uilamp('Parent',pV.gridInner,'Color',[0.94 0.94 0.94]);
         pV.lamp_forceSave.Layout.Row = 11; pV.lamp_forceSave.Layout.Column = 1;
@@ -447,7 +447,7 @@ function projSetUpWindow(widget,widgetState)
                 end
             case 4
                 pV.panel.Parent.Visible = 'off';
-                [file,path] = uigetfile({'*.jpg;*.jpeg;*.png','*.svg'},'Select institution logo');
+                [file,path] = uigetfile({'*.jpg;*.jpeg;*.png;*.svg'},'Select institution logo');
                 pV.panel.Parent.Visible = 'on';
                 figure(pV.panel.Parent);
                 if ischar(file) && ischar(path)
@@ -458,7 +458,8 @@ function projSetUpWindow(widget,widgetState)
                     pV.image_instLogo.ImageSource = [path file];
                     pV.lamp_instLogo.Color = [0 1 0];
                     pV.logoI_cartouche.ImageSource = [path file];
-                    widget.glassbrain.UserData.instLogoPath = [path file];
+                    widget.glassbrain.UserData.instLogoPath = path;
+                    widget.glassbrain.UserData.instLogoFile = file;
                 else
                     pV.label_instLogo.UserData = [];
                     pV.field_instLogo.Visible = 'on';

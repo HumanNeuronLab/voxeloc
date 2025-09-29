@@ -63,7 +63,7 @@ function exportPDF(~,~,widget)
                 'Visible','off','Clipping','on');
             header1.XAxis.Visible = 'off'; header1.YAxis.Visible = 'off';
             if isfield(widget.glassbrain.UserData,'instLogoFile')
-                instLogo = imagesc('Parent',header1,'CData',imread([widget.glassbrain.UserData.instLogoPath widget.glassbrain.UserData.instLogoFile]));
+                instLogo = imagesc('Parent',header1,'CData',imread([widget.glassbrain.UserData.instLogoPath widget.glassbrain.UserData.instLogoFile],'BackgroundColor',[1 1 1]));
                 header1.XLim = ([instLogo.XData(1)-instLogo.XData(2)*0.05 instLogo.XData(2)+instLogo.XData(2)*0.05]); % adds 10% padding
                 header1.YLim = ([instLogo.YData(1)-instLogo.YData(2)*0.05 instLogo.YData(2)+instLogo.YData(2)*0.05]); % adds 10% padding
                 axis(header1,'equal');
@@ -299,7 +299,7 @@ function exportPDF(~,~,widget)
     mergedFileName = [outPath filesep widget.glassbrain.UserData.patientID '_vxlc_' datestr(now,'HHMM_ddmmmyyyy') '.pdf'];
     mergePdfs(indepPdfs,mergedFileName);
     cellfun(@delete,indepPdfs);
-    delete(ctVertFile);delete(ctHorFile);delete(t1VertFile);delete(t1HorFile);delete(head3DFile);
+    delete(ctVertFile);delete(ctHorFile);delete(t1VertFile);delete(t1HorFile);delete(head3DFile);delete(diagName);
     d.Value = numMssg/numMssg;
     pause(1);
     close(d);
