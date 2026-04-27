@@ -90,7 +90,8 @@ end
 widget              = update_outputData(widget);
 widget.mV           = mV;
 widget.d            = uiprogressdlg(widget.fig,'Title',...
-                        'Waiting for Project Set-Up parameters...');
+                        'Waiting for Project Set-Up parameters...','Indeterminate','on');
+
 drawnow
 
 [widget,wip]        = drawCentralPanel(widget);

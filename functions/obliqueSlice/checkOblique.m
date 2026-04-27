@@ -551,16 +551,52 @@ function checkOblique(widget,modus)
         hold(ax_t1Hor,"on")
     
         % Create the image for the vertical slice (CT,T1, Segmentation)
-        output.(imElec).sliceCT_Vert = imagesc(rotVolumes.ct_Vert(:,:,mode(coord.depthVert)),'Parent',ax_ctVert,'Visible','off');
-        output.(imElec).sliceT1_Vert = imagesc(rotVolumes.t1_Vert(:,:,mode(coord.depthVert)),'Parent',ax_t1Vert,'Visible','off');
-        output.(imElec).sliceSEG_VertCT = imagesc(colArrV,'Parent',ax_ctVert,'Visible','off','AlphaData',alphaArrV);
-        output.(imElec).sliceSEG_VertT1 = imagesc(colArrV,'Parent',ax_t1Vert,'Visible','off','AlphaData',alphaArrV);
+        incRes = 4;
+        colsDims = find(any(rotVolumes.t1_Vert(:,:,mode(coord.depthVert)),1));
+        rowDims = find(any(rotVolumes.t1_Vert(:,:,mode(coord.depthVert)),2));
+        maxDims = [colsDims(end)-colsDims(1) rowDims(end)-rowDims(1)];
+        [a,b] = max(maxDims);
+        colStartEnd = round([colsDims(round(length(colsDims)/2))-(a/2+10) colsDims(round(length(colsDims)/2))+(a/2+10)]);
+        rowStartEnd = round([rowDims(round(length(rowDims)/2))-(a/2+10) rowDims(round(length(rowDims)/2))+(a/2+10)]);
+        M1 = smoothdata2(colArrV,"gaussian",incRes);
+        M1 = imresize(M1(rowStartEnd(1):rowStartEnd(end),colStartEnd(1):colStartEnd(end),:),height(alphaArrV)/diff(rowStartEnd),'bilinear');
+        M2 = smoothdata2(alphaArrV,"gaussian",incRes);%alphaArrV;
+        M2 = imresize(M2(rowStartEnd(1):rowStartEnd(end),colStartEnd(1):colStartEnd(end)),height(alphaArrV)/diff(rowStartEnd),'bilinear');
+        M3 = rotVolumes.ct_Vert(:,:,mode(coord.depthVert));
+        M3 = imresize(M3(rowStartEnd(1):rowStartEnd(end),colStartEnd(1):colStartEnd(end)),height(alphaArrV)/diff(rowStartEnd),'bilinear');
+        M4 = rotVolumes.t1_Vert(:,:,mode(coord.depthVert));
+        M4 = imresize(M4(rowStartEnd(1):rowStartEnd(end),colStartEnd(1):colStartEnd(end)),height(alphaArrV)/diff(rowStartEnd),'bilinear');
+        % ax_ctVert.XLim = [1 height(colArrV)];%*incRes];
+        % ax_ctVert.YLim = [1 height(colArrV)];%*incRes];
+        output.(imElec).sliceCT_Vert = imagesc(255-M3,'Parent',ax_ctVert,'Visible','on');
+        output.(imElec).sliceT1_Vert = imagesc(255-M4,'Parent',ax_t1Vert,'Visible','on');
+        output.(imElec).sliceSEG_VertCT = imagesc(M1,'Parent',ax_ctVert,'Visible','on','AlphaData',M2);
+        output.(imElec).sliceSEG_VertT1 = imagesc(M1,'Parent',ax_t1Vert,'Visible','on','AlphaData',M2);
     
+        % Plot the contacts of current electrode as points on each slice
+        output.(pointElec).CT_Vert = plot(ax_ctVert,((point.Vert.(imElec)(:,2)-colStartEnd(1))*height(alphaArrV)/diff(rowStartEnd)),((point.Vert.(imElec)(:,1)-rowStartEnd(1))*height(alphaArrV)/diff(rowStartEnd)),'o','MarkerSize',3,'Visible','on','LineStyle','-','LineWidth',1,'Color',elecColor,'MarkerEdgeColor',[1 1 1],'MarkerFaceColor',elecColor);
+        output.(pointElec).T1_Vert = plot(ax_t1Vert,((point.Vert.(imElec)(:,2)-colStartEnd(1))*height(alphaArrV)/diff(rowStartEnd)),((point.Vert.(imElec)(:,1)-rowStartEnd(1))*height(alphaArrV)/diff(rowStartEnd)),'o','MarkerSize',3,'Visible','on','LineStyle','-','LineWidth',1,'Color',elecColor,'MarkerEdgeColor',[1 1 1],'MarkerFaceColor',elecColor);
+
+
         % Create the image for the horizontal slice (CT,T1, Segmentation)
-        output.(imElec).sliceCT_Hor = imagesc(rotVolumes.ct_Hor(:,:,mode(coord.depthHor)),'Parent',ax_ctHor,'Visible','off');
-        output.(imElec).sliceT1_Hor = imagesc(rotVolumes.t1_Hor(:,:,mode(coord.depthHor)),'Parent',ax_t1Hor,'Visible','off');
-        output.(imElec).sliceSEG_HorCT = imagesc(colArrH,'Parent',ax_ctHor,'Visible','off','AlphaData',alphaArrH);
-        output.(imElec).sliceSEG_HorT1 = imagesc(colArrH,'Parent',ax_t1Hor,'Visible','off','AlphaData',alphaArrH);
+        colsDims = find(any(rotVolumes.t1_Hor(:,:,mode(coord.depthHor)),1));
+        rowDims = find(any(rotVolumes.t1_Hor(:,:,mode(coord.depthHor)),2));
+        maxDims = [colsDims(end)-colsDims(1) rowDims(end)-rowDims(1)];
+        [a,b] = max(maxDims);
+        colStartEnd = round([colsDims(round(length(colsDims)/2))-(a/2+10) colsDims(round(length(colsDims)/2))+(a/2+10)]);
+        rowStartEnd = round([rowDims(round(length(rowDims)/2))-(a/2+10) rowDims(round(length(rowDims)/2))+(a/2+10)]);
+        M1 = smoothdata2(colArrH,"gaussian",incRes);
+        M1 = imresize(M1(rowStartEnd(1):rowStartEnd(end),colStartEnd(1):colStartEnd(end),:),height(alphaArrH)/diff(rowStartEnd),'bilinear');
+        M2 = smoothdata2(alphaArrH,"gaussian",incRes);
+        M2 = imresize(M2(rowStartEnd(1):rowStartEnd(end),colStartEnd(1):colStartEnd(end)),height(alphaArrH)/diff(rowStartEnd),'bilinear');
+        M3 = rotVolumes.ct_Hor(:,:,mode(coord.depthHor));
+        M3 = imresize(M3(rowStartEnd(1):rowStartEnd(end),colStartEnd(1):colStartEnd(end)),height(alphaArrH)/diff(rowStartEnd),'bilinear');
+        M4 = rotVolumes.t1_Hor(:,:,mode(coord.depthHor));
+        M4 = imresize(M4(rowStartEnd(1):rowStartEnd(end),colStartEnd(1):colStartEnd(end)),height(alphaArrH)/diff(rowStartEnd),'bilinear');
+        output.(imElec).sliceCT_Hor = imagesc(255-M3,'Parent',ax_ctHor,'Visible','on');
+        output.(imElec).sliceT1_Hor = imagesc(255-M4,'Parent',ax_t1Hor,'Visible','on');
+        output.(imElec).sliceSEG_HorCT = imagesc(M1,'Parent',ax_ctHor,'Visible','on','AlphaData',M2);
+        output.(imElec).sliceSEG_HorT1 = imagesc(M1,'Parent',ax_t1Hor,'Visible','on','AlphaData',M2);
         
         colormap(ax_ctVert,'bone');
         colormap(ax_ctHor,'bone');
@@ -570,14 +606,10 @@ function checkOblique(widget,modus)
         axis(ax_t1Vert,'square');
         axis(ax_ctHor,'square');
         axis(ax_t1Hor,'square');
-    
-    
+ 
         % Plot the contacts of current electrode as points on each slice
-        output.(pointElec).CT_Vert = plot(ax_ctVert,point.Vert.(imElec)(:,2),point.Vert.(imElec)(:,1),'.','MarkerSize',20,'Visible','off','LineStyle','-','LineWidth',1.5,'Color',elecColor);
-        output.(pointElec).T1_Vert = plot(ax_t1Vert,point.Vert.(imElec)(:,2),point.Vert.(imElec)(:,1),'.','MarkerSize',20,'Visible','off','LineStyle','-','LineWidth',1.5,'Color',elecColor);
-
-        output.(pointElec).CT_Hor = plot(ax_ctHor,point.Hor.(imElec)(:,2),point.Hor.(imElec)(:,1),'.','MarkerSize',20,'Visible','off','LineStyle','-','LineWidth',1.5,'Color',elecColor);
-        output.(pointElec).T1_Hor = plot(ax_t1Hor,point.Hor.(imElec)(:,2),point.Hor.(imElec)(:,1),'.','MarkerSize',20,'Visible','off','LineStyle','-','LineWidth',1.5,'Color',elecColor);
+        output.(pointElec).CT_Hor = plot(ax_ctHor,((point.Hor.(imElec)(:,2)-colStartEnd(1))*height(alphaArrV)/diff(rowStartEnd)),((point.Hor.(imElec)(:,1)-rowStartEnd(1))*height(alphaArrV)/diff(rowStartEnd)),'o','MarkerSize',3,'Visible','on','LineStyle','-','LineWidth',1.5,'Color',elecColor,'MarkerEdgeColor',[1 1 1],'MarkerFaceColor',elecColor);
+        output.(pointElec).T1_Hor = plot(ax_t1Hor,((point.Hor.(imElec)(:,2)-colStartEnd(1))*height(alphaArrV)/diff(rowStartEnd)),((point.Hor.(imElec)(:,1)-rowStartEnd(1))*height(alphaArrV)/diff(rowStartEnd)),'o','MarkerSize',3,'Visible','on','LineStyle','-','LineWidth',1.5,'Color',elecColor,'MarkerEdgeColor',[1 1 1],'MarkerFaceColor',elecColor);
     end
 
 end

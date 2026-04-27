@@ -37,20 +37,29 @@ function infCoor=pial2InfBrain_E(fsSub,cfg)
 if  ~isfield(cfg,'elecCoord'),      elecCoord = []; else    elecCoord = cfg.elecCoord;      end
 if  ~isfield(cfg,'elecNames'),      elecNames = []; else    elecNames = cfg.elecNames;      end
 if  ~isfield(cfg,'fsurfsubdir'),    fs_dir = [];    else    fs_dir = cfg.fsurfsubdir;       end
+if  ~isfield(cfg,'vxlc'),    vxlc = 0;    else    vxlc = 1;       end
 %if  ~isfield(cfg,'elecHem'),        elecHem = [];   else    elecHem = cfg.elecNames;      end
 
 % Get location of FreeSurfer directories
 if isempty(fs_dir)
     fs_dir=getFsurfSubDir_E();
 end
-sub_dir=fullfile(fs_dir,fsSub);
+if ~vxlc
+    sub_dir=fullfile(fs_dir,fsSub);
+else
+    sub_dir=fs_dir;
+end
 
 
 %% get electrode coordinates
 if isempty(elecCoord) % no electrode coordinates have been passed in the function call:
     % use the original code looking for .PIAL files
     %pialFname=[fs_dir '/' fsSub '/elec_recon/' fsSub '.PIAL'];
-    pialFname=fullfile(fs_dir,fsSub,'elec_recon','final_output',[fsSub '.PIAL']);
+    if ~vxlc
+        pialFname=fullfile(fs_dir,fsSub,'elec_recon','final_output',[fsSub '.PIAL']);
+    else
+        pialFname=fullfile(cfg.vxlc,[fsSub '.PIAL']);
+    end
     elecCoordCsv=csv2Cell_E(pialFname,' ',2);
     nChan=size(elecCoordCsv,1);
     RAS_coor=zeros(nChan,3);
@@ -60,7 +69,11 @@ if isempty(elecCoord) % no electrode coordinates have been passed in the functio
         end
     end
     %elecInfoFname=[fs_dir '/' fsSub '/elec_recon/' fsSub '.electrodeNames'];
-    elecInfoFname=fullfile(fs_dir,fsSub,'elec_recon','final_output',[fsSub '.electrodeNames']);
+    if ~vxlc
+        elecInfoFname=fullfile(fs_dir,fsSub,'elec_recon','final_output',[fsSub '.electrodeNames']);
+    else
+        elecInfoFname=fullfile(cfg.vxlc,[fsSub '.electrodeNames']);
+    end
     elecInfo=csv2Cell_E(elecInfoFname,' ',2);
     %labels=elecInfo(:,1);
     leftIds=find(cellfun(@(x) strcmpi(x,'L'),elecInfo(:,3)));

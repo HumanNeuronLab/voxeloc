@@ -3,11 +3,12 @@ function projSetUpWindow(widget,widgetState)
     % widgetState - 'init' or 'update'
 
     screenSize      = widget.root.monitorSize(3:4);
+    widget.d.Indeterminate = 'off';
     projectWindow   = uifigure('Name','Project Set-Up',...
                         'Color',[0.22 0.22 0.22],...
-                        'Position',[round(screenSize(1)/2-480) round(screenSize(2)/2-360) 960 760],...
-                        'Pointer','arrow');
-    
+                        'Pointer','arrow','WindowState','maximized');
+                        %'Position',[round(screenSize(1)/2-480) round(screenSize(2)/2-360) 960 760],...
+   
     paramsValues = paramsBuilder(projectWindow,widgetState,widget);
     projectWindow.CloseRequestFcn = {@myCloseReq,widget,paramsValues};
     paramsValues.button_Validate.ButtonPushedFcn = {@myCloseReq,widget,paramsValues};
@@ -64,17 +65,19 @@ function projSetUpWindow(widget,widgetState)
         pV.panel = uipanel('Parent',pW,'Position',[20 20 pW.Position(3)-40 pW.Position(4)-40]);
         
         pV.gridInner = uigridlayout('Parent',pV.panel,...
-            'ColumnWidth',{22,120,100,160,'1x'},'RowHeight',{100,22,22,22,22,22,22,22,22,22,22,'1x',35},...
-            'RowSpacing',15,'Padding',[20 20 20 20],'Scrollable','on','BackgroundColor',[0.24 0.24 0.24],'Visible','off');
+            'ColumnWidth',{22,120,100,160,'1x'},'RowHeight',{100,24,24,24,16,24,16,24,16,24,16,24,16,24,16,24,24,24,'1x',16,36},...
+            'RowSpacing',12,'Padding',[18 18 18 18],'Scrollable','on','BackgroundColor',[0.24 0.24 0.24],'Visible','off');
         pV = drawCartouche(pV);
-
+        
+        %%% USER ID
         pV.lamp_userID = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
         pV.lamp_userID.Layout.Row = 2; pV.lamp_userID.Layout.Column = 1;
         pV.label_userID = uilabel('Parent',pV.gridInner,'Text','User name:','FontWeight','bold','FontColor',[1 1 1]);
         % pV.label_userID.Layout.Row = 2;pV.label_userID.Layout.Column = 1;
         pV.field_userID = uieditfield('Parent',pV.gridInner,'Placeholder','[User name]','FontColor',[0.6 0.6 0.6],'BackgroundColor',[1 1 1]);
         pV.check_matrix(4,1) = 0;
-
+        
+        %%% PATIENT ID
         pV.lamp_patientID = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
         pV.lamp_patientID.Layout.Row = 3; pV.lamp_patientID.Layout.Column = 1;
         pV.label_patientID = uilabel('Parent',pV.gridInner,'Text','Patient ID:','FontWeight','bold','FontColor',[1 1 1]);
@@ -82,53 +85,64 @@ function projSetUpWindow(widget,widgetState)
         pV.field_patientID = uieditfield('Parent',pV.gridInner,'Placeholder','[Patient_ID]','FontColor',[0.6 0.6 0.6],'BackgroundColor',[1 1 1]);
         pV.check_matrix(2,1) = 0;
 
+        %%% PATIENT DIR
         pV.lamp_patientDir = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
         pV.lamp_patientDir.Layout.Row = 4; pV.lamp_patientDir.Layout.Column = 1;
         pV.label_patientDir = uilabel('Parent',pV.gridInner,'Text','Patient folder:','FontWeight','bold','FontColor',[1 1 1]);
         % pV.label_patientDir.Layout.Row = 3; pV.label_patientDir.Layout.Column = 1;
-        pV.button_patientDir = uibutton('Parent',pV.gridInner,'Text','Select folder','BackgroundColor',[1,0.65,0],'Tag','DIR');
-        pV.field_patientDir = uilabel('Parent',pV.gridInner,'Text','[Folder path]','FontColor',[0.6 0.6 0.6]);
+        pV.button_patientDir = uibutton('Parent',pV.gridInner,'Text','Select folder','BackgroundColor',[1,0.65,0],'Tag','DIR','FontColor',[0.2 0.2 0.2]);
+        pV.field_patientDir = uilabel('Parent',pV.gridInner,'Text','[Folder path]','FontColor',[0.6 0.6 0.6],'Interpreter','html');
+        pV.field_patientDir.Layout.Row = 5; pV.field_patientDir.Layout.Column = [2 5];
         pV.check_matrix(1,1) = 0;
         
+        %%% VOXELOC DIR
         pV.lamp_voxelocFolder = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
-        pV.lamp_voxelocFolder.Layout.Row = 5; pV.lamp_voxelocFolder.Layout.Column = 1;
+        pV.lamp_voxelocFolder.Layout.Row = 6; pV.lamp_voxelocFolder.Layout.Column = 1;
         pV.label_voxelocFolder = uilabel('Parent',pV.gridInner,'Text','Voxeloc Folder:','FontWeight','bold','FontColor',[1 1 1]);
         % pV.label_voxelocFolder.Layout.Row = 5; pV.label_voxelocFolder.Layout.Column = 1;
-        pV.button_voxelocFolder = uibutton('Parent',pV.gridInner,'Text','Select folder','BackgroundColor',[1,0.65,0],'Tag','DIR_VOX');
-        pV.field_voxelocFolder = uilabel('Parent',pV.gridInner,'Text','[Folder path]','FontColor',[0.6 0.6 0.6]);
+        pV.button_voxelocFolder = uibutton('Parent',pV.gridInner,'Text','Select folder','BackgroundColor',[1,0.65,0],'Tag','DIR_VOX','FontColor',[0.2 0.2 0.2]);
+        pV.field_voxelocFolder = uilabel('Parent',pV.gridInner,'Text','[Folder path]','FontColor',[0.6 0.6 0.6],'Interpreter','html');
+        pV.field_voxelocFolder.Layout.Row = 7; pV.field_voxelocFolder.Layout.Column = [2 5];
         pV.check_matrix(6,1) = 0;
 
+        %%% AUTOSAVE FILE
         pV.lamp_autosaveFile = uilamp('Parent',pV.gridInner,'Color',[0.94 0.94 0.94]);
-        pV.lamp_autosaveFile.Layout.Row = 6; pV.lamp_autosaveFile.Layout.Column = 1;
+        pV.lamp_autosaveFile.Layout.Row = 8; pV.lamp_autosaveFile.Layout.Column = 1;
         pV.label_autosaveFile = uilabel('Parent',pV.gridInner,'Text','Autosave file:','FontWeight','bold','FontColor',[1 1 1]);
         % pV.label_autosaveFile.Layout.Row = 6; pV.label_autosaveFile.Layout.Column = 1;
-        pV.field_autosaveFile = uilabel('Parent',pV.gridInner,'Text','[No autosave file linked yet]','FontColor',[0.6 0.6 0.6]);
-        pV.field_autosaveFile.Layout.Column = 4;
-        pV.field_autosavePath = uilabel('Parent',pV.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
+        pV.field_autosaveFile = uilabel('Parent',pV.gridInner,'Text','[No autosave file linked yet]','FontColor',[0.6 0.6 0.6],'Interpreter','html');
+        pV.field_autosaveFile.Layout.Row = 9; pV.field_autosaveFile.Layout.Column = [2 5];
+        % pV.field_autosavePath = uilabel('Parent',pV.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
         
+        %%% CT FILE
         pV.lamp_ctFile = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
-        pV.lamp_ctFile.Layout.Row = 7; pV.lamp_ctFile.Layout.Column = 1;
+        pV.lamp_ctFile.Layout.Row = 10; pV.lamp_ctFile.Layout.Column = 1;
         pV.label_ctFile = uilabel('Parent',pV.gridInner,'Text','CT file:','FontWeight','bold','FontColor',[1 1 1]);
         % pV.label_ctFile.Layout.Row = 7;
         % pV.label_ctFile.Layout.Column = 1;
-        pV.button_ctFile = uibutton('Parent',pV.gridInner,'Text','Load','BackgroundColor',[1,0.65,0],'Tag','CT');
-        pV.field_ctFile = uilabel('Parent',pV.gridInner,'Text','[No CT file loaded yet]','FontColor',[0.6 0.6 0.6]);
-        pV.field_ctPath = uilabel('Parent',pV.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
+        pV.button_ctFile = uibutton('Parent',pV.gridInner,'Text','Load','BackgroundColor',[1,0.65,0],'Tag','CT','FontColor',[0.2 0.2 0.2]);
+        pV.field_ctFile = uilabel('Parent',pV.gridInner,'Text','[No CT file loaded yet]','FontColor',[0.6 0.6 0.6],'Interpreter','html');
+        pV.field_ctFile.Layout.Row = 11; pV.field_ctFile.Layout.Column = [2 5];
+        % pV.field_ctPath = uilabel('Parent',pV.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
         pV.check_matrix(3,1) = 0;
         
+        %%% T1 FILE
         pV.lamp_t1File = uilamp('Parent',pV.gridInner,'Color',[0.94 0.94 0.94]);
-        pV.lamp_t1File.Layout.Row = 8; pV.lamp_t1File.Layout.Column = 1;
+        pV.lamp_t1File.Layout.Row = 12; pV.lamp_t1File.Layout.Column = 1;
         pV.label_t1File = uilabel('Parent',pV.gridInner,'Text','T1 file:','FontWeight','bold','FontColor',[1 1 1]);
-        pV.button_t1File = uibutton('Parent',pV.gridInner,'Text','Load','BackgroundColor',[1,0.65,0],'Tag','T1');
-        pV.field_t1File = uilabel('Parent',pV.gridInner,'Text','[No T1 file loaded yet]','FontColor',[0.6 0.6 0.6]);
-        pV.field_t1Path = uilabel('Parent',pV.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
+        pV.button_t1File = uibutton('Parent',pV.gridInner,'Text','Load','BackgroundColor',[1,0.65,0],'Tag','T1','FontColor',[0.2 0.2 0.2]);
+        pV.field_t1File = uilabel('Parent',pV.gridInner,'Text','[No T1 file loaded yet]','FontColor',[0.6 0.6 0.6],'Interpreter','html');
+        pV.field_t1File.Layout.Row = 13; pV.field_t1File.Layout.Column = [2 5];
+        % pV.field_t1Path = uilabel('Parent',pV.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
         
+        %%% PARC FILE
         pV.lamp_parcFile = uilamp('Parent',pV.gridInner,'Color',[0.94 0.94 0.94]);
-        pV.lamp_parcFile.Layout.Row = 9; pV.lamp_parcFile.Layout.Column = 1;
+        pV.lamp_parcFile.Layout.Row = 14; pV.lamp_parcFile.Layout.Column = 1;
         pV.label_parcFile = uilabel('Parent',pV.gridInner,'Text','Parcellation file:','FontWeight','bold','FontColor',[1 1 1]);
-        pV.button_parcFile = uibutton('Parent',pV.gridInner,'Text','Load','BackgroundColor',[1,0.65,0],'Tag','PARC');
-        pV.field_parcFile = uilabel('Parent',pV.gridInner,'Text','[No parcellation file loaded yet]','FontColor',[0.6 0.6 0.6]);
-        pV.field_parcPath = uilabel('Parent',pV.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
+        pV.button_parcFile = uibutton('Parent',pV.gridInner,'Text','Load','BackgroundColor',[1,0.65,0],'Tag','PARC','FontColor',[0.2 0.2 0.2]);
+        pV.field_parcFile = uilabel('Parent',pV.gridInner,'Text','[No parcellation file loaded yet]','FontColor',[0.6 0.6 0.6],'Interpreter','html');
+        pV.field_parcFile.Layout.Row = 15; pV.field_parcFile.Layout.Column = [2 5];
+        % pV.field_parcPath = uilabel('Parent',pV.gridInner,'Text','[File path]','FontColor',[0.6 0.6 0.6]);
         
 %                 pV.label_electrodes = uilabel('Parent',pV.gridInner,'Text','Number of electrodes:','FontWeight','bold');
 %                 pV.label_electrodes.Layout.Row = 9;
@@ -136,30 +150,33 @@ function projSetUpWindow(widget,widgetState)
 %                 pV.field_electrodes = uilabel('Parent',pV.gridInner,'Text','Completed: 0 of 0','FontColor',[0.6 0.6 0.6]);
 %                 pV.lamp_electrodes = uilamp('Parent',pV.gridInner,'Color',[1 0 0]);
         
+        %%% LOGO
         pV.lamp_instLogo = uilamp('Parent',pV.gridInner,'Color',[0.94 0.94 0.94]);
-        pV.lamp_instLogo.Layout.Row = 10; pV.lamp_instLogo.Layout.Column = 1;
+        pV.lamp_instLogo.Layout.Row = 16; pV.lamp_instLogo.Layout.Column = 1;
         pV.label_instLogo = uilabel('Parent',pV.gridInner,'Text','Institution Logo:','FontWeight','bold','FontColor',[1 1 1]);
         % pV.label_instLogo.Layout.Row = 10;
         % pV.label_instLogo.Layout.Column = 1;
-        pV.button_instLogo = uibutton('Parent',pV.gridInner,'Text','Load Image','BackgroundColor',[1,0.65,0]);
+        pV.button_instLogo = uibutton('Parent',pV.gridInner,'Text','Load Image','BackgroundColor',[1,0.65,0],'FontColor',[0.2 0.2 0.2]);
         pV.field_instLogo = uilabel('Parent',pV.gridInner,'Text','[No logo loaded yet]','FontColor',[0.6 0.6 0.6]);
-        pV.image_instLogo = uiimage('Parent',pV.gridInner,'ImageSource',which('UNIGE_logo.png'),'HorizontalAlignment','left','Visible','off');
+        pV.image_instLogo = uiimage('Parent',pV.gridInner,'ImageSource',which('UNIGE_logo.png'),'HorizontalAlignment','center','Visible','off','BackgroundColor',[1 1 1]);
+        pV.image_instLogo.Layout.Row = 17; pV.image_instLogo.Layout.Column = 2;
         % pV.image_instLogo.Layout.Row = pV.lamp_instLogo.Layout.Row;
         % pV.image_instLogo.Layout.Column = 3;
         
+        %%% LAST AUTOSAVE
         pV.lamp_forceSave = uilamp('Parent',pV.gridInner,'Color',[0.94 0.94 0.94]);
-        pV.lamp_forceSave.Layout.Row = 11; pV.lamp_forceSave.Layout.Column = 1;
+        pV.lamp_forceSave.Layout.Row = 18; pV.lamp_forceSave.Layout.Column = 1;
         pV.label_forceSave = uilabel('Parent',pV.gridInner,'Text','Last autosave:','FontWeight','bold','FontColor',[1 1 1]);
         % pV.label_forceSave.Layout.Row = 11;
         % pV.label_forceSave.Layout.Column = 1;
-        pV.button_forceSave = uibutton('Parent',pV.gridInner,'Text','Force Save','BackgroundColor',[0,0.65,1]);
+        pV.button_forceSave = uibutton('Parent',pV.gridInner,'Text','Force Save','BackgroundColor',[0,0.65,1],'FontColor',[0.2 0.2 0.2]);
         pV.field_forceSave = uilabel('Parent',pV.gridInner,'Text','[No autosave yet]','FontColor',[0.6 0.6 0.6]); % datestr(A.date,'HH:MM dd/mmm/yyyy')
         
-        pV.label_newVersion = uilabel('Parent',pV.gridInner,'Text','lll','HorizontalAlignment','right','VerticalAlignment','bottom','Interpreter','html','FontSize',10,'FontColor',[1 1 1]);
+        pV.label_newVersion = uilabel('Parent',pV.gridInner,'Text','···','HorizontalAlignment','right','VerticalAlignment','bottom','Interpreter','html','FontSize',10,'FontColor',[1 1 1]);
         pV.label_newVersion.Layout.Row = numel(pV.gridInner.RowHeight)-1;
         pV.label_newVersion.Layout.Column = [numel(pV.gridInner.ColumnWidth)-1 numel(pV.gridInner.ColumnWidth)];
 
-        pV.button_Validate = uibutton('Parent',pV.gridInner,'Text','Next','BackgroundColor',[1,0.65,0],'Tag','DONE','Enable','off');
+        pV.button_Validate = uibutton('Parent',pV.gridInner,'Text','Next','BackgroundColor',[1,0.65,0],'Tag','DONE','Enable','off','FontColor',[0.2 0.2 0.2]);
         pV.button_Validate.Layout.Row = numel(pV.gridInner.RowHeight);
         pV.button_Validate.Layout.Column = 2;
 
@@ -168,113 +185,7 @@ function projSetUpWindow(widget,widgetState)
         pV.image_currentVersion.Layout.Row = numel(pV.gridInner.RowHeight);
         pV.image_currentVersion.Layout.Column = [numel(pV.gridInner.ColumnWidth)-1 numel(pV.gridInner.ColumnWidth)];
         
-        switch wS
-            case 'init'
-                pV.gridInit = uigridlayout('Parent',pV.panel,...
-                    'ColumnWidth',{'1x',200,200,'1x'},'RowHeight',{100,'1x',50,'1x',35},...
-                    'RowSpacing',15,'Padding',[20 20 20 20],'Scrollable','on','BackgroundColor',[0.24 0.24 0.24]);
-                
-                pV.logo_voxeloc = uiimage('Parent',pV.gridInit,'ImageSource',which('voxeloc_logo_white.png'));
-                pV.logo_voxeloc.Layout.Column = [1,numel(pV.gridInit.ColumnWidth)];
-                pV.logo_voxeloc.Layout.Row = 1;
-                pV.label_choice = uilabel('Parent',pV.gridInit,'Text','Start new projet or load existing file?','FontWeight','bold','FontColor',[1 1 1]);
-                pV.label_choice.Layout.Column = [1,numel(pV.gridInit.ColumnWidth)];
-                pV.label_choice.Layout.Row = 2;
-                pV.label_choice.HorizontalAlignment = 'center';
-                pV.label_choice.VerticalAlignment = 'center';
-                pV.button_startNew = uibutton('Parent',pV.gridInit,'Text','New Project','BackgroundColor',[1,0.65,0],'Tag','NEW');
-                pV.button_startNew.Layout.Column = 2;
-                pV.button_startNew.Layout.Row = 3;
-                pV.button_loadFile = uibutton('Parent',pV.gridInit,'Text','Load','BackgroundColor',[0.94 0.94 0.94],'Tag','LOAD');
-                pV.button_loadFile.Layout.Column = 3;
-                pV.button_loadFile.Layout.Row = 3;
-                pV.label_newVersionTop = uilabel('Parent',pV.gridInit,'Text','lll','HorizontalAlignment','right','VerticalAlignment','bottom','Interpreter','html','FontSize',10,'FontColor',[1 1 1]);
-                pV.label_newVersionTop.Layout.Row = numel(pV.gridInit.RowHeight)-1;
-                pV.label_newVersionTop.Layout.Column = [numel(pV.gridInit.ColumnWidth)-1 numel(pV.gridInit.ColumnWidth)];
-                progPath = fileparts(which('voxeloc.m'));
-                pV.image_currentVersionTop = uiimage('Parent',pV.gridInit,'ImageSource',[progPath filesep 'assets' filesep 'voxeloc_version.svg'],'HorizontalAlignment','right','ScaleMethod','scaledown');
-                pV.image_currentVersionTop.Layout.Row = numel(pV.gridInit.RowHeight);
-                pV.image_currentVersionTop.Layout.Column = [numel(pV.gridInit.ColumnWidth)-1 numel(pV.gridInit.ColumnWidth)];
-                
-                pV.button_startNew.ButtonPushedFcn = {@fileStartVoxeloc,pV,widget};
-                pV.button_loadFile.ButtonPushedFcn = {@fileStartVoxeloc,pV,widget};
-              
-            case 'update'
-                pV.gridInner.Visible = 'on';
-                yay =0;
-                if ~isempty(widget.viewer.projectParams.tab.UserData.userID)
-                    pV.field_userID.Value = widget.viewer.projectParams.tab.UserData.userID;
-                    pV.label_userID.UserData.userID = widget.viewer.projectParams.tab.UserData.userID;
-                    pV.field_userID.FontColor = [0 0 0];
-                    pV.lamp_userID.Color = [0 1 0];
-                    pV.text4_cartouche.Text = ['Produced by: ' widget.viewer.projectParams.tab.UserData.userID];
-                end
-                if ~isempty(widget.viewer.projectParams.tab.UserData.patientDir)
-                    pV.field_patientDir.Text = widget.viewer.projectParams.tab.UserData.patientDir;
-                    pV.label_patientDir.UserData.patientDir = widget.viewer.projectParams.tab.UserData.patientDir;
-                    pV.field_patientDir.FontColor = [0.94 0.94 0.94];
-                    pV.lamp_patientDir.Color = [0 1 0];
-                end
-                if ~isempty(widget.viewer.projectParams.tab.UserData.patientID)
-                    pV.field_patientID.Value = widget.viewer.projectParams.tab.UserData.patientID;
-                    pV.label_patientID.UserData.patientID = widget.viewer.projectParams.tab.UserData.patientID;
-                    pV.field_patientID.FontColor = [0 0 0];
-                    pV.lamp_patientID.Color = [0 1 0];
-                    pV.text2_cartouche.Text = widget.viewer.projectParams.tab.UserData.patientID;
-                end
-                if ~isempty(widget.viewer.projectParams.tab.UserData.voxelocDir)
-                    pV.field_voxelocFolder.Text = widget.viewer.projectParams.tab.UserData.voxelocDir;
-                    pV.label_voxelocFolder.UserData.voxDir = widget.viewer.projectParams.tab.UserData.voxelocDir;
-                    pV.field_voxelocFolder.FontColor = [0.94 0.94 0.94];
-                    pV.lamp_voxelocFolder.Color = [0 1 0];
-                end
-                if ~isempty(widget.viewer.projectParams.tab.UserData.autosavePath)
-                    pV.field_autosaveFile.Text = widget.viewer.projectParams.tab.UserData.autosavePath;
-                    pV.label_autosaveFile.UserData.autosavePath = widget.autosave.UserData.filePath;
-                    pV.field_autosaveFile.FontColor = [0.94 0.94 0.94];
-                    pV.lamp_autosaveFile.Color = [0 1 0];
-                end
-                if ~isempty(widget.viewer.projectParams.tab.UserData.autosaveFile)
-                    pV.field_autosavePath.Text = widget.viewer.projectParams.tab.UserData.autosaveFile;
-                    pV.field_autosavePath.FontColor = [0.94 0.94 0.94];
-                end
-                if ~isempty(widget.viewer.projectParams.tab.UserData.ctFile)
-                    pV.field_ctFile.Text = widget.viewer.projectParams.tab.UserData.ctPath;
-                    pV.field_ctFile.FontColor = [0.94 0.94 0.94];
-                    pV.field_ctPath.Text = widget.viewer.projectParams.tab.UserData.ctFile;
-                    pV.field_ctPath.FontColor = [0.94 0.94 0.94];
-                    pV.lamp_ctFile.Color = [0 1 0];
-                end
-                if ~isempty(widget.viewer.projectParams.tab.UserData.t1File)
-                    pV.field_t1File.Text = widget.viewer.projectParams.tab.UserData.t1Path;
-                    pV.field_t1File.FontColor = [0.94 0.94 0.94];
-                    pV.field_t1Path.Text = widget.viewer.projectParams.tab.UserData.t1File;
-                    pV.field_t1Path.FontColor = [0.94 0.94 0.94];
-                    pV.lamp_t1File.Color = [0 1 0];
-                end
-                if ~isempty(widget.viewer.projectParams.tab.UserData.parcFile)
-                    pV.field_parcFile.Text = widget.viewer.projectParams.tab.UserData.parcPath;
-                    pV.field_parcFile.FontColor = [0.94 0.94 0.94];
-                    pV.field_parcPath.Text = widget.viewer.projectParams.tab.UserData.parcFile;
-                    pV.field_parcPath.FontColor = [0.94 0.94 0.94];
-                    pV.lamp_parcFile.Color = [0 1 0];
-                end
-                if ~isempty(widget.viewer.projectParams.tab.UserData.instLogoPath)
-                    pV.image_instLogo.ImageSource = widget.viewer.projectParams.tab.UserData.instLogoPath;
-                    [pV.label_instLogo.UserData.instLogoPath,pV.label_instLogo.UserData.instLogoFile,fileExt] = ...
-                        fileparts(widget.viewer.projectParams.tab.UserData.instLogoPath);
-                    pV.label_instLogo.UserData.instLogoFile = [pV.label_instLogo.UserData.instLogoFile fileExt];
-                    pV.label_instLogo.UserData.instLogoPath = [pV.label_instLogo.UserData.instLogoPath filesep];
-                    pV.image_instLogo.Visible = 'on';
-                    pV.field_instLogo.Visible = 'off';
-                    pV.logoI_cartouche.ImageSource = widget.viewer.projectParams.tab.UserData.instLogoPath;
-                    pV.lamp_instLogo.Color = [0 1 0];
-                end
-                cF = dir(widget.autosave.UserData.filePath);
-                pV.field_forceSave.Text = datestr(cF.date,'HH:MM dd/mmm/yyyy');
-                pV.field_forceSave.FontColor = [0.94 0.94 0.94];
-                validCheck = runcheck([],[],pV,widget.d,0);
-        end
+        pV = projWinUpdate(pV,wS);
         pV.field_userID.ValueChangingFcn = {@runcheck, pV,widget.d,1};
         pV.field_userID.ValueChangedFcn = {@runcheck, pV,widget.d,1};
 
@@ -290,6 +201,119 @@ function projSetUpWindow(widget,widgetState)
         pV.button_instLogo.ButtonPushedFcn = {@runcheck, pV,widget.d,4};
         pV.button_forceSave.ButtonPushedFcn = {@runcheck, pV,widget.d,5};
     end
+    function pV = projWinUpdate(pV,wS)
+        switch wS
+                    case 'init'
+                        pV.gridInit = uigridlayout('Parent',pV.panel,...
+                            'ColumnWidth',{'1x',200,200,'1x'},'RowHeight',{100,'1x',50,'1x',35},...
+                            'RowSpacing',15,'Padding',[20 20 20 20],'Scrollable','on','BackgroundColor',[0.24 0.24 0.24]);
+                        
+                        pV.logo_voxeloc = uiimage('Parent',pV.gridInit,'ImageSource',which('voxeloc_logo_white.png'));
+                        pV.logo_voxeloc.Layout.Column = [1,numel(pV.gridInit.ColumnWidth)];
+                        pV.logo_voxeloc.Layout.Row = 1;
+                        pV.label_choice = uilabel('Parent',pV.gridInit,'Text','Start new projet or load existing file?','FontWeight','bold','FontColor',[1 1 1]);
+                        pV.label_choice.Layout.Column = [1,numel(pV.gridInit.ColumnWidth)];
+                        pV.label_choice.Layout.Row = 2;
+                        pV.label_choice.HorizontalAlignment = 'center';
+                        pV.label_choice.VerticalAlignment = 'center';
+                        pV.button_startNew = uibutton('Parent',pV.gridInit,'Text','New Project','BackgroundColor',[1,0.65,0],'Tag','NEW','FontColor',[0.2 0.2 0.2]);
+                        pV.button_startNew.Layout.Column = 2;
+                        pV.button_startNew.Layout.Row = 3;
+                        pV.button_loadFile = uibutton('Parent',pV.gridInit,'Text','Load','BackgroundColor',[0.94 0.94 0.94],'Tag','LOAD','FontColor',[0.2 0.2 0.2]);
+                        pV.button_loadFile.Layout.Column = 3;
+                        pV.button_loadFile.Layout.Row = 3;
+                        pV.label_newVersionTop = uilabel('Parent',pV.gridInit,'Text','···','HorizontalAlignment','right','VerticalAlignment','bottom','Interpreter','html','FontSize',10,'FontColor',[1 1 1]);
+                        pV.label_newVersionTop.Layout.Row = numel(pV.gridInit.RowHeight)-1;
+                        pV.label_newVersionTop.Layout.Column = [numel(pV.gridInit.ColumnWidth)-1 numel(pV.gridInit.ColumnWidth)];
+                        progPath = fileparts(which('voxeloc.m'));
+                        pV.image_currentVersionTop = uiimage('Parent',pV.gridInit,'ImageSource',[progPath filesep 'assets' filesep 'voxeloc_version.svg'],'HorizontalAlignment','right','ScaleMethod','scaledown');
+                        pV.image_currentVersionTop.Layout.Row = numel(pV.gridInit.RowHeight);
+                        pV.image_currentVersionTop.Layout.Column = [numel(pV.gridInit.ColumnWidth)-1 numel(pV.gridInit.ColumnWidth)];
+                        
+                        pV.button_startNew.ButtonPushedFcn = {@fileStartVoxeloc,pV,widget};
+                        pV.button_loadFile.ButtonPushedFcn = {@fileStartVoxeloc,pV,widget};
+                      
+                    case 'update'
+                        pV.gridInner.Visible = 'on';
+                        yay =0;
+                        pathColor = "#b2b2b2"; % (0.7 0.7 0.7)
+                        fileColor = "#78f542";
+                        if ~isempty(widget.glassbrain.UserData.userID)
+                            pV.field_userID.Value = widget.glassbrain.UserData.userID;
+                            pV.label_userID.UserData.userID = widget.glassbrain.UserData.userID;
+                            pV.field_userID.FontColor = [0 0 0];
+                            pV.lamp_userID.Color = [0 1 0];
+                            pV.text4_cartouche.Text = ['Produced by: ' widget.glassbrain.UserData.userID];
+                        end
+                        if ~isempty(widget.glassbrain.UserData.patientDir)
+                            pV.field_patientDir.Text = append("<font style='color:",pathColor,"'>",string(widget.glassbrain.UserData.patientDir),"</font>");
+                            pV.label_patientDir.UserData.patientDir = widget.glassbrain.UserData.patientDir;
+                            % pV.field_patientDir.FontColor = pathColor;
+                            pV.lamp_patientDir.Color = [0 1 0];
+                        end
+                        if ~isempty(widget.glassbrain.UserData.patientID)
+                            pV.field_patientID.Value = widget.glassbrain.UserData.patientID;
+                            pV.label_patientID.UserData.patientID = widget.glassbrain.UserData.patientID;
+                            pV.field_patientID.FontColor = [0 0 0];
+                            pV.lamp_patientID.Color = [0 1 0];
+                            pV.text2_cartouche.Text = widget.glassbrain.UserData.patientID;
+                        end
+                        if ~isempty(widget.glassbrain.UserData.voxelocDir)
+                            pV.field_voxelocFolder.Text = append("<font style='color:",pathColor,"'>",string(widget.glassbrain.UserData.voxelocDir),"</font>");
+                            pV.label_voxelocFolder.UserData.voxDir = widget.glassbrain.UserData.voxelocDir;
+                            % pV.field_voxelocFolder.FontColor = pathColor;
+                            pV.lamp_voxelocFolder.Color = [0 1 0];
+                        end
+                        if ~isempty(widget.autosave.UserData.filePath)
+                            [autoPath,autoFile,autoExt] = fileparts(widget.autosave.UserData.filePath);
+                            pV.field_autosaveFile.Text = append("<font style='color:",pathColor,"'>",string(autoPath),"</font>",...
+                                string(filesep),"<font style='color:",fileColor,"'>",string([autoFile autoExt]),"</font>");
+                            pV.label_autosaveFile.UserData.autosavePath = widget.autosave.UserData.filePath;
+                            % pV.field_autosaveFile.FontColor = pathColor;
+                            pV.lamp_autosaveFile.Color = [0 1 0];
+                        end
+                        %%%%%%%% widget.viewer.projectParams.tab.UserData.
+                        if ~isempty(widget.glassbrain.UserData.fileNameCT)
+                            pV.field_ctFile.Text = append("<font style='color:",pathColor,"'>",string(widget.glassbrain.UserData.filePathCT),"</font>",...
+                                "<font style='color:",fileColor,"'>",string(widget.glassbrain.UserData.fileNameCT),"</font>");
+                            pV.field_ctFile.FontColor = pathColor;
+                            % pV.field_ctPath.Text = widget.viewer.projectParams.tab.UserData.ctFile;
+                            % pV.field_ctPath.FontColor = pathColor;
+                            pV.lamp_ctFile.Color = [0 1 0];
+                        end
+                        if ~isempty(widget.glassbrain.UserData.fileNameT1)
+                            pV.field_t1File.Text = append("<font style='color:",pathColor,"'>",string(widget.glassbrain.UserData.filePathT1),"</font>",...
+                                "<font style='color:",fileColor,"'>",string(widget.glassbrain.UserData.fileNameT1),"</font>");
+                            pV.field_t1File.FontColor = pathColor;
+                            % pV.field_t1Path.Text = widget.viewer.projectParams.tab.UserData.t1File;
+                            % pV.field_t1Path.FontColor = pathColor;
+                            pV.lamp_t1File.Color = [0 1 0];
+                        end
+                        if ~isempty(widget.glassbrain.UserData.fileNamePARC)
+                            pV.field_parcFile.Text = append("<font style='color:",pathColor,"'>",string(widget.glassbrain.UserData.filePathPARC),"</font>",...
+                                "<font style='color:",fileColor,"'>",string(widget.glassbrain.UserData.fileNamePARC),"</font>");
+                            pV.field_parcFile.FontColor = pathColor;
+                            % pV.field_parcPath.Text = widget.viewer.projectParams.tab.UserData.parcFile;
+                            % pV.field_parcPath.FontColor = pathColor;
+                            pV.lamp_parcFile.Color = [0 1 0];
+                        end
+                        if isfield(widget.glassbrain.UserData,'instLogoPath') && ~isempty(widget.glassbrain.UserData.instLogoPath)
+                            pV.image_instLogo.ImageSource = [widget.glassbrain.UserData.instLogoPath widget.glassbrain.UserData.instLogoFile];
+                            [pV.label_instLogo.UserData.instLogoPath,pV.label_instLogo.UserData.instLogoFile,fileExt] = ...
+                                fileparts(pV.image_instLogo.ImageSource);
+                            pV.label_instLogo.UserData.instLogoFile = [pV.label_instLogo.UserData.instLogoFile fileExt];
+                            pV.label_instLogo.UserData.instLogoPath = [pV.label_instLogo.UserData.instLogoPath filesep];
+                            pV.image_instLogo.Visible = 'on';
+                            pV.field_instLogo.Visible = 'off';
+                            pV.logoI_cartouche.ImageSource = pV.image_instLogo.ImageSource;
+                            pV.lamp_instLogo.Color = [0 1 0];
+                        end
+                        cF = dir(widget.autosave.UserData.filePath);
+                        pV.field_forceSave.Text = datestr(cF.date,'HH:MM dd/mmm/yyyy');
+                        pV.field_forceSave.FontColor = [0.94 0.94 0.94];
+                        validCheck = runcheck([],[],pV,widget.d,0);
+        end
+    end
 
     function fileStartVoxeloc (src,evt,pV,widget)
         switch src.Tag
@@ -301,6 +325,7 @@ function projSetUpWindow(widget,widgetState)
                 pV.panel.Parent.Visible = 'off';
                 nSrc.mssg = [];
                 loadVoxelocFile(nSrc,[],widget,pV);
+                projWinUpdate(pV,'update');
                 widget.autosave.UserData.overwrite = 'on';
                 pV.panel.Parent.Visible = 'on';
                 figure(pV.panel.Parent);
@@ -314,6 +339,8 @@ function projSetUpWindow(widget,widgetState)
     end
 
     function validCheck = runcheck(src,evt,pV,d,idVal)
+        pathColor = "#b2b2b2"; % (0.7 0.7 0.7)
+        fileColor = "#78f542";
         switch idVal
             case 1
                 if isempty(evt.Value)
@@ -330,12 +357,12 @@ function projSetUpWindow(widget,widgetState)
                 if isequal(evt.EventName,'ValueChanged')||isequal(evt.EventName,'ValueChanging')
                     if isempty(evt.Value)
                         pV.lamp_patientID.Color = [1 0 0];
-                        pV.label_patientID.UserData.userID = [];
+                        pV.label_patientID.UserData.patientID = [];
                         pV.text2_cartouche.Text = '[Subject ID]';
                     else
                         pV.field_patientID.FontColor = [0 0 0];
                         pV.lamp_patientID.Color = [0 1 0];
-                        pV.label_patientID.UserData.userID = evt.Value;
+                        pV.label_patientID.UserData.patientID = evt.Value;
                         pV.text2_cartouche.Text = evt.Value;
                         drawnow;
                         widget.glassbrain.UserData.patientID = pV.field_patientID.Value;
@@ -346,19 +373,9 @@ function projSetUpWindow(widget,widgetState)
                     pV.panel.Parent.Visible = 'on';
                     figure(pV.panel.Parent);
                     if cDir ~= 0
-                        [path1,pV.label_patientID.UserData.patientID] = fileparts(cDir);
-                        [path2,path1] = fileparts(path1);
-                        [~,path2] = fileparts(path2);
                         pV.label_patientDir.UserData.patientDir = cDir;
-                        pV.field_patientDir.Text = ['...' filesep path2 filesep path1 filesep pV.label_patientID.UserData.patientID];
-                        pV.field_patientDir.FontColor = [0.94 0.94 0.94];
-                        pV.lamp_patientDir.Color = [0 1 0];
-                        pV.field_patientID.Value = pV.label_patientID.UserData.patientID;
-                        pV.field_patientID.FontColor = [0 0 0];
-                        pV.lamp_patientID.Color = [0 1 0];
-                        pV.text2_cartouche.Text = pV.label_patientID.UserData.patientID;
-                        widget.glassbrain.UserData.patientID = pV.field_patientID.Value;
-                        widget.glassbrain.UserData.patientDir = cDir;
+                        pV.field_patientDir.Text = append("<font style='color:",pathColor,"'>",string(pV.label_patientDir.UserData.patientDir),"</font>");
+                        pV.lamp_patientDir.Color = [0 1 0];widget.glassbrain.UserData.patientDir = cDir;
                         transferData(pV,[],widget,pV,'OUT');
                     end
                 end
@@ -378,22 +395,23 @@ function projSetUpWindow(widget,widgetState)
                         pV.panel.Parent.Visible = 'on';
                         figure(pV.panel.Parent);
                         if isfield(widget.glassbrain.UserData,'CTvol') || ~isempty(widget.glassbrain.UserData.CTvol)
-                            [pV.button_ctFile.UserData.filePath,~] = fileparts(widget.glassbrain.UserData.filePathCT);
-                            [path2,path1] = fileparts(pV.button_ctFile.UserData.filePath);
-                            [~,path2] = fileparts(path2);
-                            pV.field_ctFile.Text = ['...' filesep path2 filesep path1];
-                            pV.field_ctFile.FontColor = [0.94 0.94 0.94];
+                            % [pV.button_ctFile.UserData.filePath,~] = fileparts(widget.glassbrain.UserData.filePathCT);
+                            % [path2,path1] = fileparts(pV.button_ctFile.UserData.filePath);
+                            % [~,path2] = fileparts(path2);
+                            pV.field_ctFile.Text = append("<font style='color:",pathColor,"'>",string(widget.glassbrain.UserData.filePathCT),"</font>",...
+                                "<font style='color:",fileColor,"'>",string(widget.glassbrain.UserData.fileNameCT),"</font>");
+                            % pV.field_ctFile.FontColor = [0.94 0.94 0.94];
                             pV.lamp_ctFile.Color = [0 1 0];
-                            pV.field_ctPath.Text = widget.glassbrain.UserData.fileNameCT;
-                            pV.field_ctPath.FontColor = [0.94 0.94 0.94];
+                            % pV.field_ctPath.Text = widget.glassbrain.UserData.fileNameCT;
+                            % pV.field_ctPath.FontColor = [0.94 0.94 0.94];
                             pV.check_matrix(4,1) = 1;
                         else
                             pV.field_ctFile.FontColor = [0.6 0.6 0.6];
                             pV.lamp_ctFile.Color = [1 0 0];
                             pV.button_ctFile.UserData = [];
                             pV.field_ctFile.Text = '[No CT file loaded yet]';
-                            pV.field_ctPath.Text = '[File path]';
-                            pV.field_ctPath.FontColor = [0.6 0.6 0.6];
+                            % pV.field_ctPath.Text = '[File path]';
+                            % pV.field_ctPath.FontColor = [0.6 0.6 0.6];
                             pV.check_matrix(4,1) = 0;
                         end
                     case 'T1'
@@ -404,21 +422,22 @@ function projSetUpWindow(widget,widgetState)
                         pV.panel.Parent.Visible = 'on';
                         figure(pV.panel.Parent);
                         if isfield(widget.glassbrain.UserData,'T1vol') || ~isempty(widget.glassbrain.UserData.T1vol)
-                            [pV.button_t1File.UserData.filePath,~] = fileparts(widget.glassbrain.UserData.filePathT1);
-                            [path2,path1] = fileparts(pV.button_t1File.UserData.filePath);
-                            [~,path2] = fileparts(path2);
-                            pV.field_t1File.Text = ['...' filesep path2 filesep path1];
-                            pV.field_t1File.FontColor = [0.94 0.94 0.94];
+                            % [pV.button_t1File.UserData.filePath,~] = fileparts(widget.glassbrain.UserData.filePathT1);
+                            % [path2,path1] = fileparts(pV.button_t1File.UserData.filePath);
+                            % [~,path2] = fileparts(path2);
+                            pV.field_t1File.Text = append("<font style='color:",pathColor,"'>",string(widget.glassbrain.UserData.filePathT1),"</font>",...
+                                "<font style='color:",fileColor,"'>",string(widget.glassbrain.UserData.fileNameT1),"</font>");
+                            % pV.field_t1File.FontColor = [0.94 0.94 0.94];
                             pV.lamp_t1File.Color = [0 1 0];
-                            pV.field_t1Path.Text = widget.glassbrain.UserData.fileNameT1;
-                            pV.field_t1Path.FontColor = [0.94 0.94 0.94];
+                            % pV.field_t1Path.Text = widget.glassbrain.UserData.fileNameT1;
+                            % pV.field_t1Path.FontColor = [0.94 0.94 0.94];
                         else
                             pV.field_t1File.FontColor = [0.6 0.6 0.6];
                             pV.lamp_t1File.Color = [0.94 0.94 0.94];
                             pV.button_t1File.UserData = [];
                             pV.field_t1File.Text = '[No T1 file loaded yet]';
-                            pV.field_t1Path.Text = '[File path]';
-                            pV.field_t1Path.FontColor = [0.6 0.6 0.6];
+                            % pV.field_t1Path.Text = '[File path]';
+                            % pV.field_t1Path.FontColor = [0.6 0.6 0.6];
                         end
                     case 'PARC'
                         widget.viewer.panel_CentralTabsMRI.SelectedTab = widget.viewer.oblique.tab;
@@ -428,21 +447,22 @@ function projSetUpWindow(widget,widgetState)
                         pV.panel.Parent.Visible = 'on';
                         figure(pV.panel.Parent);
                         if isfield(widget.glassbrain.UserData,'PARCvol') || ~isempty(widget.glassbrain.UserData.PARCvol)
-                            [pV.button_parcFile.UserData.filePath,~] = fileparts(widget.glassbrain.UserData.filePathPARC);
-                            [path2,path1] = fileparts(pV.button_parcFile.UserData.filePath);
-                            [~,path2] = fileparts(path2);
-                            pV.field_parcFile.Text = ['...' filesep path2 filesep path1];
-                            pV.field_parcFile.FontColor = [0.94 0.94 0.94];
+                            % [pV.button_parcFile.UserData.filePath,~] = fileparts(widget.glassbrain.UserData.filePathPARC);
+                            % [path2,path1] = fileparts(pV.button_parcFile.UserData.filePath);
+                            % [~,path2] = fileparts(path2);
+                            pV.field_parcFile.Text = append("<font style='color:",pathColor,"'>",string(widget.glassbrain.UserData.filePathPARC),"</font>",...
+                                "<font style='color:",fileColor,"'>",string(widget.glassbrain.UserData.fileNamePARC),"</font>");
+                            % pV.field_parcFile.FontColor = [0.94 0.94 0.94];
                             pV.lamp_parcFile.Color = [0 1 0];
-                            pV.field_parcPath.Text = widget.glassbrain.UserData.fileNamePARC;
-                            pV.field_parcPath.FontColor = [0.94 0.94 0.94];
+                            % pV.field_parcPath.Text = widget.glassbrain.UserData.fileNamePARC;
+                            % pV.field_parcPath.FontColor = [0.94 0.94 0.94];
                         else
                             pV.field_parcFile.FontColor = [0.6 0.6 0.6];
                             pV.lamp_parcFile.Color = [0.94 0.94 0.94];
                             pV.button_parcFile.UserData = [];
                             pV.field_parcFile.Text = '[No parcellation file loaded yet]';
-                            pV.field_parcPath.Text = '[File path]';
-                            pV.field_parcPath.FontColor = [0.6 0.6 0.6];
+                            % pV.field_parcPath.Text = '[File path]';
+                            % pV.field_parcPath.FontColor = [0.6 0.6 0.6];
                         end
                 end
             case 4
@@ -483,18 +503,18 @@ function projSetUpWindow(widget,widgetState)
                 pV.panel.Parent.Visible = 'on';
                 figure(pV.panel.Parent);
                 if cDir ~= 0
-                    [path1,pV.label_voxelocFolder.UserData.voxDir] = fileparts(cDir);
-                    if isequal(pV.label_voxelocFolder.UserData.voxDir,'voxeloc')
-                        cDir = path1;
-                        [path1,path0] = fileparts(path1);
-                        pV.label_voxelocFolder.UserData.voxDir = path0;
-                    end
-                    [~,path1] = fileparts(path1);
-                    pV.field_voxelocFolder.Text = ['...' filesep path1 filesep pV.label_voxelocFolder.UserData.voxDir filesep 'voxeloc'];
+                    % [path1,pV.label_voxelocFolder.UserData.voxDir] = fileparts(cDir);
+                    % if isequal(pV.label_voxelocFolder.UserData.voxDir,'voxeloc')
+                    %     % cDir = path1;
+                    %     % [path1,path0] = fileparts(path1);
+                    %     % pV.label_voxelocFolder.UserData.voxDir = path0;
+                    % end
+                    % [~,path1] = fileparts(path1);
+                    pV.field_voxelocFolder.Text = append("<font style='color:",pathColor,"'>",string(pV.label_patientDir.UserData.patientDir),"</font>");
                     pV.field_voxelocFolder.FontColor = [0.94 0.94 0.94];
                     pV.lamp_voxelocFolder.Color = [0 1 0];
-                    widget.glassbrain.UserData.voxelocDir = [cDir filesep 'voxeloc'];
-                    pV.label_voxelocFolder.UserData.voxDir = [cDir filesep 'voxeloc'];
+                    widget.glassbrain.UserData.voxelocDir = cDir;
+                    pV.label_voxelocFolder.UserData.voxDir = cDir;
                     transferData(pV,[],widget,pV,'OUT');
                     pV.check_matrix(6,1) = 1;
                 end

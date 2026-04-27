@@ -177,14 +177,14 @@ try
     end
 
     if isfield(widget.glassbrain.UserData,'instLogoPath')
-        autoload.image_instLogo.ImageSource = widget.glassbrain.UserData.instLogoPath;
-        [autoload.label_instLogo.UserData.instLogoPath,autoload.label_instLogo.UserData.instLogoFile,fileExt] = ...
-            fileparts(widget.glassbrain.UserData.instLogoPath);
-        autoload.label_instLogo.UserData.instLogoFile = [autoload.label_instLogo.UserData.instLogoFile fileExt];
-        autoload.label_instLogo.UserData.instLogoPath = [autoload.label_instLogo.UserData.instLogoPath filesep];
+        autoload.image_instLogo.ImageSource = [widget.glassbrain.UserData.instLogoPath widget.glassbrain.UserData.instLogoFile];
+        % [autoload.label_instLogo.UserData.instLogoPath,autoload.label_instLogo.UserData.instLogoFile,fileExt] = ...
+        %     fileparts(widget.glassbrain.UserData.instLogoPath);
+        autoload.label_instLogo.UserData.instLogoFile = widget.glassbrain.UserData.instLogoFile;%[autoload.label_instLogo.UserData.instLogoFile fileExt];
+        autoload.label_instLogo.UserData.instLogoPath = widget.glassbrain.UserData.instLogoPath;%[autoload.label_instLogo.UserData.instLogoPath filesep];
         autoload.image_instLogo.Visible = 'on';
         autoload.field_instLogo.Visible = 'off';
-        autoload.logoI_cartouche.ImageSource = widget.glassbrain.UserData.instLogoPath;
+        autoload.logoI_cartouche.ImageSource = [widget.glassbrain.UserData.instLogoPath widget.glassbrain.UserData.instLogoFile];
         autoload.lamp_instLogo.Color = [0 1 0];
         widget.viewer.projectParams.tab.UserData.instLogoPath = widget.glassbrain.UserData.instLogoPath;
     end

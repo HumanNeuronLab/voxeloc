@@ -157,7 +157,6 @@ function selectFile(data, ~, widget)
                 end
             end
         end
-        
         vol_size = size(widget.glassbrain.UserData.(volName));
         ax1.XLim = [0,vol_size(2)];
         ax1.YLim = [0,vol_size(1)];

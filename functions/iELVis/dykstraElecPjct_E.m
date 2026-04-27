@@ -79,6 +79,16 @@ function dykstraElecPjct_E(sub,minimizeChange,bidsRootDir,sessionId,elecHem)
 % To Do
 % -Create text files of avg brain coordinates too?
 
+if nargin >=2 && isequal(minimizeChange,'Voxeloc')
+    vxlc = 1;
+    minimizeChange = 0;
+    RAStransform = bidsRootDir;
+    bidsRootDir=[];
+else
+    vxlc = 0;
+    RAStransform = 'Jon';
+end
+
 if nargin<2,
    minimizeChange=1; 
 end
@@ -97,14 +107,18 @@ if ~isempty(elecHem),
         error('Illegal value of elecHem.');
     end
 end
-
-fsDir=getFsurfSubDir_E();
-
+if ~vxlc
+    fsDir=getFsurfSubDir_E();
+end
 %% Get version of code to store with electrode coordinates:
 brainShiftMethod=['dykstra-' iELVis_getGitInfo_E];
 
 %%
-elecReconDir=fullfile(fsDir,sub,'elec_recon');
+if ~vxlc
+    elecReconDir=fullfile(fsDir,sub,'elec_recon');
+else
+    elecReconDir=sub.glassbrain.UserData.voxelocDir;
+end
 mniInfoFname=fullfile(elecReconDir,'final_output','mniElecInfo.tsv');
 mniPairsFname=fullfile(elecReconDir,'final_output','mniElecPairs.tsv');
 if exist(mniInfoFname,'file') && exist(mniPairsFname,'file')
@@ -113,6 +127,21 @@ if exist(mniInfoFname,'file') && exist(mniPairsFname,'file')
 else
     % import from mgrid
     [elecMatrix, elecLabels, elecRgb, elecPairs, elecPresent]=mgrid2matlab_E(sub);
+    cNum = 0;
+    for i = 1:numel(elecLabels)
+        uIdx = strfind(elecLabels{i},'_');
+        uIdx = uIdx(2);
+        newLabels{i} = elecLabels{i}(1:uIdx);
+        if i ~= 1 && ~strcmp(newLabels{i},newLabels{i-1})
+            cNum = i-1;
+        end
+        elecNum(i,1) = cNum + str2num(elecLabels{i}(uIdx+1:end));
+    end
+    elecMatrix = elecMatrix(elecNum,:);
+    elecLabels = elecLabels(elecNum);
+    elecRgb = elecRgb(elecNum,:);
+    elecPairs = elecPairs(elecNum);
+    elecPresent = elecPresent(elecNum);
 end
 % [elecMatrix, elecLabels, elecRgb, elecPairs, elecPresent]=mgrid2matlab(sub);
 
@@ -145,9 +174,17 @@ end
 
 
 %% Start diary
-elecReconPath=fullfile(fsDir,sub,'elec_recon');
+if ~vxlc
+    elecReconPath=fullfile(fsDir,sub,'elec_recon');
+    diary_file = fullfile(elecReconPath,'final_output',['localization_process_' datestr(now,29) '.log']);
+else
+    elecReconPath = elecReconDir;
+    diary_file = fullfile(elecReconPath,['localization_process_' datestr(now,29) '.log']);
+    widget = sub;
+    sub = widget.glassbrain.UserData.patientID;
+end
 
-diary_file = fullfile(elecReconPath,'final_output',['localization_process_' datestr(now,29) '.log']);
+
 fprintf('Recording command line output in file: \n%s\n',diary_file);
 diary(diary_file)
 
@@ -157,7 +194,13 @@ fprintf('Freesurfer Recon dir: %s\n',elecReconPath);
 fprintf('Initial location mgrid file: %s.mgrid\n',sub);
 
 % Dykstra code uses RAS coordinates (not VOX)
-VOX2RAS=[-1 0 0 128; 0 0 -1 128; 0 -1 0 128; 0 0 0 1];
+switch RAStransform
+    case 'Jon'
+        VOX2RAS=[-1 0 0 128; 0 0 -1 128; 0 -1 0 128; 0 0 0 1];
+    case 'Pierre'
+        VOX2RAS=[0 -1 0 128; 0 0 1 -128; -1 0 0 128; 0 0 0 1];
+end
+
 ctRAS=(VOX2RAS*[elecMatrix'; ones(1, size(elecMatrix,1))])';
 ctRAS=ctRAS(:,1:3);
 
@@ -181,7 +224,6 @@ infRAS=zeros(nElec,3)*NaN;
 pialRAS=ctRAS;
 pialVOX=zeros(nElec,3);
 
-
 %% Correct subdurals for brain shift
 % The optimset function used by Dykstra's code can't deal with initial
 % coordinates that have a value of 0. If you add a tiny amount it
@@ -201,49 +243,57 @@ if sum(jit)
 end
 
 %surfPath=sprintf('/Applications/freesurfer/subjects/%s/surf/',sub);
-surfPath=fullfile(fsDir,sub,'surf');
-for hemLoop=0:1,
-    hemIds=find(elecHem==hemLoop);
-    
-    if ~isempty(hemIds)
-        if hemLoop==0,
-            hem='r';
-        else
-            hem='l';
-        end
-        
-        %% Load Leptomeningeal Surface
-        surftype='pial-outer-smoothed';
-        [surf.vert surf.tri]=read_surf_E(fullfile(surfPath,[hem 'h.' surftype]));
-        
-        %% Brain Shift Correction
-        useIds=intersect(hemIds,sduralIds);
-        if ~isempty(useIds)
-            if universalYes(minimizeChange)
-                % Project subdural electrodes to leptomeningeal surface while minimizing
-                % distortion
-                coordLepto=snap2dural_energy(jitCtRAS(useIds,:),surf);
-            else
-                %Simply assign subdural electrodes to the nearest leptomeningeal vertex
-                coordLepto=get_loc_snap_mgh(jitCtRAS(useIds,:),surfPath,hem,'pial-outer-smoothed');
-            end
-            leptoRAS(useIds,:)=coordLepto;
-            
-            %% Project leptomeningeal locations to pial surface
-            pialRAS(useIds,:)=get_loc_snap_mgh(coordLepto,surfPath,hem,'pial');
-        end
-    end
+if ~vxlc
+    surfPath=fullfile(fsDir,sub,'surf');
+else
+    surfPath=fullfile(widget.glassbrain.UserData.patientDir,'surf');
 end
+% for hemLoop=0:1,
+%     hemIds=find(elecHem==hemLoop);
+% 
+%     if ~isempty(hemIds)
+%         if hemLoop==0,
+%             hem='r';
+%         else
+%             hem='l';
+%         end
+% 
+%         %% Load Leptomeningeal Surface
+%         surftype='pial-outer-smoothed';
+%         [surf.vert surf.tri]=read_surf_E(fullfile(surfPath,[hem 'h.' surftype]));
+% 
+%         %% Brain Shift Correction
+%         useIds=intersect(hemIds,sduralIds);
+%         if ~isempty(useIds)
+%             if universalYes(minimizeChange)
+%                 % Project subdural electrodes to leptomeningeal surface while minimizing
+%                 % distortion
+%                 coordLepto=snap2dural_energy(jitCtRAS(useIds,:),surf);
+%             else
+%                 %Simply assign subdural electrodes to the nearest leptomeningeal vertex
+%                 coordLepto=get_loc_snap_mgh(jitCtRAS(useIds,:),surfPath,hem,'pial-outer-smoothed');
+%             end
+%             leptoRAS(useIds,:)=coordLepto;
+% 
+%             %% Project leptomeningeal locations to pial surface
+%             pialRAS(useIds,:)=get_loc_snap_mgh(coordLepto,surfPath,hem,'pial');
+%         end
+%     end
+% end
 
 
 %% Save the electrodes locations and labels as text files
 
 %%%%%% Output Electrode Names to Text Files %%%%%%%%%
-fnameLabels=fullfile(elecReconPath,'final_output',[sub '.electrodeNames']);
+if ~vxlc
+    fnameLabels=fullfile(elecReconPath,'final_output',[sub '.electrodeNames']);
+else
+    fnameLabels=fullfile(elecReconPath,[sub '.electrodeNames']);
+end
 fprintf('Saving electrode labels to: %s\n',fnameLabels);
 fidLabels=fopen(fnameLabels,'w');
 fprintf(fidLabels,'%s\n',datestr(now));
-fprintf(fidLabels,'Name, Depth/Strip/Grid, Hem\n');
+fprintf(fidLabels,'Name Depth/Strip/Grid Hem\n');
 for a=1:nElec,
     if elecHem(a)
         hem='L';
@@ -256,27 +306,39 @@ fclose(fidLabels);
 
 %%%%%% Output RAS Coordinates to Text Files %%%%%%%%%
 % POSTIMPLANT (CT or MRI) RAS COORDINATES
-fnamePostImpRAS = fullfile(elecReconPath,'final_output',[ sub '.POSTIMPLANT']);
+if ~vxlc
+    fnamePostImpRAS = fullfile(elecReconPath,'final_output',[ sub '.POSTIMPLANT']);
+else
+    fnamePostImpRAS = fullfile(elecReconPath,[ sub '.POSTIMPLANT']);
+end
 fprintf('Saving CT RAS electrode locations to: %s\n',fnamePostImpRAS);
-fidPostImp=writeElecCoordHeader_E(fnamePostImpRAS,brainShiftMethod,sub);
+fidPostImp=writeElecCoordHeader_E(fnamePostImpRAS,brainShiftMethod,sub,fileparts(surfPath));
 for a=1:nElec,
     fprintf(fidPostImp,'%f %f %f\n',ctRAS(a,1),ctRAS(a,2),ctRAS(a,3));
 end
 fclose(fidPostImp);
 
 % Lepto RAS COORDINATES
-fnameLeptoRAS = fullfile(elecReconPath,'final_output',[sub '.LEPTO']);
+if ~vxlc
+    fnameLeptoRAS = fullfile(elecReconPath,'final_output',[sub '.LEPTO']);
+else
+    fnameLeptoRAS = fullfile(elecReconPath,[sub '.LEPTO']);
+end
 fprintf('Saving Lepto RAS electrode locations to: %s\n',fnameLeptoRAS);
-fidLepto=writeElecCoordHeader_E(fnameLeptoRAS,brainShiftMethod,sub);
+fidLepto=writeElecCoordHeader_E(fnameLeptoRAS,brainShiftMethod,sub,fileparts(surfPath));
 for a=1:nElec,
     fprintf(fidLepto,'%f %f %f\n',leptoRAS(a,1),leptoRAS(a,2),leptoRAS(a,3));
 end
 fclose(fidLepto);
 
 % Pial RAS COORDINATES
-fnamePialRAS = fullfile(elecReconPath,'final_output',[sub '.PIAL']);
+if ~vxlc
+    fnamePialRAS = fullfile(elecReconPath,'final_output',[sub '.PIAL']);
+else
+    fnamePialRAS = fullfile(elecReconPath,[sub '.PIAL']);
+end
 fprintf('Saving Pial RAS electrode locations to: %s\n',fnamePialRAS);
-fidPial=writeElecCoordHeader_E(fnamePialRAS,brainShiftMethod,sub);
+fidPial=writeElecCoordHeader_E(fnamePialRAS,brainShiftMethod,sub,fileparts(surfPath));
 for a=1:nElec,
     fprintf(fidPial,'%f %f %f\n',pialRAS(a,1),pialRAS(a,2),pialRAS(a,3));
 end
@@ -286,9 +348,13 @@ fclose(fidPial);
 % Lepto VOX COORDINATES
 RAS2VOX=inv(VOX2RAS);
 leptoVOX=(RAS2VOX*[leptoRAS'; ones(1, nElec)])';
-fnameLeptoVOX = fullfile(elecReconPath,'final_output',[sub '.LEPTOVOX']);
+if ~vxlc
+    fnameLeptoVOX = fullfile(elecReconPath,'final_output',[sub '.LEPTOVOX']);
+else
+    fnameLeptoVOX = fullfile(elecReconPath,[sub '.LEPTOVOX']);
+end
 fprintf('Saving lepto VOX electrode locations to: %s\n',fnameLeptoVOX);
-fidLeptoVox=writeElecCoordHeader_E(fnameLeptoVOX,brainShiftMethod,sub);
+fidLeptoVox=writeElecCoordHeader_E(fnameLeptoVOX,brainShiftMethod,sub,fileparts(surfPath));
 for a=1:nElec,
     fprintf(fidLeptoVox,'%f %f %f\n',leptoVOX(a,1),leptoVOX(a,2),leptoVOX(a,3));
 end
@@ -296,19 +362,37 @@ fclose(fidLeptoVox);
 
 % Pial VOX COORDINATES
 pialVOX=(RAS2VOX*[pialRAS'; ones(1, nElec)])';
-fnamePialVOX = fullfile(elecReconPath,'final_output',[sub '.PIALVOX']);
+if ~vxlc
+    fnamePialVOX = fullfile(elecReconPath,'final_output',[sub '.PIALVOX']);
+else
+    fnamePialVOX = fullfile(elecReconPath,[sub '.PIALVOX']);
+end
 fprintf('Saving pial VOX electrode locations to: %s\n',fnamePialVOX);
-fidPialVox=writeElecCoordHeader_E(fnamePialVOX,brainShiftMethod,sub);
+fidPialVox=writeElecCoordHeader_E(fnamePialVOX,brainShiftMethod,sub,fileparts(surfPath));
 for a=1:nElec,
     fprintf(fidPialVox,'%f %f %f\n',pialVOX(a,1),pialVOX(a,2),pialVOX(a,3));
 end
 fclose(fidPialVox);
 
 %% Created text file of Inflated Pial Surface Coordinates (relies on just created text files) 
-infRAS=pial2InfBrain_E(sub,[]);
-fnameInfRAS = fullfile(elecReconPath,'final_output',[sub '.INF']);
+if vxlc
+    cfg.fsurfsubdir = fileparts(surfPath);
+    cfg.vxlc = elecReconPath;
+    cfg.sub = sub;
+else 
+    cfg = [];
+end
+try
+    infRAS=pial2InfBrain_E(sub,cfg);
+catch
+end
+if ~vxlc
+    fnameInfRAS = fullfile(elecReconPath,'final_output',[sub '.INF']);
+else
+    fnameInfRAS = fullfile(elecReconPath,[sub '.INF']);
+end
 fprintf('Saving inflated pial RAS electrode locations to: %s\n',fnameInfRAS);
-fidInf=writeElecCoordHeader_E(fnameInfRAS,brainShiftMethod,sub);
+fidInf=writeElecCoordHeader_E(fnameInfRAS,brainShiftMethod,sub,fileparts(surfPath));
 for a=1:nElec,
     fprintf(fidInf,'%f %f %f\n',infRAS(a,1),infRAS(a,2),infRAS(a,3));
 end
@@ -316,7 +400,11 @@ fclose(fidInf);
 
 
 %% Plot results to double check
-plotPostImpVsLepto_E(sub,1,1);
+if ~vxlc
+    plotPostImpVsLepto_E(sub,1,1);
+else
+    plotPostImpVsLepto_E(cfg,1,1);
+end
 
 % close diary
 fprintf('\nElectrodes Localization finished for %s',sub);
@@ -327,5 +415,3 @@ diary off
 if ~isempty(bidsRootDir)
     iELVisFsurf2BIDS(sub,bidsRootDir,sessionId);
 end
-
-

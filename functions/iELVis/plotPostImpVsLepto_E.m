@@ -24,22 +24,38 @@ function [figH, axH]=plotPostImpVsLepto_E(sub,printEm,plotPial)
 % June 2015
 
 % Load lepto and CT coordinates
-fsDir=getFsurfSubDir_E();
+if isequal(class(sub),'struct')
+    vxlc = 1;
+    fsDir = sub.vxlc;
+    sub = sub.sub;
+else
+    fsDir=getFsurfSubDir_E();
+    vxlc = 0;
+end
 %erPath=[fsDir sub '/elec_recon/'];
-erPath=fullfile(fsDir,sub,'elec_recon');
-leptoFname=fullfile(erPath,'final_output',[sub '.LEPTO']);
+if ~vxlc
+    erPath=fullfile(fsDir,sub,'elec_recon');
+    leptoFname=fullfile(erPath,'final_output',[sub '.LEPTO']);
+    chanFname=fullfile(erPath,'final_output',[sub '.electrodeNames']);
+    postImpFname=fullfile(erPath,'final_output',[sub '.POSTIMPLANT']);
+else
+    erPath=fullfile(fsDir);
+    leptoFname=fullfile(erPath,[sub '.LEPTO']);
+    chanFname=fullfile(erPath,[sub '.electrodeNames']);
+    postImpFname=fullfile(erPath,[sub '.POSTIMPLANT']);
+end
 %leptoFname=[erPath sub '.LEPTO'];
 leptoCsv=csv2Cell_E(leptoFname,' ',2);
 nChan=size(leptoCsv,1);
 
 % Load elec names etc..
-chanFname=fullfile(erPath,'final_output',[sub '.electrodeNames']);
+
 chanInfo=csv2Cell_E(chanFname,' ',2);
 chanName=chanInfo(:,1);
 chanType=chanInfo(:,2);
 chanHem=chanInfo(:,3);
 
-postImpFname=fullfile(erPath,'final_output',[sub '.POSTIMPLANT']);
+
 postImpCsv=csv2Cell_E(postImpFname,' ',2);
 
 leptoRAS=zeros(nChan,3);

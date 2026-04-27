@@ -1,4 +1,4 @@
-function [fidXyz]=writeElecCoordHeader_E(fname,brainShiftMethod,subj)
+function [fidXyz]=writeElecCoordHeader_E(fname,brainShiftMethod,subj,fsSubDir)
 %function [fidXyz]=writeElecCoordHeader(fname,brainShiftMethod)
 %
 % Inputs:
@@ -20,8 +20,10 @@ function [fidXyz]=writeElecCoordHeader_E(fname,brainShiftMethod,subj)
 % fprintf(fidXyz,'\n');
 % fprintf(fidXyz,'R A S\n');
 
-fsDir=getFsurfSubDir_E();
-fsSubDir=fullfile(fsDir,subj);
+if nargin<4
+    fsDir=getFsurfSubDir_E();
+    fsSubDir=fullfile(fsDir,subj);
+end
 
 % Get version of FreeSurfer being used
 fsurfVersionFname=fullfile(fsSubDir,'scripts','build-stamp.txt');
@@ -38,6 +40,6 @@ fprintf(fidXyz,'%s',datestr(now));
 fprintf(fidXyz,'\t%s',brainShiftMethod); % method for brain shift correction
 fprintf(fidXyz,'\t%s',fsurfVersion); % version of FreeSurfer used
 fprintf(fidXyz,'\n');
-fprintf(fidXyz,'R A S\n');
+fprintf(fidXyz,'I L A\n');
 % TODO add version of freesurfer used?
 end

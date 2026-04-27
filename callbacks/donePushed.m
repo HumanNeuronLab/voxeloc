@@ -36,6 +36,8 @@ function donePushed(~,~,widget,fig,pos)
     end
 
     saveMGRID(final_outputData,[path filesep filenameMGRID],widget.glassbrain.UserData.patientID);
+    RAStransform = 'Jon'; % 'Jon' or 'Pierre, to select RAS coord system ('Jon' = default coord system, 'Pierre' = modified coord system)
+    dykstraElecPjct_E(widget,'Voxeloc',RAStransform);
 
     if isfield(widget.glassbrain.UserData,'PARCvol') && isfield(widget.glassbrain.UserData.electrodes,'Electrode1')
         cfg.parcVol = widget.glassbrain.UserData.PARCvol;
